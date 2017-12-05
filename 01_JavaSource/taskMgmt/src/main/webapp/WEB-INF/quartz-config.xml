@@ -1,0 +1,58 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+ 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+  
+  <!-- Quartz Scheduler -->
+    
+     <bean id="SchedulerService" class="com.mindtree.task.scheduler.SchedulerService" />
+	
+	<!-- Job Detail-->
+	<bean name="FirstJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+	    <property name="jobClass" value="com.mindtree.task.scheduler.jobs.FirstJobDetail"/>
+	    <property name="group" value="JobGroup"/>
+	    <property name="jobDataAsMap">
+	        <map>
+	           <entry key="schedulerService" value-ref="SchedulerService" />
+	        </map>
+	    </property>
+	    <property name="durability" value="true" /> 
+	</bean>
+	
+	<bean name="SecondJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+	    <property name="jobClass" value="com.mindtree.task.scheduler.jobs.SecondJobDetail"/>
+	    <property name="group" value="JobGroup"/>
+	    <property name="jobDataAsMap">
+	        <map>
+	           <entry key="schedulerService" value-ref="SchedulerService" />
+	        </map>
+	    </property>
+	    <property name="durability" value="true" /> 
+	</bean>
+
+	<!-- Cron Trigger -->
+	<bean id="FirstSimpleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	    <property name="jobDetail" ref="FirstJobDetail" />
+	    <property name="cronExpression" value="${schedule.timer1}" />
+	</bean>
+	
+	<bean id="SecondSimpleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	    <property name="jobDetail" ref="SecondJobDetail" />
+	    <property name="cronExpression" value="${schedule.timer2}" />
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	    <property name="jobDetails">
+	       <list>
+	          <ref bean="FirstJobDetail" />
+	          <ref bean="SecondJobDetail" />
+	       </list>
+	    </property>    
+	    <property name="triggers">
+	       <list>
+	          <ref bean="FirstSimpleTrigger" />
+	           <ref bean="SecondSimpleTrigger" />
+	       </list>
+	    </property>
+	</bean>
+    
+</beans>

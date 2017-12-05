@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+  xmlns="http://www.springframework.org/schema/security"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/security 
+    http://www.springframework.org/schema/security/spring-security-4.2.xsd
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+ 
+    <http use-expressions="true" create-session="never" authentication-manager-ref="authenticationManager">
+    <!--  <access-denied-handler error-page="/accessdenied.do" /> This is handled by Global ExceptionResolver-->
+     <form-login 
+     	login-page="/loginpage.do" 
+     	default-target-url="/home.do" 
+     	authentication-failure-url="/loginpage.do?st=2" 
+     	/>
+     <logout logout-url="/logoff.do" logout-success-url="/loginpage.do?st=1"/>    	    	
+     
+     <intercept-url pattern="/index.jsp" access="permitAll"/>  		<!-- Initial inxed page -->
+     <intercept-url pattern="/loginpage.do" access="permitAll"/>
+     <intercept-url pattern="/validateLogin.do" access="permitAll"/>
+     <intercept-url pattern="/logoff.do" access="permitAll"/>
+     
+     <intercept-url pattern="/javascript/*" access="permitAll"/>
+     <intercept-url pattern="/css/*" access="permitAll"/>
+     
+     <intercept-url pattern="/**" access="isAuthenticated()"/>
+       
+    </http>
+ 
+    <authentication-manager id="authenticationManager">
+        <authentication-provider ref="customAuthenticationProvider" />
+    </authentication-manager>
+    
+    <beans:bean  id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+	    <beans:constructor-arg>
+	        <beans:list>
+	        	 <beans:bean class="org.springframework.security.access.vote.RoleVoter"/>
+	             <beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+	             <beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
+	        </beans:list>
+	    </beans:constructor-arg>
+	</beans:bean>
+    
+    <global-method-security pre-post-annotations="enabled" authentication-manager-ref="authenticationManager" />
+ 
+</beans:beans>
