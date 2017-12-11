@@ -5,7 +5,6 @@ import java.net.URL;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 
-import com.mindtree.task.constants.MessageCode;
 import com.mindtree.task.model.User;
 
 public class RequestFilter implements javax.servlet.Filter{

@@ -96,10 +96,6 @@ public class LoginController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/accessdenied.do", method = RequestMethod.GET)
-	public ModelAndView accessDenied(HttpServletRequest request,HttpServletResponse response) {	
-		return new ModelAndView(ApplicationConstants.ERROR_403_PAGE);
-	}
 	
 	@RequestMapping(value = "/validateLogin.do", method = RequestMethod.POST)
 	public ModelAndView validateLogin(HttpServletRequest request, HttpServletResponse response,

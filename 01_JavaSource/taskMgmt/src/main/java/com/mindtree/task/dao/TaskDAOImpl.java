@@ -29,7 +29,7 @@ public class TaskDAOImpl implements TaskDAO {
 			session.persist(obj);
 			
 		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex);
+			log.error("DAO exception occured: "+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		}
 		return obj; 	
@@ -42,11 +42,12 @@ public class TaskDAOImpl implements TaskDAO {
 			session.update(obj);
 			
 		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex);
+			log.error("DAO exception occured: "+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Persistable getEntity(Class classObj, String key) throws DAOException {
 		Persistable retrievedObj=null;
@@ -55,12 +56,13 @@ public class TaskDAOImpl implements TaskDAO {
 			retrievedObj= (Persistable) session.get(classObj, key);
 			
 		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex);
+			log.error("DAO exception occured: "+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 		return retrievedObj;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Persistable getEntity(Class classObj, Integer key) throws DAOException {
 		Persistable retrievedObj=null;
@@ -69,7 +71,7 @@ public class TaskDAOImpl implements TaskDAO {
 			retrievedObj= (Persistable) session.get(classObj, key);
 			
 		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex);
+			log.error("DAO exception occured: "+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 		return retrievedObj;
@@ -83,7 +85,7 @@ public class TaskDAOImpl implements TaskDAO {
 			session.delete(obj);
 			
 		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex);
+			log.error("DAO exception occured: "+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 	}
@@ -102,7 +104,7 @@ public class TaskDAOImpl implements TaskDAO {
 			}
 			records = query.getResultList();
 		}catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex);
+			log.error("DAO exception occured: "+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 		return records;
@@ -126,9 +128,26 @@ public class TaskDAOImpl implements TaskDAO {
 				persistable = resultList.get(0);
 			}
 		} catch (Exception ex) {
-			log.error("DAO exception occured: "+ex);
+			log.error("DAO exception occured: "+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		}		
 		return persistable;
+	}
+
+	@Override
+	public void updateRecords(String queryName, Map<String, Object> params) {
+		Session session = sessionFactory.getCurrentSession();
+		try{
+			Query query = session.createNamedQuery(queryName);
+			if(params !=null){
+				for (Map.Entry<String, Object> entry : params.entrySet()) {
+					query.setParameter(entry.getKey(), entry.getValue());
+				}
+			}
+			query.executeUpdate();
+		}catch (Exception ex) {	
+			log.error("DAO exception occured: "+ex.getMessage());
+			throw new DAOException(ex.getMessage(), ex);
+		} 	
 	}	
 }

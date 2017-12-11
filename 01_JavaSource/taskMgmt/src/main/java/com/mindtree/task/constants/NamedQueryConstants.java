@@ -17,5 +17,7 @@ public interface NamedQueryConstants {
 	public static final String FIND_USER_BY_USERNAME = "User.findUserByUserName";
 	
 	public static final String I18N_MESSAGES = "I18nMessage.allMessages";
+	
+	public static final String UPDATE_USERS_LOGIN_STATUS = "User.updateLoginStatusToN";
 
 }

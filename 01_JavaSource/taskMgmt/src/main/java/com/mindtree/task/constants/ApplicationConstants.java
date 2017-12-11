@@ -19,5 +19,10 @@ public interface ApplicationConstants {
 	public static final String USER = "User";
 	
 	public static final String MANAGER = "Manager";
+	
+	
+	public static final String YES = "Y";
+	public static final String NO = "N";
+	
 
 }

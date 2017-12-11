@@ -30,5 +30,7 @@ public interface TaskService {
 	public Persistable find(Class entityobj, String key) throws ApplicationException;
 	
 	public List<Persistable> getAllTasks(Integer projId) throws ApplicationException;
+	
+	public void updateUsersLoginStatus() throws ApplicationException;
 
 }

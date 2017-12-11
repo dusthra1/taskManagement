@@ -2,7 +2,7 @@
  	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
   
-  <!-- Quartz Scheduler -->
+  <!-- Quartz Scheduler https://dzone.com/articles/multi-job-scheduling-service -->
     
      <bean id="SchedulerService" class="com.mindtree.task.scheduler.SchedulerService" />
 	

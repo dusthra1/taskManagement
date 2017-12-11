@@ -44,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
 				throw ae;
 
 			} catch (Exception ex) {
-				log.error("Exception occured while save entity " + ex);
+				log.error("Exception occured while save entity " + ex.getMessage());
 				ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 				throw ae;
 			}
@@ -64,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
 				throw ae;
 
 			} catch (Exception ex) {
-				log.error("Exception occured while update entity " + ex);
+				log.error("Exception occured while update entity " + ex.getMessage());
 				ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 				throw ae;
 			}
@@ -83,7 +83,7 @@ public class TaskServiceImpl implements TaskService {
 				throw ae;
 
 			} catch (Exception ex) {
-				log.error("Exception occured while delete entity " + ex);
+				log.error("Exception occured while delete entity " + ex.getMessage());
 				ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 				throw ae;
 			}
@@ -106,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while getting employees " + ex);
+			log.error("Exception occured while getting employees " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}		
@@ -126,7 +126,7 @@ public class TaskServiceImpl implements TaskService {
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while getting employees " + ex);
+			log.error("Exception occured while getting employees " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}		
@@ -161,7 +161,7 @@ public class TaskServiceImpl implements TaskService {
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while saving task " + ex);
+			log.error("Exception occured while saving task " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}
@@ -181,7 +181,7 @@ public class TaskServiceImpl implements TaskService {
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while saving task " + ex);
+			log.error("Exception occured while saving task " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}	
@@ -201,7 +201,7 @@ public class TaskServiceImpl implements TaskService {
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while saving task " + ex);
+			log.error("Exception occured while saving task " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}		
@@ -224,7 +224,7 @@ public class TaskServiceImpl implements TaskService {
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while getting projects " + ex);
+			log.error("Exception occured while getting projects " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}
@@ -244,7 +244,7 @@ public class TaskServiceImpl implements TaskService {
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while getting projects " + ex);
+			log.error("Exception occured while getting projects " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}
@@ -268,10 +268,30 @@ public class TaskServiceImpl implements TaskService {
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while getting tasks " + ex);
+			log.error("Exception occured while getting tasks " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}
 		return allTasksList;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void updateUsersLoginStatus() throws ApplicationException {
+		try {			
+			Map<String,Object> params = new HashMap<String,Object>();
+			params.put("status_n", ApplicationConstants.NO);
+			params.put("status_y", ApplicationConstants.YES);
+			taskDAO.updateRecords(NamedQueryConstants.UPDATE_USERS_LOGIN_STATUS, params);	
+		} catch (DAOException daoEx) {
+			log.error("Exception occured while getting employees " + daoEx.getMessage());
+			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
+			throw ae;
+
+		} catch (Exception ex) {
+			log.error("Exception occured while getting employees " + ex.getMessage());
+			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
+			throw ae;
+		}		
 	}
 }

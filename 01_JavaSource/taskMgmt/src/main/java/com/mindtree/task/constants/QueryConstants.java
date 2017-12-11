@@ -17,5 +17,7 @@ public interface QueryConstants {
 	public static final String FIND_USER_BY_USERNAME = "from User where userName= :userName";
 	
 	public static final String I18N_MESSAGES = "from I18nMessage";
+	
+	public static final String UPDATE_USERS_LOGIN_STATUS = "update User set loginStatus= :status_n where loginStatus= :status_y";
 
 }
