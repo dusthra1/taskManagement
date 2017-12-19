@@ -14,7 +14,10 @@
 		<hibernate.version>5.2.10.Final</hibernate.version>
 		<mysql.connector.version>5.1.25</mysql.connector.version>
 		<quartz.version>2.2.1</quartz.version>
-		<war.name>taskManagement</war.name>
+		
+		<app.name>taskManagement</app.name>
+		<basedir>taskMgmt</basedir>
+		<dist.folder>C:\Projects\L201\myGitHub\taskManagement\03_Dist</dist.folder>
 	</properties>
   
   <dependencies>
@@ -314,8 +317,9 @@
 </dependencies>
   
   <build>
-    <finalName>taskManagement</finalName>
+    <finalName>${app.name}</finalName>
 		<plugins>
+			<!-- setting the JDK version -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -325,6 +329,8 @@
 					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
+			
+			<!-- Fire Junit Tests on build.  Add -DskipTests=true to skip -->
 			<plugin>
 			      <artifactId>maven-surefire-plugin</artifactId>
 			      <version>2.20.1</version>
@@ -333,15 +339,67 @@
           			 <threadCount>2</threadCount> -->
 			      </configuration>
 			    </plugin>
+			
+			 <!-- package war file -->
 			 <plugin>
            		 <groupId>org.apache.maven.plugins</groupId>
             	<artifactId>maven-war-plugin</artifactId>
             	<version>2.3</version>
             	 <configuration>
-             		<warname>${war.name}</warname>
-             		<outputDirectory>D:\apache-tomcat-8.0.3\webapps</outputDirectory>
+             		<warname>${app.name}</warname>
+             		 <packagingExcludes>WEB-INF/classes/*.xml</packagingExcludes>	  
+             		<outputDirectory>target</outputDirectory>
             	</configuration>
-        	  </plugin>     
+        	  </plugin>  
+        	  
+        	  <!-- package a jar with static files -->
+        	  <plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-assembly-plugin</artifactId>
+				  <version>2.5.3</version>
+				  <configuration>
+				    <descriptor>src/main/resources/assembly.xml</descriptor>
+				    <finalName>${app.name}</finalName>
+				  </configuration>
+				  <executions>
+				    <execution>
+				    <id>create-archive</id>
+				      <phase>package</phase>
+				      <goals>
+				        <goal>single</goal>
+				      </goals>
+				    </execution>
+				  </executions>
+				</plugin>  
+       
+			 <!-- Copying war and jar file to distribution folder or staging area -->
+        	  <plugin>
+		        <artifactId>maven-resources-plugin</artifactId>
+		        <version>3.0.2</version>
+		        <executions>
+		          <execution>
+		            <id>copy-resources</id>
+		            <phase>validate</phase>
+		            <goals>
+		              <goal>copy-resources</goal>
+		            </goals>
+		            <configuration>
+		              <outputDirectory>${dist.folder}</outputDirectory>
+		              <includeEmptyDirs>true</includeEmptyDirs>
+		              <resources>         
+		                <resource>
+		                  <directory>target</directory>
+		                  <filtering>true</filtering>
+		                  <includes>
+		                  	 <include>${app.name}.war</include>
+		                     <include>${app.name}-web.jar</include>
+		                  </includes>
+		                </resource>
+		              </resources>              
+		            </configuration>            
+		          </execution>
+		        </executions>
+		      </plugin>			      	      
 		</plugins>
   </build>
 </project>
