@@ -2,57 +2,43 @@
  	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
   
-  <!-- Quartz Scheduler https://dzone.com/articles/multi-job-scheduling-service -->
-    
-     <bean id="SchedulerService" class="com.mindtree.task.scheduler.SchedulerService" />
-	
-	<!-- Job Detail-->
-	<bean name="FirstJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-	    <property name="jobClass" value="com.mindtree.task.scheduler.jobs.FirstJobDetail"/>
-	    <property name="group" value="JobGroup"/>
-	    <property name="jobDataAsMap">
-	        <map>
-	           <entry key="schedulerService" value-ref="SchedulerService" />
-	        </map>
-	    </property>
-	    <property name="durability" value="true" /> 
-	</bean>
-	
-	<bean name="SecondJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-	    <property name="jobClass" value="com.mindtree.task.scheduler.jobs.SecondJobDetail"/>
-	    <property name="group" value="JobGroup"/>
-	    <property name="jobDataAsMap">
-	        <map>
-	           <entry key="schedulerService" value-ref="SchedulerService" />
-	        </map>
-	    </property>
-	    <property name="durability" value="true" /> 
-	</bean>
+	<bean id="quartzJobFactory" class="com.mindtree.task.scheduler.AutowiringSpringBeanJobFactory">
+	    <property name="ignoredUnknownProperties" value="applicationContext"/>
+	</bean>    
 
-	<!-- Cron Trigger -->
-	<bean id="FirstSimpleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-	    <property name="jobDetail" ref="FirstJobDetail" />
-	    <property name="cronExpression" value="${schedule.timer1}" />
-	</bean>
+	<bean id="firstJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+    	<property name="jobClass" value="com.mindtree.task.scheduler.jobs.FirstJob"/>
+    	 <property name="group" value="JobGroup-1"/>
+    	<property name="durability" value="true" /> 
+	</bean>	
 	
-	<bean id="SecondSimpleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-	    <property name="jobDetail" ref="SecondJobDetail" />
-	    <property name="cronExpression" value="${schedule.timer2}" />
+	<!-- Cron Trigger -->
+	<bean id="firstJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	    <property name="jobDetail" ref="firstJob" />
+	    <property name="cronExpression" value="${schedule.timer1}" />
 	</bean>
 
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	    <property name="configLocation" value="WEB-INF/config/quartz.properties"/>
+	    <property name="dataSource" ref="dataSource"/> 							<!-- Quartz with the DB requires references to the data source and transaction manager beans -->
+	    <property name="transactionManager" ref="transactionManager"/>
+	 	<property name="jobFactory" ref="quartzJobFactory"/>  					<!-- reference to our 'autowiring job factory bean', defined above: -->
+	    <property name="overwriteExistingJobs" value="true"/>					<!-- Boolean controlling whether you want to override the job definitions in the DB on the app start up. -->
+	    <property name="autoStartup" value="true" />
+	    <property name="schedulerName" value="quartzScheduler"/>
+	    <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+	    <property name="waitForJobsToCompleteOnShutdown" value="true"/>			<!-- Controls whether to wait for jobs completion on app shutdown, we use 'true' -->
+	   
 	    <property name="jobDetails">
-	       <list>
-	          <ref bean="FirstJobDetail" />
-	          <ref bean="SecondJobDetail" />
-	       </list>
-	    </property>    
-	    <property name="triggers">
-	       <list>
-	          <ref bean="FirstSimpleTrigger" />
-	           <ref bean="SecondSimpleTrigger" />
-	       </list>
-	    </property>
-	</bean>
+		       <list>
+		          <ref bean="firstJob" />
+		       </list>
+		    </property>    
+		    <property name="triggers">
+		       <list>
+		          <ref bean="firstJobTrigger" />
+		       </list>
+		    </property>
+	</bean>	
     
 </beans>
