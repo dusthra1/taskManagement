@@ -53,7 +53,7 @@ public class TaskDAOImpl implements TaskDAO {
 		Persistable retrievedObj=null;
 		Session session = sessionFactory.getCurrentSession();
 		try {
-			retrievedObj= (Persistable) session.get(classObj, key);
+			retrievedObj= (Persistable) session.load(classObj, key);
 			
 		} catch (Exception ex) {	
 			log.error("DAO exception occured: "+ex.getMessage());
@@ -68,7 +68,7 @@ public class TaskDAOImpl implements TaskDAO {
 		Persistable retrievedObj=null;
 		Session session = sessionFactory.getCurrentSession();
 		try {
-			retrievedObj= (Persistable) session.get(classObj, key);
+			retrievedObj= (Persistable) session.load(classObj, key);
 			
 		} catch (Exception ex) {	
 			log.error("DAO exception occured: "+ex.getMessage());
