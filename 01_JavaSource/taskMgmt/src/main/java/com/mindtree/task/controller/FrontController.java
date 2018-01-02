@@ -192,44 +192,50 @@ public class FrontController {
 		
 		List<Persistable> allProjList = null;
 		
-		if("view".equals(type)){
-			
-			String filterName = jsonRequest.getString("filter");
-			String sortOrder = jsonRequest.getString("sortOrder");
-			String sortField = jsonRequest.getString("sortField");
-			
-			if(!filterName.isEmpty() && !"undefined".equalsIgnoreCase(filterName) ){
-				log.debug("Executing filter: "+filterName);
-				allProjList= taskService.getAllProjects(filterName);
-			}else{
-					allProjList= taskService.getAllProjects();	
-			}
-			
-			if (!allProjList.isEmpty()) {
-				Gson gson = TaskUtil.getGsonInstance();
-				String jsonStr=gson.toJson(allProjList);			
+		switch(type){
+		
+			case "view":
 				
-				jsonResponse.put("projects", jsonStr);	
-				jsonResponse.put("itemCount", allProjList.size());
-				jsonResponse.put("results", "success");
-			}else{
-				jsonResponse.put("results", "empty");
-			}
-			jsonUtil.handleJSONResponse(response, jsonResponse.toString());
-		}
+					String filterName = jsonRequest.getString("filter");
+					String sortOrder = jsonRequest.getString("sortOrder");
+					String sortField = jsonRequest.getString("sortField");
+					
+					if(!filterName.isEmpty() && !"undefined".equalsIgnoreCase(filterName) ){
+						log.debug("Executing filter: "+filterName);
+						allProjList= taskService.getAllProjects(filterName);
+					}else{
+							allProjList= taskService.getAllProjects();	
+					}
+					
+					if (!allProjList.isEmpty()) {
+						Gson gson = TaskUtil.getGsonInstance();
+						String jsonStr=gson.toJson(allProjList);			
+						
+						jsonResponse.put("projects", jsonStr);	
+						jsonResponse.put("itemCount", allProjList.size());
+						jsonResponse.put("results", "success");
+					}else{
+						jsonResponse.put("results", "empty");
+					}
+					jsonUtil.handleJSONResponse(response, jsonResponse.toString());
+					break;
 				
-		//Delete Project
-		if("delete".equals(type)){
-			String id = jsonRequest.getString("id");
-			Persistable prj;
-			try {
-				prj = (Persistable)taskService.find(Project.class, Integer.valueOf(id));
-				if(prj !=null){
-					taskService.deleteEntity(prj);
-				}
-			} catch (NumberFormatException | ApplicationException e) {
-				log.error("Error Occurred --"+ e);
-			}			
+			case "delete":
+	
+					String id = jsonRequest.getString("id");
+					Persistable prj;
+					try {
+						prj = (Persistable)taskService.find(Project.class, Integer.valueOf(id));
+						if(prj !=null){
+							taskService.deleteEntity(prj);
+						}
+					} catch (NumberFormatException | ApplicationException e) {
+						log.error("Error Occurred --"+ e);
+					}			
+					break;
+				default:
+					log.debug("Manage Projects: Did not match any case");
+					break;
 		}
 		
 	}
