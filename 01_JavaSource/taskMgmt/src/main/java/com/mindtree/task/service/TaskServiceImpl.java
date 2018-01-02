@@ -176,12 +176,12 @@ public class TaskServiceImpl implements TaskService {
 			obj = taskDAO.getEntity(entityobj, projId);
 			
 		} catch (DAOException daoEx) {
-			log.error("Exception occured while saving task " + daoEx.getMessage());
+			log.error("Exception occured while finding entity " + daoEx.getMessage());
 			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while saving task " + ex.getMessage());
+			log.error("Exception occured while finding entity " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}	
@@ -196,12 +196,12 @@ public class TaskServiceImpl implements TaskService {
 			obj = taskDAO.getEntity(entityobj, key);
 			
 		}catch (DAOException daoEx) {
-			log.error("Exception occured while saving task " + daoEx.getMessage());
+			log.error("Exception occured while finding entity " + daoEx.getMessage());
 			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 			throw ae;
 
 		} catch (Exception ex) {
-			log.error("Exception occured while saving task " + ex.getMessage());
+			log.error("Exception occured while finding entity " + ex.getMessage());
 			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			throw ae;
 		}		

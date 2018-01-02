@@ -31,7 +31,7 @@ public List<Persistable> getProperties() {
 		i18nMessageLst = taskDAO.findRecords(NamedQueryConstants.I18N_MESSAGES, null);		
 		
 	} catch (DAOException daoEx) {
-		log.error("Exception occured while getting projects " + daoEx.getMessage());
+		log.error("Exception occured while getting i18n messages " + daoEx.getMessage());
 		ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, daoEx);
 		throw ae;
 
