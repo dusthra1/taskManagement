@@ -2,6 +2,9 @@ package com.mindtree.task.service;
 
 import java.util.List;
 
+import com.mindtree.task.dto.EmployeeDTO;
+import com.mindtree.task.dto.ProjectDTO;
+import com.mindtree.task.dto.TaskDTO;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.form.AddTaskForm;
 import com.mindtree.task.model.Persistable;
@@ -15,11 +18,11 @@ public interface TaskService {
 	
 	public void deleteEntity(Persistable obj) throws ApplicationException;
 	
-	public List<Persistable> getAllProjects() throws ApplicationException;
+	public List<ProjectDTO> getAllProjects() throws ApplicationException;
 	
-	public List<Persistable> getAllProjects(String projName) throws ApplicationException;
+	public List<ProjectDTO> getAllProjects(String projName) throws ApplicationException;
 	
-	public List<Persistable> getAllEmployees(Integer projId) throws ApplicationException;
+	public List<EmployeeDTO> getAllEmployees(Integer projId) throws ApplicationException;
 	
 	public List<Persistable> getAllEmployees() throws ApplicationException;
 	
@@ -29,7 +32,7 @@ public interface TaskService {
 	
 	public Persistable find(Class entityobj, String key) throws ApplicationException;
 	
-	public List<Persistable> getAllTasks(Integer projId) throws ApplicationException;
+	public List<TaskDTO> getAllTasks(Integer projId) throws ApplicationException;
 	
 	public void updateUsersLoginStatus() throws ApplicationException;
 

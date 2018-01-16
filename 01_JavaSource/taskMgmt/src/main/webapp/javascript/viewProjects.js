@@ -1,3 +1,7 @@
+var header = $("meta[name='_csrf_header']").attr("content");
+var token = $("meta[name='_csrf']").attr("content");
+                	
+
 $(function () {
 	
         $("#jsGrid").jsGrid({
@@ -21,14 +25,17 @@ $(function () {
             	loadData: function(filter) {  
             		//alert(filter.sortField);
             		//alert(filter.sortOrder);
-            		//alert(filter.name);
+            		//alert(filter.name);      		
             		
             		var d = $.Deferred();
             		var jsonReq = '{"type":"view","filter":"'+filter.name+'","sortOrder":"'+filter.sortOrder+'","sortField":"'+filter.sortField+'","dummy=":"'+(new Date()).getTime()+'"}';
             	   
             	    $.ajax({
                         type: "GET",
-                        url: "manageProject.do?jsonstr="+jsonReq                       
+                        url: "manageProject.do?jsonstr="+jsonReq,
+                        error: function() {
+                            alert("FAILURE !");
+                          }
                     }).done(function(response) {
                     	d.resolve({
             	            data: JSON.parse(response.projects),
@@ -38,10 +45,16 @@ $(function () {
             	   return d.promise();
             	},
             	insertItem: function (item) {
-            	    jsonReq = '{"type":"add","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'","dummy=":"'+(new Date()).getTime()+'"}';
+            	    var jsonReq = '{"type":"add","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'","dummy=":"'+(new Date()).getTime()+'"}';
             	    $.ajax({
                         type: "POST",
-                        url: "addProject.do?jsonstr="+jsonReq
+                        url: "addProject.do?jsonstr="+jsonReq,
+                        beforeSend: function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
+                        error: function() {
+                            alert("FAILURE !");
+                          }
                     }).done(function(){
                     	$("#jsGrid").jsGrid("loadData");
                     });
@@ -50,7 +63,13 @@ $(function () {
                 	jsonReq = '{"type":"update","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'","dummy=":"'+(new Date()).getTime()+'"}';
                     $.ajax({
                         type: "POST",
-                        url: "addProject.do?jsonstr="+jsonReq                       
+                        url: "addProject.do?jsonstr="+jsonReq,
+                        beforeSend: function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
+                        error: function() {
+                            alert("FAILURE !");
+                          }
                     }).done(function(){
                     	$("#jsGrid").jsGrid("loadData");
                     });
@@ -59,7 +78,10 @@ $(function () {
                 	jsonReq = '{"type":"delete","id":"'+item.id+'","dummy=":"'+(new Date()).getTime()+'"}';
                     $.ajax({
                         type: "GET",
-                        url: "manageProject.do?jsonstr="+jsonReq                       
+                        url: "manageProject.do?jsonstr="+jsonReq,
+                        error: function() {
+                            alert("FAILURE !");
+                          }
                     }).done(function(){
                     	$("#jsGrid").jsGrid("loadData");
                     });

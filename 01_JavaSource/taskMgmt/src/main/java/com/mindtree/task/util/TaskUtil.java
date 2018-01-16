@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -11,9 +12,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class TaskUtil {
 	
@@ -32,12 +30,12 @@ public class TaskUtil {
 		    return date;
 	}
 
-	public static Gson getGsonInstance(){
+	/*public static Gson getGsonInstance(){
 		GsonBuilder b = new GsonBuilder();
 		b.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 		Gson gson = b.create();
 		return gson;
-	}
+	}*/
 	
 	public static boolean isEmptyString(String string) {
 		boolean isEmpty = true;
@@ -106,12 +104,25 @@ public class TaskUtil {
 		return timeOutUrl;
 	}
 	
-	public static void main(String args[]){
+	/**
+	 * Null-safe check if the specified collection is empty.
+	 * <p>
+	 * Null returns true.
+	 * 
+	 * @param coll  the collection to check, may be null
+	 * @return true if empty or null
+	 * @since Commons Collections 3.2
+	 */
+	public static boolean isEmpty(Collection coll) {
+	    return (coll == null || coll.isEmpty());
+	}
+	
+	/*public static void main(String args[]){
 		System.out.println(getEncryptedString("abcd1234"));
 		
 		System.out.println(getDecryptedString("YWJjZDEyMzQ="));
 		
-	}
+	}*/
 	
 	
 	

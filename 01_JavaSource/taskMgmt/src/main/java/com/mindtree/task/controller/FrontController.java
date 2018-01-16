@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.mindtree.task.constants.ApplicationConstants;
+import com.mindtree.task.dto.EmployeeDTO;
+import com.mindtree.task.dto.ProjectDTO;
+import com.mindtree.task.dto.TaskDTO;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.form.AddTaskForm;
 import com.mindtree.task.model.Employee;
@@ -54,11 +58,11 @@ public class FrontController {
 		AddTaskForm addTaskForm = new AddTaskForm();
 		request.setAttribute("addTaskFormDetails", addTaskForm);
 		
-		List<Persistable> allProjList= taskService.getAllProjects();		
+		List<ProjectDTO> allProjList= taskService.getAllProjects();		
 		request.setAttribute("allProjList", allProjList);
 		ModelAndView modelview=new ModelAndView();
 		modelview.addObject(model);
-		modelview.setViewName("addTaskPage");
+		modelview.setViewName(ApplicationConstants.ADD_TASK_PAGE);
 		return modelview;
 	}
 	
@@ -71,14 +75,14 @@ public class FrontController {
 		taskValidator.validate(addTaskForm, result);
 		
 		if(result.hasErrors()){
-			List<Persistable> allProjList= taskService.getAllProjects();		
+			List<ProjectDTO> allProjList= taskService.getAllProjects();		
 			request.setAttribute("allProjList", allProjList);	
-			modelview.setViewName("addTaskPage");
+			modelview.setViewName(ApplicationConstants.ADD_TASK_PAGE);
 		}else{
 			Task savedTask = taskService.saveTaskDetails(addTaskForm);
 			String message="Task Saved Successfully: Id: "+savedTask.getTaskId();
 			modelview.addObject("message", message);
-			modelview.setViewName("homePage");
+			modelview.setViewName(ApplicationConstants.HOME_PAGE);
 		}
 		return modelview;
 	}
@@ -92,11 +96,12 @@ public class FrontController {
 		
 		JSONObject jsonRequest = new JSONObject(jsonstr);
 		String projId = jsonRequest.getString("projId");
-		List<Persistable> empList = taskService.getAllEmployees(Integer.valueOf(projId));
+		List<EmployeeDTO> empDTOList = taskService.getAllEmployees(Integer.valueOf(projId));
 		
-		if (!empList.isEmpty()) {
-			Gson gson = TaskUtil.getGsonInstance();
-			String jsonStr=gson.toJson(empList);
+		if (!empDTOList.isEmpty()) {
+			//Gson gson = TaskUtil.getGsonInstance();
+			Gson gson = new Gson();
+			String jsonStr=gson.toJson(empDTOList);
 			
 			jsonResponse.put("EMP_LIST", jsonStr);
 			jsonResponse.put("result", "success");
@@ -112,11 +117,11 @@ public class FrontController {
 	@RequestMapping(method = RequestMethod.GET, value ="/viewTasks.do")
 	public ModelAndView viewTasks(HttpServletRequest request)
 	{
-		List<Persistable> allProjList= taskService.getAllProjects();		
-		StringBuffer sb = new StringBuffer("[");
+		List<ProjectDTO> allProjList= taskService.getAllProjects();		
+		StringBuilder sb = new StringBuilder("[");
 		int index = 0;
-		for(Persistable obj:allProjList){
-			Project prj = (Project)obj;
+		for(ProjectDTO obj:allProjList){
+			ProjectDTO prj = (ProjectDTO)obj;
 			if(index>0){sb.append(",");}
 			sb.append("'").append(prj.getName()).append(":").append(prj.getId()).append("'");
 			index++;
@@ -124,7 +129,7 @@ public class FrontController {
 		sb.append("]");
 		request.setAttribute("projectsList", sb.toString());	
 		
-		return new ModelAndView("viewTaskPage");
+		return new ModelAndView(ApplicationConstants.VIEW_TASK_PAGE);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value ="/getTasksHTML.do")
@@ -134,15 +139,15 @@ public class FrontController {
 		JSONUtil jsonUtil = new JSONUtil();
 		JSONObject jsonRequest = new JSONObject(jsonstr);
 		String projId = jsonRequest.getString("projId");
-		StringBuffer htmlStr = new StringBuffer();
+		StringBuilder htmlStr = new StringBuilder();
 		//Get all tasks for project
 		try {
-			List<Persistable> allTaskList= taskService.getAllTasks(Integer.valueOf(projId));
+			List<TaskDTO> allTaskList= taskService.getAllTasks(Integer.valueOf(projId));
 			
 			if(allTaskList !=null && allTaskList.size()>0){
 				
-				for(Persistable obj : allTaskList){
-					Task tsk = (Task) obj;
+				for(TaskDTO tsk : allTaskList){
+					//Task tsk = (Task) obj;
 					htmlStr.append("<table>")
 						   .append("<tr><td></td></tr>")
 						   .append("<tr><td></td></tr>")
@@ -176,7 +181,7 @@ public class FrontController {
 	@RequestMapping(method = RequestMethod.GET, value ="/viewProjects.do")
 	public ModelAndView viewProjects(HttpServletRequest request)
 	{
-		return new ModelAndView("viewProjectsPage");
+		return new ModelAndView(ApplicationConstants.VIEW_PROJECTS_PAGE);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value ="/manageProject.do")
@@ -190,7 +195,7 @@ public class FrontController {
 		log.debug("type=: "+type);
 		
 		
-		List<Persistable> allProjList = null;
+		List<ProjectDTO> allProjList = null;
 		
 		switch(type){
 		
@@ -208,7 +213,8 @@ public class FrontController {
 					}
 					
 					if (!allProjList.isEmpty()) {
-						Gson gson = TaskUtil.getGsonInstance();
+						//Gson gson = TaskUtil.getGsonInstance();
+						Gson gson = new Gson();
 						String jsonStr=gson.toJson(allProjList);			
 						
 						jsonResponse.put("projects", jsonStr);	
@@ -250,26 +256,32 @@ public class FrontController {
 		String name = jsonRequest.getString("name");
 		String desc = jsonRequest.getString("desc");
 		
-		Project proj= null;
+		Project proj=  new Project();
 		
-		//Add Project
-		if("add".equals(type)){
-			proj = new Project();
+		switch(type){
+		
+		case "add":
 			proj.setName(name);
 			proj.setDescription(desc);
 			taskService.saveEntity(proj);
+			break;
+		
+		case "update":
+			String id = jsonRequest.getString("id");
+			Project oldProj = (Project) taskService.find(Project.class, Integer.valueOf(id));
+			if(oldProj !=null)	{
+				proj.setId(Integer.valueOf(id));
+				proj.setName(name);
+				proj.setDescription(desc);
+				taskService.updateEntity(proj);
+			}
+			break;
+		
+		default:
+			log.debug("Add/Update Projects: Did not match any case");
+			break;
 		}
-				
-		//Update Project
-		if("update".equals(type)){
-			String id = jsonRequest.getString("id");			
-				proj = (Project)taskService.find(Project.class, Integer.valueOf(id));
-				if(proj!=null){
-					proj.setName(name);
-					proj.setDescription(desc);
-					taskService.updateEntity(proj);
-				}
-		}
+		
 	}
 	
 	//http://learnfromexamples.com/generate-excel-in-spring-mvc-application-using-apache-poi/

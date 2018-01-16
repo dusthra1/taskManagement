@@ -61,7 +61,7 @@ public class Task implements Persistable,Comparable<Task>{
 	private Project project;
 	
 	@NotFound(action=NotFoundAction.IGNORE)
-	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.MERGE)	
+	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.MERGE)	
 	@JoinTable(name="TASK_EMPLOYEE", 
 	joinColumns=@JoinColumn(name="TASK_ID"),
 	inverseJoinColumns=@JoinColumn(name="MID"))
