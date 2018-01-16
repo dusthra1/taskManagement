@@ -20,22 +20,22 @@ public class SessionManager {
 	}
 
 	public static void setUserInSession(User user, HttpServletRequest request,boolean createSession) {		
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(createSession);
 		session.setAttribute(USER_SESSION_KEY, user);		
 	}
 	
 	public static void setAdminUserInSession(User user, HttpServletRequest request,boolean createSession){
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(createSession);
 		session.setAttribute(ADMIN_USER_SESSION_KEY, user);	
 	}
 	
 	public static void setLocale(String locale, HttpServletRequest request,boolean createSession){
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(createSession);
 		session.setAttribute(LOCALE, locale);	
 	}
 	
 	public static void setLoginAs(boolean loginAs, HttpServletRequest request,boolean createSession){
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(createSession);
 		session.setAttribute(LOGIN_AS_SESSION_ACTIVE, loginAs);	
 	}
 	

@@ -24,5 +24,15 @@ public interface ApplicationConstants {
 	public static final String YES = "Y";
 	public static final String NO = "N";
 	
+	//Tiles pages
+	
+	public static final String LOGIN_PAGE = "loginPage";
+	public static final String LOGIN_AS_PAGE = "adminLoginAsPage";
+	public static final String HOME_PAGE = "homePage";
+	public static final String ADMIN_HOME_PAGE = "adminHomePage";
+	public static final String ADD_TASK_PAGE = "addTaskPage";
+	public static final String VIEW_TASK_PAGE = "viewTaskPage";
+	public static final String VIEW_PROJECTS_PAGE = "viewProjectsPage";
+	
 
 }

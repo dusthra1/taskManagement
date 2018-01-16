@@ -30,7 +30,7 @@ import com.mindtree.task.form.LoginForm;
 import com.mindtree.task.model.Role;
 import com.mindtree.task.model.User;
 import com.mindtree.task.service.LoginService;
-import com.mindtree.task.util.Status;
+import com.mindtree.task.util.ReturnStatus;
 import com.mindtree.task.util.TaskUtil;
 
 @Controller
@@ -44,13 +44,11 @@ public class LoginController {
 	@Autowired
 	private TaskUtil taskUtil;
 
-	private final String LOGIN_PAGE = "loginPage";
-	
 	@RequestMapping(method = RequestMethod.GET, value ="/loginpage.do")
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView(LOGIN_PAGE);
+		ModelAndView mav = new ModelAndView(ApplicationConstants.LOGIN_PAGE);
 		if(SessionManager.isUserAuthenticated(request)){
-			mav = new ModelAndView("homePage");				
+			mav = new ModelAndView(ApplicationConstants.HOME_PAGE);				
 		}
 		String sessionTimeOut = request.getParameter("st");
 		if (null!=sessionTimeOut && "1".equals(sessionTimeOut)) {
@@ -65,7 +63,7 @@ public class LoginController {
 	@RequestMapping(value = "/adminHome.do", method = RequestMethod.GET)
 	public ModelAndView adminHome(HttpServletRequest request,HttpServletResponse response) {	
 		
-		return new ModelAndView("adminHomePage");
+		return new ModelAndView(ApplicationConstants.ADMIN_HOME_PAGE);
 	}
 	
 	@RequestMapping(value = "/loginAs.do", method = RequestMethod.GET)
@@ -103,7 +101,7 @@ public class LoginController {
 		ModelAndView modelAndView = null;
 		try {
 			HttpSession session = request.getSession();
-			modelAndView = new ModelAndView(LOGIN_PAGE);
+			modelAndView = new ModelAndView(ApplicationConstants.LOGIN_PAGE);
 			String userName = loginForm.getUserID();
 			String password = loginForm.getPassword();
 			String locale = loginForm.getLocale();
@@ -111,7 +109,7 @@ public class LoginController {
 			if (!TaskUtil.isEmptyString(userName) && !TaskUtil.isEmptyString(password)) {
 				
 				String encrypPasswd = TaskUtil.getEncryptedString(password);
-				Status returnStatus = loginService.login(userName, encrypPasswd);
+				ReturnStatus returnStatus = loginService.login(userName, encrypPasswd);
 				if (null != returnStatus && MessageCode.SUCCESS.equalsIgnoreCase(returnStatus.getStatus())) {
 					
 					User user = (User) returnStatus.getReturnObject();
@@ -134,9 +132,9 @@ public class LoginController {
 								log.info(" -"+role.getRoleName());
 								if(ApplicationConstants.ADMIN.equalsIgnoreCase(role.getRoleName())){
 									SessionManager.setAdminUserInSession(user, request, false);
-									modelAndView.setViewName("adminHomePage");
+									modelAndView.setViewName(ApplicationConstants.ADMIN_HOME_PAGE);
 								}else{
-									modelAndView.setViewName("homePage");
+									modelAndView.setViewName(ApplicationConstants.HOME_PAGE);
 								}
 						}
 						log.info("------------------------------------------");		
@@ -167,7 +165,7 @@ public class LoginController {
 					} 
 
 				} else {
-					String errorCode = returnStatus.getErrorCode();
+					String errorCode = (null != returnStatus) ? returnStatus.getErrorCode() : "error";
 					modelAndView.addObject("errorMessage", errorCode);
 				}
 
@@ -189,7 +187,7 @@ public class LoginController {
 	public ModelAndView workAsOtherUser(HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("loginform") LoginForm loginForm) {		
 		
-		ModelAndView modelAndView = new ModelAndView("homePage");
+		ModelAndView modelAndView = new ModelAndView(ApplicationConstants.HOME_PAGE);
 		
 		try{
 			String userName = loginForm.getUserID();
@@ -198,7 +196,7 @@ public class LoginController {
 					
 					if(!userName.equalsIgnoreCase(currentUser.getUserName())){
 						
-						Status returnStatus = loginService.loginAs(userName);
+						ReturnStatus returnStatus = loginService.loginAs(userName);
 						
 						if (null != returnStatus && MessageCode.SUCCESS.equalsIgnoreCase(returnStatus.getStatus())) {
 							User user = (User) returnStatus.getReturnObject();
@@ -211,18 +209,18 @@ public class LoginController {
 							}
 						}else {
 							log.error("LoginAsService returned error "+MessageCode.USER_NOT_FOUND);
-							modelAndView.setViewName("adminLoginAsPage");
+							modelAndView.setViewName(ApplicationConstants.LOGIN_AS_PAGE);
 							modelAndView.addObject("errorMessage", "User Not found");
 						}
 						
 					}else{
-						modelAndView.setViewName("adminLoginAsPage");
+						modelAndView.setViewName(ApplicationConstants.LOGIN_AS_PAGE);
 						modelAndView.addObject("errorMessage", "User already logged in");
 					}
 					
 				}else {
 					log.error("LoginAsService returned error "+MessageCode.USER_NOT_FOUND);
-					modelAndView.setViewName("adminLoginAsPage");
+					modelAndView.setViewName(ApplicationConstants.LOGIN_AS_PAGE);
 					modelAndView.addObject("errorMessage", "User field empty");
 				}
 			
@@ -243,6 +241,6 @@ public class LoginController {
 		//change user in session as admin user object
 		User adminUserObj = SessionManager.getAdminUserInSession(request);
 		SessionManager.setUserInSession(adminUserObj, request, false);
-		return new ModelAndView("adminHomePage");
+		return new ModelAndView(ApplicationConstants.ADMIN_HOME_PAGE);
 	}
 }

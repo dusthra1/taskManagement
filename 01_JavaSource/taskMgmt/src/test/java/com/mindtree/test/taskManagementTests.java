@@ -19,16 +19,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.mindtree.task.dto.EmployeeDTO;
+import com.mindtree.task.dto.ProjectDTO;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.model.Employee;
-import com.mindtree.task.model.I18nMessage;
-import com.mindtree.task.model.I18nMsgID;
-import com.mindtree.task.model.Language;
-import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.Project;
-import com.mindtree.task.model.Role;
 import com.mindtree.task.model.Task;
-import com.mindtree.task.model.User;
 import com.mindtree.task.service.TaskService;
 
 @RunWith( SpringJUnit4ClassRunner.class )
@@ -57,7 +53,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testProjectExists() {	
 		
-		List<Persistable> projLst = taskService.getAllProjects();	
+		List<ProjectDTO> projLst = taskService.getAllProjects();	
 		System.out.println("Number of Projects: "+projLst.size());
 		assertThat(projLst.isEmpty(), is(false));
 	}
@@ -70,7 +66,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void testEmployeesExists(){
-		List<Persistable> employeesLst = taskService.getAllEmployees(1);
+		List<EmployeeDTO> employeesLst = taskService.getAllEmployees(1);
 		System.out.println("Number of Employees: "+employeesLst.size());
 		assertFalse(employeesLst.isEmpty());
 	}
@@ -85,7 +81,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	public void testEmpPersist() throws ApplicationException{
 		
 		try{
-			List<Persistable> employeesLstBefore = taskService.getAllEmployees(1);
+			List<EmployeeDTO> employeesLstBefore = taskService.getAllEmployees(1);
 			int countBefore = employeesLstBefore.size();
 			
 			String randomNum = String.valueOf(Math.random());
@@ -99,7 +95,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 			mockEmp.setProject(proj);		
 			taskService.saveEntity(mockEmp);
 			
-			List<Persistable> employeesLstAfter = taskService.getAllEmployees(1);
+			List<EmployeeDTO> employeesLstAfter = taskService.getAllEmployees(1);
 			int countAfter = employeesLstAfter.size();
 					
 			assertTrue(countAfter == countBefore+1);

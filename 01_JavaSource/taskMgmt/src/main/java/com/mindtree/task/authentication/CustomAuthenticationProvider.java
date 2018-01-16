@@ -53,7 +53,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	    	 queryParams = new HashMap<String, Object>();
 			 queryParams.put("userName", username);
 			 queryParams.put("password",password);
-			 userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME_PWD, queryParams);
+			 userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME_KEY, queryParams);
 			 
 			 if(userObj !=null){
 				 

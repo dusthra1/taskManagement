@@ -20,7 +20,7 @@ import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.exception.DAOException;
 import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.User;
-import com.mindtree.task.util.Status;
+import com.mindtree.task.util.ReturnStatus;
 
 @Service
 public class LoginServiceImpl implements LoginService  {
@@ -35,11 +35,11 @@ public class LoginServiceImpl implements LoginService  {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Status login(String userName, String password) throws ApplicationException {
+	public ReturnStatus login(String userName, String password) throws ApplicationException {
 		
 		User userObj = null;
 		Map<String, Object> queryParams = null;
-		Status returnStatus = new Status();
+		ReturnStatus returnStatus = new ReturnStatus();
 	
 		//Custom Authentication
 		Authentication authenticatedUser = authProvider.doLogin(userName, password);
@@ -52,7 +52,7 @@ public class LoginServiceImpl implements LoginService  {
 			queryParams = new HashMap<String, Object>();
 			queryParams.put("userName", userName);
 			queryParams.put("password",password);
-			userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME_PWD, queryParams);		
+			userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME_KEY, queryParams);		
 			
 			returnStatus.setReturnObject(userObj);
 			returnStatus.setStatus(MessageCode.SUCCESS);
@@ -87,11 +87,11 @@ public class LoginServiceImpl implements LoginService  {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Status loginAs(String userName) throws ApplicationException {
+	public ReturnStatus loginAs(String userName) throws ApplicationException {
 		
 		User userObj = null;
 		Map<String, Object> queryParams = null;
-		Status returnStatus = new Status();
+		ReturnStatus returnStatus = new ReturnStatus();
 		
 	try{
 			queryParams = new HashMap<String, Object>();

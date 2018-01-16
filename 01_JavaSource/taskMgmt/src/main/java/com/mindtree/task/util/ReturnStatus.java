@@ -7,7 +7,7 @@ package com.mindtree.task.util;
  * for further processing
  * 
  */
-public class Status {
+public class ReturnStatus {
 	
 	private String status;
 	private String errorCode;

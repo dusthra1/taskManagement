@@ -24,12 +24,14 @@ public class TaskValidator implements Validator{
 		ValidationUtils.rejectIfEmpty(errors, "startDate", "startDate.required");
 		ValidationUtils.rejectIfEmpty(errors, "dueDate", "dueDate.required");
 		
-		 if(addTask.getProjId()==0){
+		if(addTask != null){
+			if(addTask.getProjId()==0){
 				errors.rejectValue("projId", "required.proj");
-		}
-		 if(null == addTask.getEmpId() || addTask.getEmpId().size() ==0){
+			}
+		 if(addTask.getEmpId()==null || addTask.getEmpId().size() ==0){
 			 	errors.rejectValue("empId", "required.emp");
-		 }
+		 	}
+		}
 	}
 	
 	

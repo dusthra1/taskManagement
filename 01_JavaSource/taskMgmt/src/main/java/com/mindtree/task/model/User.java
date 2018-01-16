@@ -28,7 +28,7 @@ import com.mindtree.task.constants.QueryConstants;
 
 @Entity
 @Table(name="USERS")
-	@NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.FIND_USER_BY_USERNAME_PWD, query = QueryConstants.FIND_USER_BY_USERNAME_PWD),
+	@NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.FIND_USER_BY_USERNAME_KEY, query = QueryConstants.FIND_USER_BY_USERNAME_KEY),
 			 				@NamedQuery(name = NamedQueryConstants.FIND_USER_BY_USERNAME, query = QueryConstants.FIND_USER_BY_USERNAME),
 			 				@NamedQuery(name = NamedQueryConstants.UPDATE_USERS_LOGIN_STATUS, query = QueryConstants.UPDATE_USERS_LOGIN_STATUS)
 			
