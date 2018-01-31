@@ -31,7 +31,7 @@ var jsonReq = '{"projId":"'+projId+'","dummy=":"'+(new Date()).getTime()+'"}';
 		
         error: function()
         {
-         alert('error occured');
+         //alert('error occured');
         }
 	});	
 }

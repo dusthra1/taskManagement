@@ -16,7 +16,7 @@ public class TaskDTO {
 	private Date dueDate;
 	private Project project;
 	
-	private List<Employee> employeesList = new ArrayList<Employee>();
+	private List<Employee> employeesList = new ArrayList<>();
 
 	public int getTaskId() {
 		return taskId;

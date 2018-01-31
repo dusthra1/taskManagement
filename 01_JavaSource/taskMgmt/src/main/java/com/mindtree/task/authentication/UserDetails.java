@@ -63,7 +63,7 @@ public class UserDetails implements Authentication {
 	}
 
 	@Override
-	public void setAuthenticated(boolean arg0) throws IllegalArgumentException {
+	public void setAuthenticated(boolean arg0) {
 		// Not Used
 		
 	}

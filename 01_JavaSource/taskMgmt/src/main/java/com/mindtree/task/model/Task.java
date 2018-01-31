@@ -72,7 +72,7 @@ public class Task implements Persistable,Comparable<Task>{
 		@Parameter(name = "increment_size", value = "1")
 		})
 	@CollectionId(columns = { @Column(name="Id") }, generator = "taskEmp-sequence-hilo", type= @Type(type="long"))
-	private List<Employee> employeesList = new ArrayList<Employee>();
+	private List<Employee> employeesList = new ArrayList<>();
 	
 	public int getTaskId() {
 		return taskId;

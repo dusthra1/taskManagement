@@ -26,13 +26,25 @@ public class LoggerProfiler {
 	//@Pointcut("execution(public * com.mindtree.task.controller.FrontController.*(..))")
 	
 	@Pointcut("within(com.mindtree.task.controller.*)")
-	public void controllerLayer(){}
+	public void controllerLayer(){
+		/*
+		 * Used in profile method
+		 */
+	}
 	
 	@Pointcut("within(com.mindtree.task.service.*)")
-	public void serviceLayer(){}
+	public void serviceLayer(){
+		/*
+		 * Used in profile method
+		 */
+	}
 	
 	@Pointcut("within(com.mindtree.task.dao.*)")
-	public void daoLayer(){}
+	public void daoLayer(){
+		/*
+		 * Used in profile method
+		 */
+	}
 	
 	
 }

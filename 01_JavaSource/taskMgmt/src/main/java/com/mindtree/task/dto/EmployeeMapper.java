@@ -8,8 +8,12 @@ import com.mindtree.task.model.Persistable;
 
 public class EmployeeMapper {
 	
-	public static List<EmployeeDTO> _toDTOList(List<Persistable> entitiesList){
-		List<EmployeeDTO> empDTOList = new ArrayList<EmployeeDTO> ();
+	private EmployeeMapper(){
+		throw new IllegalStateException("Utility class");
+	}
+	
+	public static List<EmployeeDTO> toDTOList(List<Persistable> entitiesList){
+		List<EmployeeDTO> empDTOList = new ArrayList<> ();
 		
 		for(Persistable obj: entitiesList){
 			Employee emp = (Employee) obj;

@@ -23,7 +23,7 @@ public class DatabaseMessageSource extends AbstractMessageSource implements Reso
     private Logger log = Logger.getLogger(getClass());
     private ResourceLoader resourceLoader;
 
-    private final Map<String, Map<String, String>> messages = new HashMap<String, Map<String, String>>();  
+    private final Map<String, Map<String, String>> messages = new HashMap<>();  
     
 
     @Autowired
@@ -41,8 +41,7 @@ public class DatabaseMessageSource extends AbstractMessageSource implements Reso
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
         String msg = getText(code, locale);
-        MessageFormat result = createMessageFormat(msg, locale);
-        return result;
+        return createMessageFormat(msg, locale);
     }
 
     @Override
@@ -96,10 +95,10 @@ public class DatabaseMessageSource extends AbstractMessageSource implements Reso
         	//logger.debug(i18nMsg.getI18nMsgID().getCode()+" "+i18nMsg.getI18nMsgID().getLocale().getLocale()+" "+i18nMsg.getMessage());
             
             if (m == null)
-				m = new HashMap<String, Map<String, String>>();
+				m = new HashMap<>();
 	            Map<String, String> data = m.get(i18nMsg.getI18nMsgID().getCode());
 				if (data == null) {
-					data = new HashMap<String, String>();
+					data = new HashMap<>();
 					m.put(i18nMsg.getI18nMsgID().getCode(), data);
 				}
 	

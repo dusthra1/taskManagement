@@ -214,7 +214,7 @@
         },
 
         renderTemplate: function(source, context, config) {
-            args = [];
+            var args = [];
             for(var key in config) {
                 args.push(config[key]);
             }

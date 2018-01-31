@@ -29,12 +29,12 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(final String userName) {
 		org.springframework.security.core.userdetails.User securityUser = null;
 		User user = null;
 
 		if (null != userName) {
-			Map<String, Object> param = new HashMap<String, Object>();
+			Map<String, Object> param = new HashMap<>();
 			param.put("userId", userName);
 			user = (User) taskDAO.findRecord(QueryConstants.FIND_USER_BY_USERNAME, param);
 			
@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
 			boolean accountNonLocked = true;
 			
 			//populate User Roles
-			Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+			Collection<GrantedAuthority> authorities = new ArrayList<>();
 			List<Role> rolesList = user.getRoles();
 			for(Role role: rolesList){
 				authorities.add(new SimpleGrantedAuthority(role.getRoleName()));

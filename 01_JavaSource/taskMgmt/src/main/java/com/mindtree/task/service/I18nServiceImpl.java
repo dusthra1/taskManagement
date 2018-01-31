@@ -32,13 +32,11 @@ public List<Persistable> getProperties() {
 		
 	} catch (DAOException daoEx) {
 		log.error("Exception occured while getting i18n messages " + daoEx.getMessage());
-		ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, daoEx);
-		throw ae;
+		throw new ApplicationException(MessageCode.GENERIC_ERROR, daoEx);
 
 	} catch (Exception ex) {
 		log.error("Exception occured while getting projects " + ex.getMessage());
-		ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-		throw ae;
+		throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 	}
 	return i18nMessageLst;
 

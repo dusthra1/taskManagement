@@ -1,6 +1,6 @@
 package com.mindtree.task.constants;
 
-public interface MessageCode {
+public final class MessageCode {
 	
 	public static final String ERROR_404 = "error.404";
 	

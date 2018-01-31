@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,13 +34,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	 
 	 public Authentication doLogin(String username, String password){
 		 com.mindtree.task.authentication.UserDetails userDetails =  new com.mindtree.task.authentication.UserDetails(username,password);
-		 Authentication authUser = authenticate(userDetails);
 		 
-		 return authUser;
+		 return authenticate(userDetails);
 	 }
 
 	@Override
-	public Authentication authenticate(final Authentication authentication) throws AuthenticationException {
+	public Authentication authenticate(final Authentication authentication) {
 		
 		final String username = authentication.getName();
 	    final String password = authentication.getCredentials().toString();
@@ -50,7 +48,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		 Map<String, Object> queryParams = null;
 	     
 	    
-	    	 queryParams = new HashMap<String, Object>();
+	    	 queryParams = new HashMap<>();
 			 queryParams.put("userName", username);
 			 queryParams.put("password",password);
 			 userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME_KEY, queryParams);

@@ -1,6 +1,6 @@
 package com.mindtree.task.constants;
 
-public interface ApplicationConstants {
+public final class ApplicationConstants {
 	
 	public static final String ERROR_CODE = "errorCode";
 	
@@ -23,6 +23,8 @@ public interface ApplicationConstants {
 	
 	public static final String YES = "Y";
 	public static final String NO = "N";
+	
+	public static final String DAO_EXCEPTION_MSG = "DAO exception occured: ";
 	
 	//Tiles pages
 	

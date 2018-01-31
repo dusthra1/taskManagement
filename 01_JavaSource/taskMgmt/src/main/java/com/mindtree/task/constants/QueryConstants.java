@@ -1,6 +1,6 @@
 package com.mindtree.task.constants;
 
-public interface QueryConstants {	
+public final class QueryConstants {	
 	
 	public static final String ALL_PROJECTS = "from Project";
 	

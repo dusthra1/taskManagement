@@ -68,7 +68,7 @@ public class User implements Persistable  {
 		@Parameter(name = "increment_size", value = "1")
 		})
 	@CollectionId(columns = { @Column(name="Id") }, generator = "userRole-sequence-hilo", type= @Type(type="long"))
-	private List<Role> roles = new ArrayList<Role>();
+	private List<Role> roles = new ArrayList<>();
 	
 	@Column(name="STATUS")
 	private String status;	

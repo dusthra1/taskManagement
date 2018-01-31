@@ -28,7 +28,7 @@ public class TaskValidator implements Validator{
 			if(addTask.getProjId()==0){
 				errors.rejectValue("projId", "required.proj");
 			}
-		 if(addTask.getEmpId()==null || addTask.getEmpId().size() ==0){
+		 if(addTask.getEmpId()==null || addTask.getEmpId().isEmpty()){
 			 	errors.rejectValue("empId", "required.emp");
 		 	}
 		}

@@ -22,12 +22,8 @@ import com.mindtree.task.dto.TaskDTO;
 import com.mindtree.task.dto.TaskMapper;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.exception.DAOException;
-import com.mindtree.task.form.AddTaskForm;
-import com.mindtree.task.model.Employee;
 import com.mindtree.task.model.Persistable;
-import com.mindtree.task.model.Project;
 import com.mindtree.task.model.Task;
-import com.mindtree.task.util.TaskUtil;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -46,35 +42,13 @@ public class TaskServiceImpl implements TaskService {
 				
 			} catch (DAOException daoEx) {
 				log.error("Exception occured while save entity " + daoEx.getMessage());
-				ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-				throw ae;
+				throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 			} catch (Exception ex) {
 				log.error("Exception occured while save entity " + ex.getMessage());
-				ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-				throw ae;
+				throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			}
 		}		
-	}
-	
-	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
-	public void updateEntity(Persistable obj) throws ApplicationException {
-		if(obj !=null){
-			try {
-				taskDAO.updateEntity(obj);
-				
-			} catch (DAOException daoEx) {
-				log.error("Exception occured while update entity " + daoEx.getMessage());
-				ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-				throw ae;
-
-			} catch (Exception ex) {
-				log.error("Exception occured while update entity " + ex.getMessage());
-				ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-				throw ae;
-			}
-		}
 	}
 	
 	@Override
@@ -85,13 +59,11 @@ public class TaskServiceImpl implements TaskService {
 				taskDAO.deleteEntity(obj);
 			}catch (DAOException daoEx) {
 				log.error("Exception occured while delete entity" + daoEx.getMessage());
-				ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-				throw ae;
+				throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 			} catch (Exception ex) {
 				log.error("Exception occured while delete entity " + ex.getMessage());
-				ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-				throw ae;
+				throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			}
 		}
 	}
@@ -103,76 +75,56 @@ public class TaskServiceImpl implements TaskService {
 		List<Persistable> empList = null;
 		List<EmployeeDTO> empDTOList = null;
 		try {
-			Map<String,Object> params = new HashMap<String,Object>();
+			Map<String,Object> params = new HashMap<>();
 			params.put("projId", projId);
 			
 			empList = taskDAO.findRecords(NamedQueryConstants.PROJECT_EMPLOYEES, params);	
-			empDTOList = EmployeeMapper._toDTOList(empList);
+			empDTOList = EmployeeMapper.toDTOList(empList);
 			
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while getting employees " + daoEx.getMessage());
-			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-			throw ae;
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 		} catch (Exception ex) {
 			log.error("Exception occured while getting employees " + ex.getMessage());
-			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-			throw ae;
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}		
 		return empDTOList;
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public List<Persistable> getAllEmployees() throws ApplicationException {
+	public List<Persistable> getAllEmployees()  {
 		List<Persistable> empList = null;
 		try {
 			
 			empList = taskDAO.findRecords(NamedQueryConstants.ALL_EMPLOYEES, null);	
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while getting employees " + daoEx.getMessage());
-			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-			throw ae;
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 		} catch (Exception ex) {
 			log.error("Exception occured while getting employees " + ex.getMessage());
-			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-			throw ae;
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}		
 		return empList;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Task saveTaskDetails(AddTaskForm taskForm) {
+	public Task saveTaskDetails(TaskDTO taskdto) {
 		Task savedTask = null;
 		try {
-			Task task = new Task();
-			Project proj = (Project)taskDAO.getEntity(Project.class, taskForm.getProjId());
-			task.setProject(proj);
-			task.setTaskName(taskForm.getTaskName());
-			task.setDescription(taskForm.getTaskDesc());
-			task.setStartDate(TaskUtil.parseDate(taskForm.getStartDate()));
-			task.setDueDate(TaskUtil.parseDate(taskForm.getDueDate()));
-			
-			List<String> empArr = taskForm.getEmpId();
-			for(String empId: empArr){
-				Employee emp = (Employee)taskDAO.getEntity(Employee.class, empId);
-				if(emp!=null){
-					task.getEmployeesList().add(emp);
-				}
-			}			
+			Task task = TaskMapper.toEntity(taskdto);
 			savedTask = (Task) taskDAO.saveEntity(task);
 				
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while saving task " + daoEx.getMessage());
-			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-			throw ae;
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 		} catch (Exception ex) {
 			log.error("Exception occured while saving task " + ex.getMessage());
-			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-			throw ae;
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}
 		return savedTask;
 	}
@@ -186,33 +138,29 @@ public class TaskServiceImpl implements TaskService {
 			
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while finding entity " + daoEx.getMessage());
-			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-			throw ae;
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 		} catch (Exception ex) {
 			log.error("Exception occured while finding entity " + ex.getMessage());
-			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-			throw ae;
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}	
 		return obj;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Persistable find(Class entityobj, String key) throws ApplicationException {
+	public Persistable find(Class entityobj, String key)  {
 		Persistable obj;
 		try {
 			obj = taskDAO.getEntity(entityobj, key);
 			
 		}catch (DAOException daoEx) {
 			log.error("Exception occured while finding entity " + daoEx.getMessage());
-			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-			throw ae;
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 		} catch (Exception ex) {
 			log.error("Exception occured while finding entity " + ex.getMessage());
-			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-			throw ae;
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}		
 		return obj;
 	}
@@ -223,21 +171,19 @@ public class TaskServiceImpl implements TaskService {
 		List<Persistable> allProjList = null;
 		List<ProjectDTO> allProjDTOList = null;
 		try {
-			Map<String,Object> params = new HashMap<String,Object>();
+			Map<String,Object> params = new HashMap<>();
 			params.put("projName", "%"+projName+"%");
 			
 			allProjList = taskDAO.findRecords(NamedQueryConstants.PROJECTS_BY_LIKE_NAME, params);	
-			allProjDTOList = ProjectMapper._toDTOList(allProjList);
+			allProjDTOList = ProjectMapper.toDTOList(allProjList);
 			
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while getting projects " + daoEx.getMessage());
-			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-			throw ae;
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 		} catch (Exception ex) {
 			log.error("Exception occured while getting projects " + ex.getMessage());
-			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-			throw ae;
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}
 		return allProjDTOList;
 	}
@@ -249,16 +195,14 @@ public class TaskServiceImpl implements TaskService {
 		List<ProjectDTO> allProjDTOList = null;
 		try {
 			allProjList = taskDAO.findRecords(NamedQueryConstants.ALL_PROJECTS, null);
-			allProjDTOList = ProjectMapper._toDTOList(allProjList);
+			allProjDTOList = ProjectMapper.toDTOList(allProjList);
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while getting projects " + daoEx.getMessage());
-			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-			throw ae;
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 		} catch (Exception ex) {
 			log.error("Exception occured while getting projects " + ex.getMessage());
-			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-			throw ae;
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}
 		return allProjDTOList;
 	
@@ -266,46 +210,42 @@ public class TaskServiceImpl implements TaskService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public List<TaskDTO> getAllTasks(Integer projId) throws ApplicationException {
+	public List<TaskDTO> getAllTasks(Integer projId)  {
 		List<Persistable> allTasksList = null;
 		List<TaskDTO> allTasksDTOList = null;
 		try {
-			Map<String,Object> params = new HashMap<String,Object>();
+			Map<String,Object> params = new HashMap<>();
 			params.put("projId", projId);
 			
 			allTasksList = taskDAO.findRecords(NamedQueryConstants.ALL_TASKS_FOR_PROJ, params);
-			allTasksDTOList=TaskMapper._toDTOList(allTasksList);
+			allTasksDTOList=TaskMapper.toDTOList(allTasksList);
 			
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while getting tasks " + daoEx.getMessage());
-			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-			throw ae;
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 		} catch (Exception ex) {
 			log.error("Exception occured while getting tasks " + ex.getMessage());
-			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-			throw ae;
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}
 		return allTasksDTOList;
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void updateUsersLoginStatus() throws ApplicationException {
+	public void updateUsersLoginStatus()  {
 		try {			
-			Map<String,Object> params = new HashMap<String,Object>();
+			Map<String,Object> params = new HashMap<>();
 			params.put("status_n", ApplicationConstants.NO);
 			params.put("status_y", ApplicationConstants.YES);
 			taskDAO.updateRecords(NamedQueryConstants.UPDATE_USERS_LOGIN_STATUS, params);	
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while getting employees " + daoEx.getMessage());
-			ApplicationException ae = new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
-			throw ae;
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
 
 		} catch (Exception ex) {
 			log.error("Exception occured while getting employees " + ex.getMessage());
-			ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-			throw ae;
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}		
 	}
 }

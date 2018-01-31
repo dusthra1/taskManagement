@@ -25,7 +25,7 @@ public class TaskUtil {
 			try {
 				 date = new SimpleDateFormat("dd-MM-yyyy").parse(sDate);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				log.error("Exception while parsing Date text: " + e.getMessage());
 			}
 		    return date;
 	}
@@ -47,7 +47,7 @@ public class TaskUtil {
 	}
 	
 	public static List<String> parseString(String dataStr, String key) {		
-		List<String> parsedList = new ArrayList<String>();
+		List<String> parsedList = new ArrayList<>();
 		if (null != dataStr) {
 			String[] tempArray = dataStr.split(key);
 			if (null != tempArray) {
@@ -100,8 +100,7 @@ public class TaskUtil {
 	 */
 	public String timeOutUrl() {			
 		String appname = applicationProperties.getMessage("application.name", null, null);
-		String timeOutUrl = "/" + appname + "/logoff.do?st=1";		
-		return timeOutUrl;
+		return "/" + appname + "/logoff.do?st=1";
 	}
 	
 	/**

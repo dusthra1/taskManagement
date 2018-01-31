@@ -1,5 +1,6 @@
 package com.mindtree.task.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,7 +80,22 @@ public class FrontController {
 			request.setAttribute("allProjList", allProjList);	
 			modelview.setViewName(ApplicationConstants.ADD_TASK_PAGE);
 		}else{
-			Task savedTask = taskService.saveTaskDetails(addTaskForm);
+			TaskDTO taskdto = new TaskDTO();
+			Project proj = (Project)taskService.find(Project.class, addTaskForm.getProjId());
+			taskdto.setProject(proj);
+			taskdto.setTaskName(addTaskForm.getTaskName());
+			taskdto.setDescription(addTaskForm.getTaskDesc());
+			taskdto.setStartDate(TaskUtil.parseDate(addTaskForm.getStartDate()));
+			taskdto.setDueDate(TaskUtil.parseDate(addTaskForm.getDueDate()));
+			List<String> empArr = addTaskForm.getEmpId();
+			for(String empId: empArr){
+				Employee emp = (Employee)taskService.find(Employee.class, empId);
+				if(emp!=null){
+					taskdto.getEmployeesList().add(emp);
+				}
+			}
+			
+			Task savedTask = taskService.saveTaskDetails(taskdto);
 			String message="Task Saved Successfully: Id: "+savedTask.getTaskId();
 			modelview.addObject("message", message);
 			modelview.setViewName(ApplicationConstants.HOME_PAGE);
@@ -120,8 +136,7 @@ public class FrontController {
 		List<ProjectDTO> allProjList= taskService.getAllProjects();		
 		StringBuilder sb = new StringBuilder("[");
 		int index = 0;
-		for(ProjectDTO obj:allProjList){
-			ProjectDTO prj = (ProjectDTO)obj;
+		for(ProjectDTO prj:allProjList){
 			if(index>0){sb.append(",");}
 			sb.append("'").append(prj.getName()).append(":").append(prj.getId()).append("'");
 			index++;
@@ -144,10 +159,9 @@ public class FrontController {
 		try {
 			List<TaskDTO> allTaskList= taskService.getAllTasks(Integer.valueOf(projId));
 			
-			if(allTaskList !=null && allTaskList.size()>0){
+			if(allTaskList !=null && !allTaskList.isEmpty()){
 				
 				for(TaskDTO tsk : allTaskList){
-					//Task tsk = (Task) obj;
 					htmlStr.append("<table>")
 						   .append("<tr><td></td></tr>")
 						   .append("<tr><td></td></tr>")
@@ -209,7 +223,14 @@ public class FrontController {
 						log.debug("Executing filter: "+filterName);
 						allProjList= taskService.getAllProjects(filterName);
 					}else{
-							allProjList= taskService.getAllProjects();	
+							allProjList= taskService.getAllProjects();
+							//Implementing Lambda expressions for sorting collections
+							if("desc".equals(sortOrder)){
+								Collections.sort(allProjList,(p1,p2)-> p1.getName().compareTo(p2.getName())); 
+							}else{
+								Collections.sort(allProjList,(p2,p1)-> p1.getName().compareTo(p2.getName())); 
+							}
+							 
 					}
 					
 					if (!allProjList.isEmpty()) {
@@ -231,7 +252,7 @@ public class FrontController {
 					String id = jsonRequest.getString("id");
 					Persistable prj;
 					try {
-						prj = (Persistable)taskService.find(Project.class, Integer.valueOf(id));
+						prj = taskService.find(Project.class, Integer.valueOf(id));
 						if(prj !=null){
 							taskService.deleteEntity(prj);
 						}
@@ -247,7 +268,7 @@ public class FrontController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value ="/addProject.do")
-	public void addProject(@RequestParam("jsonstr") String jsonstr, HttpServletRequest request, HttpServletResponse response) throws ApplicationException{
+	public void addProject(@RequestParam("jsonstr") String jsonstr, HttpServletRequest request, HttpServletResponse response){
 		
 		JSONObject jsonRequest = new JSONObject(jsonstr);
 		
@@ -273,7 +294,8 @@ public class FrontController {
 				proj.setId(Integer.valueOf(id));
 				proj.setName(name);
 				proj.setDescription(desc);
-				taskService.updateEntity(proj);
+				//taskService.updateEntity(proj);
+				taskService.saveEntity(proj);
 			}
 			break;
 		
@@ -287,7 +309,7 @@ public class FrontController {
 	//http://learnfromexamples.com/generate-excel-in-spring-mvc-application-using-apache-poi/
 	
 	@RequestMapping(method = RequestMethod.GET, value ="/empreport.do")
-	public ModelAndView empReport(HttpServletRequest request, HttpServletResponse response) throws ApplicationException{
+	public ModelAndView empReport(HttpServletRequest request, HttpServletResponse response) {
 
 		List<Persistable> empList = taskService.getAllEmployees();		
 		return new ModelAndView(new ExcelReportView(), "empList", empList);

@@ -11,8 +11,6 @@ public interface TaskDAO {
 	
 	public void deleteEntity(Persistable obj);
 	
-	public void updateEntity(Persistable obj);
-	
 	public Persistable getEntity(Class obj, String key);
 	
 	public Persistable getEntity(Class obj, Integer key);

@@ -14,9 +14,9 @@
      <form-login 
      	login-page="/loginpage.do" 
      	default-target-url="/home.do" 
-     	authentication-failure-url="/loginpage.do?st=2" 
+     	authentication-failure-url="/loginpage.do" 
      	/>
-     <logout logout-url="/logoff.do" logout-success-url="/loginpage.do?st=1"/>    	    	
+     <logout logout-url="/logoff.do" logout-success-url="/loginpage.do"/>    	    	
      
      <intercept-url pattern="/index.jsp" access="permitAll"/>  		<!-- Initial inxed page -->
      <intercept-url pattern="/loginpage.do" access="permitAll"/>

@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.exception.DAOException;
 import com.mindtree.task.model.Persistable;
 
@@ -23,40 +24,28 @@ public class TaskDAOImpl implements TaskDAO {
 	private SessionFactory sessionFactory;
 	
 	@Override
-	public Persistable saveEntity(Persistable obj) throws DAOException {
+	public Persistable saveEntity(Persistable obj) {
 		Session session = sessionFactory.getCurrentSession();
 		try {
-			session.persist(obj);
+			session.saveOrUpdate(obj);
 			
 		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex.getMessage());
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		}
 		return obj; 	
 	}
-	
-	@Override
-	public void updateEntity(Persistable obj) throws DAOException {
-		Session session = sessionFactory.getCurrentSession();
-		try {
-			session.update(obj);
-			
-		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex.getMessage());
-			throw new DAOException(ex.getMessage(), ex);
-		} 	
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Persistable getEntity(Class classObj, String key) throws DAOException {
+	public Persistable getEntity(Class classObj, String key) {
 		Persistable retrievedObj=null;
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			retrievedObj= (Persistable) session.load(classObj, key);
 			
 		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex.getMessage());
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 		return retrievedObj;
@@ -64,28 +53,28 @@ public class TaskDAOImpl implements TaskDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Persistable getEntity(Class classObj, Integer key) throws DAOException {
+	public Persistable getEntity(Class classObj, Integer key) {
 		Persistable retrievedObj=null;
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			retrievedObj= (Persistable) session.load(classObj, key);
 			
 		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex.getMessage());
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 		return retrievedObj;
 	}
 
 	@Override
-	public void deleteEntity(Persistable obj) throws DAOException {
+	public void deleteEntity(Persistable obj){
 
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			session.delete(obj);
 			
 		} catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex.getMessage());
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 	}
@@ -104,7 +93,7 @@ public class TaskDAOImpl implements TaskDAO {
 			}
 			records = query.getResultList();
 		}catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex.getMessage());
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 		return records;
@@ -128,7 +117,7 @@ public class TaskDAOImpl implements TaskDAO {
 				persistable = resultList.get(0);
 			}
 		} catch (Exception ex) {
-			log.error("DAO exception occured: "+ex.getMessage());
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		}		
 		return persistable;
@@ -146,7 +135,7 @@ public class TaskDAOImpl implements TaskDAO {
 			}
 			query.executeUpdate();
 		}catch (Exception ex) {	
-			log.error("DAO exception occured: "+ex.getMessage());
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 	}	

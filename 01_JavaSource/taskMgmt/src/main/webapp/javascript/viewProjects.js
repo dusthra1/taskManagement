@@ -11,7 +11,7 @@ $(function () {
             filtering: true,
             inserting: true,
             editing: true,
-            sorting: false,
+            sorting: true,
             paging: true,
             autoload: true,
            
@@ -34,7 +34,7 @@ $(function () {
                         type: "GET",
                         url: "manageProject.do?jsonstr="+jsonReq,
                         error: function() {
-                            alert("FAILURE !");
+                            //alert("FAILURE !");
                           }
                     }).done(function(response) {
                     	d.resolve({
@@ -53,14 +53,14 @@ $(function () {
                             xhr.setRequestHeader(header, token);
                         },
                         error: function() {
-                            alert("FAILURE !");
+                            //alert("FAILURE !");
                           }
                     }).done(function(){
                     	$("#jsGrid").jsGrid("loadData");
                     });
                 },
                 updateItem: function (item) {
-                	jsonReq = '{"type":"update","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'","dummy=":"'+(new Date()).getTime()+'"}';
+                	var jsonReq = '{"type":"update","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'","dummy=":"'+(new Date()).getTime()+'"}';
                     $.ajax({
                         type: "POST",
                         url: "addProject.do?jsonstr="+jsonReq,
@@ -68,19 +68,19 @@ $(function () {
                             xhr.setRequestHeader(header, token);
                         },
                         error: function() {
-                            alert("FAILURE !");
+                            //alert("FAILURE !");
                           }
                     }).done(function(){
                     	$("#jsGrid").jsGrid("loadData");
                     });
                 },
                 deleteItem: function (item) {
-                	jsonReq = '{"type":"delete","id":"'+item.id+'","dummy=":"'+(new Date()).getTime()+'"}';
+                	var jsonReq = '{"type":"delete","id":"'+item.id+'","dummy=":"'+(new Date()).getTime()+'"}';
                     $.ajax({
                         type: "GET",
                         url: "manageProject.do?jsonstr="+jsonReq,
                         error: function() {
-                            alert("FAILURE !");
+                            //alert("FAILURE !");
                           }
                     }).done(function(){
                     	$("#jsGrid").jsGrid("loadData");

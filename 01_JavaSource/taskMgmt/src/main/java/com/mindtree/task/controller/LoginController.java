@@ -1,11 +1,9 @@
 package com.mindtree.task.controller;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -52,9 +50,9 @@ public class LoginController {
 		}
 		String sessionTimeOut = request.getParameter("st");
 		if (null!=sessionTimeOut && "1".equals(sessionTimeOut)) {
-			mav.addObject("errorMessage", MessageCode.LOGIN_SESSION_TIMEOUT);
+			mav.addObject(ApplicationConstants.ERROR_MESSAGE, MessageCode.LOGIN_SESSION_TIMEOUT);
 		}else if (null!=sessionTimeOut && "2".equals(sessionTimeOut)) {
-			mav.addObject("errorMessage", MessageCode.INVALID_LOGIN);
+			mav.addObject(ApplicationConstants.ERROR_MESSAGE, MessageCode.INVALID_LOGIN);
 		}
 		
 		return mav;
@@ -72,7 +70,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/logoff.do", method = RequestMethod.GET)
-	public ModelAndView logOff(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {		
+	public ModelAndView logOff(HttpServletRequest request,HttpServletResponse response) {		
 		String sessionTimeOut = request.getParameter("st");
 		ModelAndView mav = new ModelAndView("redirect:/loginPage.do?st="+sessionTimeOut+"");
 		
@@ -166,19 +164,18 @@ public class LoginController {
 
 				} else {
 					String errorCode = (null != returnStatus) ? returnStatus.getErrorCode() : "error";
-					modelAndView.addObject("errorMessage", errorCode);
+					modelAndView.addObject(ApplicationConstants.ERROR_MESSAGE, errorCode);
 				}
 
 			} else {
 				log.debug("LoginService returned error "+MessageCode.EMPTY_LOGIN_CREDENTIALS);
-				modelAndView.addObject("errorMessage", MessageCode.EMPTY_LOGIN_CREDENTIALS);
+				modelAndView.addObject(ApplicationConstants.ERROR_MESSAGE, MessageCode.EMPTY_LOGIN_CREDENTIALS);
 			}
 
 		}catch (Exception ex) {
 			String errorMessage = "Login Process Failed";
 			log.error("ERROR Occurred", ex);
-			ApplicationException ae = new ApplicationException(errorMessage, ex);
-			throw ae;
+			throw new ApplicationException(errorMessage, ex);
 		}		
 		return modelAndView;
 	}
@@ -210,25 +207,24 @@ public class LoginController {
 						}else {
 							log.error("LoginAsService returned error "+MessageCode.USER_NOT_FOUND);
 							modelAndView.setViewName(ApplicationConstants.LOGIN_AS_PAGE);
-							modelAndView.addObject("errorMessage", "User Not found");
+							modelAndView.addObject(ApplicationConstants.ERROR_MESSAGE, "User Not found");
 						}
 						
 					}else{
 						modelAndView.setViewName(ApplicationConstants.LOGIN_AS_PAGE);
-						modelAndView.addObject("errorMessage", "User already logged in");
+						modelAndView.addObject(ApplicationConstants.ERROR_MESSAGE, "User already logged in");
 					}
 					
 				}else {
 					log.error("LoginAsService returned error "+MessageCode.USER_NOT_FOUND);
 					modelAndView.setViewName(ApplicationConstants.LOGIN_AS_PAGE);
-					modelAndView.addObject("errorMessage", "User field empty");
+					modelAndView.addObject(ApplicationConstants.ERROR_MESSAGE, "User field empty");
 				}
 			
 		}catch (Exception ex) {
 			String errorMessage = "Work as Other user process Failed";
 			log.error("ERROR Occurred", ex);
-			ApplicationException ae = new ApplicationException(errorMessage, ex);
-			throw ae;
+			throw new ApplicationException(errorMessage, ex);
 		}	
 		
 		return modelAndView;

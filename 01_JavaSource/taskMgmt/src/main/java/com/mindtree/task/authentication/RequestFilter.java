@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
@@ -20,65 +20,38 @@ public class RequestFilter implements javax.servlet.Filter{
 	
 private static final Logger log = Logger.getLogger(RequestFilter.class);
 
-private String loginHomePath;
-private String loginValidatePath;	
-
-private final String loginHome = "loginHome";	
-private final String loginValidate = "loginValidate";	
-
 	@Override
 	public void destroy() {
-		
+		/*
+		 *  Do Nothing 
+		 */
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain)
+	public void doFilter(ServletRequest srequest, ServletResponse sresponse,FilterChain chain)
 			throws IOException, ServletException {
 
 		String key="userName";
 		try{
 			
-			HttpServletRequest req = (HttpServletRequest) request;
-			//HttpServletResponse res = (HttpServletResponse) response;
+			HttpServletRequest request = (HttpServletRequest) srequest;
+			HttpServletResponse response = (HttpServletResponse) sresponse;
+			//String sessionTimeOut = request.getParameter("st");
 			
-			HttpSession session = req.getSession();
+			//HttpSession session = request.getSession();
 			
-			User user=SessionManager.getUserInSession(req);
+			User user=SessionManager.getUserInSession(request);
 			if(user!=null){
 				MDC.put(key, user.getUserName());
 			}
 			
-			URL aURL = new URL(req.getRequestURL().toString());		
-			String url = aURL.getPath();
-			String sessionTimeOut = req.getParameter("st");
+			URL aURL = new URL(request.getRequestURL().toString());		
 			log.debug("------------------------");
-			log.debug("Requested URL: "+aURL);	
+			log.debug("Requested URL: "+aURL.getPath());	
 			log.debug("------------------------");
 			
 			chain.doFilter(request, response);
 			
-			/*if(SessionManager.isUserAuthenticated(req)){
-				chain.doFilter(request, response);
-			}else{
-				if(!"POST".equalsIgnoreCase(req.getMethod())){
-					String queryStr = req.getQueryString();
-					if(null==queryStr || "".equalsIgnoreCase(queryStr) || "null".equalsIgnoreCase(queryStr)){
-						queryStr = "";
-					}
-					
-					if(!(url.contains(loginHomePath) ||  url.contains(loginValidatePath))){
-						String accessedPath = url+"?"+queryStr;
-						session.setAttribute("accessedPath", accessedPath);
-					}
-				}
-				
-				if (session.isNew() || (null!=sessionTimeOut && "1".equals(sessionTimeOut))) {
-					 request.setAttribute("errorMessage", MessageCode.LOGIN_SESSION_TIMEOUT);
-				}
-				
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher("loginpage.do");
-			    requestDispatcher.forward(request, response);
-			}*/
 		} finally{
 			MDC.remove(key);
 		}  
@@ -86,8 +59,9 @@ private final String loginValidate = "loginValidate";
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {			
-		loginHomePath = filterConfig.getInitParameter(loginHome);
-		loginValidatePath = filterConfig.getInitParameter(loginValidate);
+		/*
+		 *  Do Nothing 
+		 */
 	}
 
 }

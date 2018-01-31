@@ -31,7 +31,11 @@ public class AppContextListener implements ServletContextListener {
 	private static final Logger log = Logger.getLogger(AppContextListener.class);
 
 	@Override
-	public void contextDestroyed(ServletContextEvent event) {}
+	public void contextDestroyed(ServletContextEvent event) {
+		/*
+		 *  Do Nothing 
+		 */
+	}
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
@@ -61,8 +65,7 @@ public class AppContextListener implements ServletContextListener {
 			
 		}catch (Exception ex) {
 			log.error("ERROR Occurred", ex);
-			ApplicationException ae = new ApplicationException(ex.getMessage(), ex);
-			throw ae;
+			throw new ApplicationException(ex.getMessage(), ex);
 		}		
 	}
 

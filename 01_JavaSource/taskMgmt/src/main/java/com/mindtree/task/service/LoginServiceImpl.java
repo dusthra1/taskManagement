@@ -35,7 +35,7 @@ public class LoginServiceImpl implements LoginService  {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ReturnStatus login(String userName, String password) throws ApplicationException {
+	public ReturnStatus login(String userName, String password) {
 		
 		User userObj = null;
 		Map<String, Object> queryParams = null;
@@ -49,7 +49,7 @@ public class LoginServiceImpl implements LoginService  {
 			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 			
 			//Fetching user for status
-			queryParams = new HashMap<String, Object>();
+			queryParams = new HashMap<>();
 			queryParams.put("userName", userName);
 			queryParams.put("password",password);
 			userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME_KEY, queryParams);		
@@ -67,34 +67,32 @@ public class LoginServiceImpl implements LoginService  {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void updateUser(Persistable obj) throws ApplicationException {
+	public void updateUser(Persistable obj) {
 		if(obj !=null){
 			try {
-				taskDAO.updateEntity(obj);
+				taskDAO.saveEntity(obj);
 				
 			} catch (DAOException daoEx) {
 				log.error("Exception occured while update entity " + daoEx.getMessage());
-				ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, daoEx);
-				throw ae;
+				throw new ApplicationException(MessageCode.GENERIC_ERROR, daoEx);
 
 			} catch (Exception ex) {
 				log.error("Exception occured while update entity " + ex.getMessage());
-				ApplicationException ae = new ApplicationException(MessageCode.GENERIC_ERROR, ex);
-				throw ae;
+				throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 			}
 		}
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public ReturnStatus loginAs(String userName) throws ApplicationException {
+	public ReturnStatus loginAs(String userName) {
 		
 		User userObj = null;
 		Map<String, Object> queryParams = null;
 		ReturnStatus returnStatus = new ReturnStatus();
 		
 	try{
-			queryParams = new HashMap<String, Object>();
+			queryParams = new HashMap<>();
 			queryParams.put("userName", userName);			
 			userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME, queryParams);			
 			

@@ -8,8 +8,12 @@ import com.mindtree.task.model.Project;
 
 public class ProjectMapper {
 	
-	public static List<ProjectDTO> _toDTOList(List<Persistable> entitiesList){
-		List<ProjectDTO> prjDTOList = new ArrayList<ProjectDTO> ();
+	private ProjectMapper(){
+		throw new IllegalStateException("Utility class");
+	}
+	
+	public static List<ProjectDTO> toDTOList(List<Persistable> entitiesList){
+		List<ProjectDTO> prjDTOList = new ArrayList<> ();
 		
 		for(Persistable obj: entitiesList){
 			Project proj = (Project) obj;
