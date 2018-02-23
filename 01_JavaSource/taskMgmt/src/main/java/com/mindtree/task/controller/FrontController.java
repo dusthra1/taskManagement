@@ -163,8 +163,7 @@ public class FrontController {
 				
 				for(TaskDTO tsk : allTaskList){
 					htmlStr.append("<table>")
-						   .append("<tr><td></td></tr>")
-						   .append("<tr><td></td></tr>")
+						   .append("<tr><td></td></tr><tr><td></td></tr>")
 						   .append("<tr><td>Task: <b>"+tsk.getTaskName()+"</b></td></tr>")
 						   .append("<tr><td>Task Description: "+tsk.getDescription()+"</td></tr>")
 						   .append("<tr><td>Start Date: "+tsk.getStartDate()+"</td></tr>")
