@@ -58,6 +58,12 @@
        <put-attribute name="title" value="View Projects Page" />        
        <put-attribute name="body" value="/WEB-INF/jsp/viewProjects.jsp" />  
    </definition>
+   
+    <definition name="fileUploadPage" extends="base.definition">  
+       <put-attribute name="title" value="File Upload Page" />        
+       <put-attribute name="body" value="/WEB-INF/jsp/fileUpload.jsp" />  
+   </definition>
+   
       
    <!-- ContactUs Page -->
    <definition name="contactusPage" extends="base.definition">  

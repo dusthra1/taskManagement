@@ -20,10 +20,13 @@ import com.mindtree.task.dto.ProjectDTO;
 import com.mindtree.task.dto.ProjectMapper;
 import com.mindtree.task.dto.TaskDTO;
 import com.mindtree.task.dto.TaskMapper;
+import com.mindtree.task.dto.UploadFileDTO;
+import com.mindtree.task.dto.UploadFileMapper;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.exception.DAOException;
 import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.Task;
+import com.mindtree.task.model.UploadFile;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -247,5 +250,16 @@ public class TaskServiceImpl implements TaskService {
 			log.error("Exception occured while getting employees " + ex.getMessage());
 			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}		
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public UploadFileDTO getFile(Integer fileId) {
+		UploadFileDTO fileDTO = null;
+		UploadFile file= (UploadFile) taskDAO.getEntity(UploadFile.class, fileId);
+		if(file!=null){
+			fileDTO = UploadFileMapper.toDTO(file);
+		}
+		return fileDTO;
 	}
 }

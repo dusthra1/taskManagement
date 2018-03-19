@@ -4,7 +4,7 @@ var jsonReq = '{"projId":"'+projId+'","dummy=":"'+(new Date()).getTime()+'"}';
 	
 	$.ajax({
         type: 'GET',
-		url: "getProjEmployees.do?jsonstr="+jsonReq,
+		url: encodeURI("getProjEmployees.do?jsonstr="+jsonReq),
 		dataType: "json",
 		
 		success: function(event) {			

@@ -45,5 +45,5 @@
 	</beans:bean>
     
     <global-method-security pre-post-annotations="enabled" authentication-manager-ref="authenticationManager" />
- 
+    
 </beans:beans>

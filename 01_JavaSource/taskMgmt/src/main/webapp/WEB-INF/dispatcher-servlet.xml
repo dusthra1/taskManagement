@@ -122,6 +122,10 @@
 		</property>
 	</bean>	
 	
+	<bean id="filterMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="50000000" /> <!-- 5 MB -->
+	</bean>
+	
 	<!-- Tiles -->
 	<bean id="tilesConfigurer"
     class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">

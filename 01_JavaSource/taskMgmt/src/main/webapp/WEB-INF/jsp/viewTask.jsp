@@ -47,7 +47,7 @@
 	  jsonReq = '{"projId":"'+prjId+'","dummy=":"'+(new Date()).getTime()+'"}';
 	  $.ajax({
           type: "GET",
-          url: "getTasksHTML.do?jsonstr="+jsonReq                       
+          url: encodeURI("getTasksHTML.do?jsonstr="+jsonReq)                       
       }).done(function(response){
     	  $('#showContent').empty();
     	  $('#showContent').html(response);

@@ -5,6 +5,7 @@ import java.util.List;
 import com.mindtree.task.dto.EmployeeDTO;
 import com.mindtree.task.dto.ProjectDTO;
 import com.mindtree.task.dto.TaskDTO;
+import com.mindtree.task.dto.UploadFileDTO;
 import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.Task;
 
@@ -31,5 +32,7 @@ public interface TaskService {
 	public List<TaskDTO> getAllTasks(Integer projId);
 	
 	public void updateUsersLoginStatus();
+	
+	public UploadFileDTO getFile(Integer fileId);
 
 }

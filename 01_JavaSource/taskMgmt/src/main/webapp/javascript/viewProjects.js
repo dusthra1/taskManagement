@@ -32,7 +32,7 @@ $(function () {
             	   
             	    $.ajax({
                         type: "GET",
-                        url: "manageProject.do?jsonstr="+jsonReq,
+                        url: encodeURI("manageProject.do?jsonstr="+jsonReq),
                         error: function() {
                             //alert("FAILURE !");
                           }
@@ -48,7 +48,7 @@ $(function () {
             	    var jsonReq = '{"type":"add","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'","dummy=":"'+(new Date()).getTime()+'"}';
             	    $.ajax({
                         type: "POST",
-                        url: "addProject.do?jsonstr="+jsonReq,
+                        url: encodeURI("addProject.do?jsonstr="+jsonReq),
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },
@@ -63,7 +63,7 @@ $(function () {
                 	var jsonReq = '{"type":"update","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'","dummy=":"'+(new Date()).getTime()+'"}';
                     $.ajax({
                         type: "POST",
-                        url: "addProject.do?jsonstr="+jsonReq,
+                        url: encodeURI("addProject.do?jsonstr="+jsonReq),
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },
@@ -78,7 +78,7 @@ $(function () {
                 	var jsonReq = '{"type":"delete","id":"'+item.id+'","dummy=":"'+(new Date()).getTime()+'"}';
                     $.ajax({
                         type: "GET",
-                        url: "manageProject.do?jsonstr="+jsonReq,
+                        url: encodeURI("manageProject.do?jsonstr="+jsonReq),
                         error: function() {
                             //alert("FAILURE !");
                           }

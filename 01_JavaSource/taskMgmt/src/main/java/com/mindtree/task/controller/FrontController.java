@@ -1,11 +1,15 @@
 package com.mindtree.task.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -24,12 +29,14 @@ import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.dto.EmployeeDTO;
 import com.mindtree.task.dto.ProjectDTO;
 import com.mindtree.task.dto.TaskDTO;
+import com.mindtree.task.dto.UploadFileDTO;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.form.AddTaskForm;
 import com.mindtree.task.model.Employee;
 import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.Project;
 import com.mindtree.task.model.Task;
+import com.mindtree.task.model.UploadFile;
 import com.mindtree.task.reports.ExcelReportView;
 import com.mindtree.task.service.TaskService;
 import com.mindtree.task.util.JSONUtil;
@@ -293,7 +300,6 @@ public class FrontController {
 				proj.setId(Integer.valueOf(id));
 				proj.setName(name);
 				proj.setDescription(desc);
-				//taskService.updateEntity(proj);
 				taskService.saveEntity(proj);
 			}
 			break;
@@ -314,4 +320,54 @@ public class FrontController {
 		return new ModelAndView(new ExcelReportView(), "empList", empList);
 			
 		}
+	
+	 @RequestMapping(method = RequestMethod.GET, value = "/fileUpload.do" )
+	    public ModelAndView showUploadForm(HttpServletRequest request) {
+	        return new ModelAndView("fileUploadPage");
+	    }
+	 
+	 @RequestMapping(value = "/doUpload.do", method = RequestMethod.POST)
+	    public ModelAndView handleFileUpload(HttpServletRequest request,
+	            @RequestParam MultipartFile fileUpload) {
+	          
+	                log.debug("Saving file: " + fileUpload.getOriginalFilename());
+	                UploadFile uploadFile = new UploadFile();
+	                ModelAndView mv = new ModelAndView("fileUploadPage");
+	                try { 
+	                	uploadFile.setFileName(fileUpload.getOriginalFilename());
+						uploadFile.setData(fileUpload.getBytes());
+						uploadFile.setContentType(fileUpload.getContentType());
+						log.debug("contentType: "+fileUpload.getContentType() +"Length: "+fileUpload.getContentType().length());
+						taskService.saveEntity(uploadFile);
+						
+						mv.addObject("message", "File "+fileUpload.getOriginalFilename()+" Saved successfully");
+						
+					} catch (IOException e) {
+						log.error("Exception occurred while saving file", e);
+					}
+	                
+	                return mv;
+	    }  
+	 
+	 	@RequestMapping(method = RequestMethod.GET, value ="/downloadFile.do")
+	    public String download(HttpServletRequest request,
+	            @RequestParam String fileId, HttpServletResponse response) {
+	 		
+	        try {
+	        	
+	        	UploadFileDTO doc = taskService.getFile(Integer.valueOf(fileId));
+	        	if(doc !=null){
+	        		response.setHeader("Content-Disposition", "inline;filename=\"" +doc.getFileName()+ "\"");
+	  	            OutputStream out = response.getOutputStream();
+	  	            response.setContentType(doc.getContentType());
+	  	            IOUtils.copy(new ByteArrayInputStream(doc.getData()), out);
+	  	            out.flush();
+	  	            out.close();
+	        	}
+	        } catch (IOException e) {
+	        	log.error("Exception occurred while downloading file", e);
+	        }
+	         
+	        return null;
+	    }
 }
