@@ -4,11 +4,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import com.mindtree.task.constants.NamedQueryConstants;
+import com.mindtree.task.constants.QueryConstants;
 
 @Entity
 @Table(name = "FILES_UPLOAD")
-public class UploadFile implements Persistable{
+@NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.ALL_FILES, query = QueryConstants.ALL_FILES)
+})
+public class FileModel implements Persistable{
 	
 	
 	private static final long serialVersionUID = 1L;

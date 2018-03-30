@@ -20,13 +20,13 @@ import com.mindtree.task.dto.ProjectDTO;
 import com.mindtree.task.dto.ProjectMapper;
 import com.mindtree.task.dto.TaskDTO;
 import com.mindtree.task.dto.TaskMapper;
-import com.mindtree.task.dto.UploadFileDTO;
-import com.mindtree.task.dto.UploadFileMapper;
+import com.mindtree.task.dto.FileModelDTO;
+import com.mindtree.task.dto.FileModelMapper;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.exception.DAOException;
 import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.Task;
-import com.mindtree.task.model.UploadFile;
+import com.mindtree.task.model.FileModel;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -254,12 +254,31 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public UploadFileDTO getFile(Integer fileId) {
-		UploadFileDTO fileDTO = null;
-		UploadFile file= (UploadFile) taskDAO.getEntity(UploadFile.class, fileId);
+	public FileModelDTO getFile(Integer fileId) {
+		FileModelDTO fileDTO = null;
+		FileModel file= (FileModel) taskDAO.getEntity(FileModel.class, fileId);
 		if(file!=null){
-			fileDTO = UploadFileMapper.toDTO(file);
+			fileDTO = FileModelMapper.toDTO(file);
 		}
 		return fileDTO;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public List<FileModelDTO> getAllFiles() {
+		List<Persistable> filesList = null;
+		List<FileModelDTO> fileDTOList = null;
+		try{
+			filesList = taskDAO.findRecords(NamedQueryConstants.ALL_FILES, null);
+			fileDTOList = FileModelMapper.toDTOList(filesList);
+		} catch (DAOException daoEx) {
+			log.error("Exception occured while getting Files " + daoEx.getMessage());
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
+
+		} catch (Exception ex) {
+			log.error("Exception occured while getting Files " + ex.getMessage());
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
+		}	
+		return fileDTOList;
 	}
 }

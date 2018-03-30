@@ -19,5 +19,7 @@ public final class QueryConstants {
 	public static final String I18N_MESSAGES = "from I18nMessage";
 	
 	public static final String UPDATE_USERS_LOGIN_STATUS = "update User set loginStatus= :status_n where loginStatus= :status_y";
+	
+	public static final String ALL_FILES = "from FileModel";
 
 }

@@ -1,6 +1,6 @@
 package com.mindtree.task.dto;
 
-public class UploadFileDTO {
+public class FileModelDTO {
 	
 	private int id;
 	private String fileName;

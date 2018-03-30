@@ -27,20 +27,22 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.dto.EmployeeDTO;
+import com.mindtree.task.dto.FileModelDTO;
 import com.mindtree.task.dto.ProjectDTO;
 import com.mindtree.task.dto.TaskDTO;
-import com.mindtree.task.dto.UploadFileDTO;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.form.AddTaskForm;
+import com.mindtree.task.form.MultipartFileForm;
 import com.mindtree.task.model.Employee;
+import com.mindtree.task.model.FileModel;
 import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.Project;
 import com.mindtree.task.model.Task;
-import com.mindtree.task.model.UploadFile;
 import com.mindtree.task.reports.ExcelReportView;
 import com.mindtree.task.service.TaskService;
 import com.mindtree.task.util.JSONUtil;
 import com.mindtree.task.util.TaskUtil;
+import com.mindtree.task.validators.FileValidator;
 import com.mindtree.task.validators.TaskValidator;
 
 
@@ -305,7 +307,7 @@ public class FrontController {
 			break;
 		
 		default:
-			log.debug("Add/Update Projects: Did not match any case");
+			log.info("Add/Update Projects: Did not match any case");
 			break;
 		}
 		
@@ -322,31 +324,39 @@ public class FrontController {
 		}
 	
 	 @RequestMapping(method = RequestMethod.GET, value = "/fileUpload.do" )
-	    public ModelAndView showUploadForm(HttpServletRequest request) {
-	        return new ModelAndView("fileUploadPage");
+	    public ModelAndView showUploadForm(HttpServletRequest request,  Model model) {
+	        
+		 model.addAttribute("mFileModel", new MultipartFileForm());
+		 return new ModelAndView("fileUploadPage");
 	    }
 	 
 	 @RequestMapping(value = "/doUpload.do", method = RequestMethod.POST)
 	    public ModelAndView handleFileUpload(HttpServletRequest request,
-	            @RequestParam MultipartFile fileUpload) {
-	          
-	                log.debug("Saving file: " + fileUpload.getOriginalFilename());
-	                UploadFile uploadFile = new UploadFile();
-	                ModelAndView mv = new ModelAndView("fileUploadPage");
-	                try { 
-	                	uploadFile.setFileName(fileUpload.getOriginalFilename());
-						uploadFile.setData(fileUpload.getBytes());
-						uploadFile.setContentType(fileUpload.getContentType());
-						log.debug("contentType: "+fileUpload.getContentType() +"Length: "+fileUpload.getContentType().length());
-						taskService.saveEntity(uploadFile);
-						
-						mv.addObject("message", "File "+fileUpload.getOriginalFilename()+" Saved successfully");
-						
-					} catch (IOException e) {
-						log.error("Exception occurred while saving file", e);
-					}
-	                
-	                return mv;
+	            @ModelAttribute("mFileModel") MultipartFileForm mFileModel, BindingResult result) {
+		 
+		 ModelAndView mv = new ModelAndView();
+		 FileValidator fileValidator = new FileValidator();
+		 fileValidator.validate(mFileModel, result);
+		 if(result.hasErrors()){
+			 mv.setViewName("fileUploadPage");
+		 }else{
+			 MultipartFile fileUpload = mFileModel.getFile();
+             log.debug("Saving file: " + fileUpload.getOriginalFilename());
+             FileModel uploadFile = new FileModel();
+           
+             try { 
+             	uploadFile.setFileName(fileUpload.getOriginalFilename());
+					uploadFile.setData(fileUpload.getBytes());
+					uploadFile.setContentType(fileUpload.getContentType());
+					taskService.saveEntity(uploadFile);		
+					
+					mv.addObject("message", "File Uploaded Successfully");
+					
+				} catch (IOException e) {
+					log.error("Exception occurred while saving file", e);
+				}
+		 }
+	    return mv;
 	    }  
 	 
 	 	@RequestMapping(method = RequestMethod.GET, value ="/downloadFile.do")
@@ -355,7 +365,7 @@ public class FrontController {
 	 		
 	        try {
 	        	
-	        	UploadFileDTO doc = taskService.getFile(Integer.valueOf(fileId));
+	        	FileModelDTO doc = taskService.getFile(Integer.valueOf(fileId));
 	        	if(doc !=null){
 	        		response.setHeader("Content-Disposition", "inline;filename=\"" +doc.getFileName()+ "\"");
 	  	            OutputStream out = response.getOutputStream();
@@ -370,4 +380,54 @@ public class FrontController {
 	         
 	        return null;
 	    }
+	 	
+		@RequestMapping(method = RequestMethod.GET, value ="/viewFiles.do")
+		public void viewUploadedFiles(@RequestParam("jsonstr") String jsonstr, HttpServletRequest request, HttpServletResponse response){
+			
+			JSONObject jsonRequest = new JSONObject(jsonstr);
+			JSONObject jsonResponse = new JSONObject();
+			JSONUtil jsonUtil = new JSONUtil();
+			
+			String type = jsonRequest.getString("type");
+			
+			switch(type){
+			case "view":
+				List<FileModelDTO> filesDTOList = taskService.getAllFiles();
+				
+				if (!filesDTOList.isEmpty()) {
+					//Gson gson = TaskUtil.getGsonInstance();
+					Gson gson = new Gson();
+					String jsonStr=gson.toJson(filesDTOList);			
+					
+					jsonResponse.put("fileList", jsonStr);	
+					jsonResponse.put("itemCount", filesDTOList.size());
+					jsonResponse.put("results", "success");
+				}else{
+					jsonResponse.put("results", "empty");
+				}
+				jsonUtil.handleJSONResponse(response, jsonResponse.toString());
+				
+				break;
+				
+			case "delete":
+				String id = jsonRequest.getString("id");
+				Persistable fileModel;
+				try {
+					fileModel = taskService.find(FileModel.class, Integer.valueOf(id));
+					if(fileModel !=null){
+						taskService.deleteEntity(fileModel);
+					}
+				} catch (NumberFormatException | ApplicationException e) {
+					log.error("Error Occurred --"+ e);
+				}			
+				break;
+			default:
+				log.info("ViewUploadedFiles: Did not match any case");
+				break;
+			
+			}
+			
+		
+			
+		}
 }

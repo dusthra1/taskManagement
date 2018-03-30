@@ -7,16 +7,26 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <title>Spring MVC - Hibernate File Upload to Database</title>
+
+ <link type="text/css" rel="stylesheet" href="javascript/jsgrid/jsgrid.min.css" />
+ <link type="text/css" rel="stylesheet" href="javascript/jsgrid/jsgrid-theme.min.css" />
+	<style>
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-    <div align="center">
+    <div align="left">
         <h1>File Upload to Database</h1>
         <c:out value="${message}"/> <br/>
-        <form:form action="doUpload.do" name = "uploadFile" method="post" enctype="multipart/form-data">
+        <form:form action="doUpload.do" name ="uploadFile" modelAttribute="mFileModel" method="post" enctype="multipart/form-data">
             <table border="0">
                 <tr>
-                    <td>Pick file #1:</td>
-                    <td><input type="file" name="fileUpload" size="50" /></td>
+                    <td>Select your file:</td>
+                    <td><form:input type="file" path="file" id="file"/><br>
+                     <form:errors path="file" cssClass="error"/>
+                  </td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center"><input type="submit" value="Upload" /></td>
@@ -25,6 +35,27 @@
        </form:form>
     </div>
     
-    <a href="downloadFile.do?fileId=103">Download</a>
+    <div id="jsGrid"></div>
+  
+ 	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="javascript/jsgrid/jsgrid.min.js"></script>
+  	<script type="text/javascript" src="javascript/viewFiles.js"></script>
+    
+    
+  <%--   <table border="1" width="80%">
+    <tr>
+    <th>SL#</th>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Delete</th>
+    </tr>
+    
+    <tr>
+    <td>${fileModel.id}</td>
+    <td><a href="downloadFile.do?fileId=${fileModel.id}"> ${fileModel.fileName}</a></td>
+    <td>${fileModel.contentType}</td>
+    </tr>
+    </table> --%>
+    
 </body>
 </html>
