@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.mindtree.task.constants.NamedQueryConstants;
 import com.mindtree.task.dao.TaskDAO;
-import com.mindtree.task.model.Role;
+import com.mindtree.task.model.TypeValues;
 import com.mindtree.task.model.User;
 
 @Component
@@ -57,9 +57,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 				 
 				//populate User Roles
 				final List<GrantedAuthority> grantedAuths = new ArrayList<>();
-				List<Role> rolesList = userObj.getRoles();
-				for(Role role: rolesList){
-					grantedAuths.add(new SimpleGrantedAuthority(role.getRoleName()));
+				List<TypeValues> rolesList = userObj.getRoles();
+				for(TypeValues role: rolesList){
+					grantedAuths.add(new SimpleGrantedAuthority(role.getTypeValue()));
 				}
 				
 				final UserDetails principal = new org.springframework.security.core.userdetails.User(username, password, grantedAuths);

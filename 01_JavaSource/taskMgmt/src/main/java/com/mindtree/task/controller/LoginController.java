@@ -23,9 +23,10 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import com.mindtree.task.authentication.SessionManager;
 import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.constants.MessageCode;
+import com.mindtree.task.constants.Role;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.form.LoginForm;
-import com.mindtree.task.model.Role;
+import com.mindtree.task.model.TypeValues;
 import com.mindtree.task.model.User;
 import com.mindtree.task.service.LoginService;
 import com.mindtree.task.util.ReturnStatus;
@@ -124,11 +125,11 @@ public class LoginController {
 						log.info("Logged in User Details");
 						log.info("UserName: "+user.getUserName());
 						log.info("Locale: "+LocaleContextHolder.getLocale());
-						List<Role> rolesList = user.getRoles();
+						List<TypeValues> rolesList = user.getRoles();
 						log.info("Roles:");
-						for(Role role: rolesList){
-								log.info(" -"+role.getRoleName());
-								if(ApplicationConstants.ADMIN.equalsIgnoreCase(role.getRoleName())){
+						for(TypeValues role: rolesList){
+								log.info(" -"+role.getTypeValue());
+								if(Role.ADMIN.toString().equals(role.getTypeValue())){
 									SessionManager.setAdminUserInSession(user, request, false);
 									modelAndView.setViewName(ApplicationConstants.ADMIN_HOME_PAGE);
 								}else{

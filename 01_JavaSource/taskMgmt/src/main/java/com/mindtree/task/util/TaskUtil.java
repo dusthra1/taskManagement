@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
+import com.mindtree.task.constants.Locale;
+
 public class TaskUtil {
 	
 	private static final Logger log = Logger.getLogger(TaskUtil.class);
@@ -116,12 +118,11 @@ public class TaskUtil {
 	    return (coll == null || coll.isEmpty());
 	}
 	
-	/*public static void main(String args[]){
-		System.out.println(getEncryptedString("abcd1234"));
+	public static void main(String args[]){
+		//System.out.println(getEncryptedString("abcd1234"));
 		
-		System.out.println(getDecryptedString("YWJjZDEyMzQ="));
-		
-	}*/
+		//System.out.println(getDecryptedString("YWJjZDEyMzQ="));
+	}
 	
 	
 	

@@ -1,13 +1,5 @@
 package com.mindtree.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Date;
-import java.util.List;
-
 import javax.persistence.PersistenceException;
 
 import org.junit.AfterClass;
@@ -19,12 +11,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.mindtree.task.dto.EmployeeDTO;
-import com.mindtree.task.dto.ProjectDTO;
+import com.mindtree.task.constants.Locale;
 import com.mindtree.task.exception.ApplicationException;
-import com.mindtree.task.model.Employee;
-import com.mindtree.task.model.Project;
-import com.mindtree.task.model.Task;
+import com.mindtree.task.model.I18nMessage;
+import com.mindtree.task.model.I18nMsgID;
+import com.mindtree.task.model.TypeValues;
 import com.mindtree.task.service.TaskService;
 
 @RunWith( SpringJUnit4ClassRunner.class )
@@ -50,13 +41,13 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	 *  		Check if Projects exists in project table
 	 *  		Prints number of Projects in table
 	 */
-	@Test
+	/*@Test
 	public void testProjectExists() {	
 		
 		List<ProjectDTO> projLst = taskService.getAllProjects();	
 		System.out.println("Number of Projects: "+projLst.size());
 		assertThat(projLst.isEmpty(), is(false));
-	}
+	}*/
 	
 	/**
 	 *  TestCase 2.:  Type: Positive
@@ -64,12 +55,12 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	 *  		Prints number of Employees in table
 	 */
 	
-	@Test
+	/*@Test
 	public void testEmployeesExists(){
 		List<EmployeeDTO> employeesLst = taskService.getAllEmployees(1);
 		System.out.println("Number of Employees: "+employeesLst.size());
 		assertFalse(employeesLst.isEmpty());
-	}
+	}*/
 	
 	/**
 	 *  TestCase 3.:  Type: Positive
@@ -77,7 +68,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	 *  		
 	 */
 	
-	@Test
+	/*@Test
 	public void testEmpPersist() throws ApplicationException{
 		
 		try{
@@ -105,7 +96,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}
 	
 		
-	}
+	}*/
 	
 	/**
 	 *  TestCase 4.:  Type: Negative
@@ -116,7 +107,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	 *  
 	 */
 	
-	@Test
+	/*@Test
 	public void  testEmpPersistWithoutProj() throws ApplicationException{
 		
 		try{
@@ -132,7 +123,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}catch(PersistenceException pe){
 			assertTrue(pe instanceof PersistenceException);
 		}
-	}
+	}*/
 	
 	/**
 	 *  TestCase 5.:  Type: Negative
@@ -143,7 +134,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	 *  
 	 */
 	
-	@Test
+	/*@Test
 	public void testTaskPersistWithoutProj() throws ApplicationException{
 		try{
 			Task task = new Task();
@@ -158,7 +149,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 			assertTrue(pe instanceof PersistenceException);
 		}
 	
-	}
+	}*/
 	
 	/*@Test
 	public void testSaveUser() throws ApplicationException{
@@ -182,30 +173,30 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}
 	}*/
 	
-	/*@Test
+	@Test
 	public void createi18nMessage() throws ApplicationException{
 		
 		try{
 			
 			String code= "error.generic";
 			
-			Language lang = (Language) taskService.find(Language.class, 1);
+			TypeValues locale = (TypeValues) taskService.find(TypeValues.class, Locale.ENGLISH.getValue());
 								
-			I18nMsgID i18nmsgID = new I18nMsgID(code, lang);
+			I18nMsgID i18nmsgID = new I18nMsgID(code, locale);
 			I18nMessage msg = new I18nMessage();	
 			msg.setI18nMsgID(i18nmsgID);
 			msg.setMessage("Error Occurred. Unable To Process Your Request. Please report this issue to Support");
 			
-			Language lang2 = (Language) taskService.find(Language.class, 2);
+			TypeValues locale2 = (TypeValues) taskService.find(TypeValues.class, Locale.SPANISH.getValue());
 			
-			I18nMsgID i18nmsgID2 = new I18nMsgID(code, lang2);
+			I18nMsgID i18nmsgID2 = new I18nMsgID(code, locale2);
 			I18nMessage msg2 = new I18nMessage();	
 			msg2.setI18nMsgID(i18nmsgID2);
 			msg2.setMessage("Error Occurred. Unable To Process Your Request. Please report this issue to SupportSP");
 			
-			Language lang3 = (Language) taskService.find(Language.class, 3);
+			TypeValues locale3 = (TypeValues) taskService.find(TypeValues.class, Locale.FRENCH.getValue());
 			
-			I18nMsgID i18nmsgID3 = new I18nMsgID(code, lang3);
+			I18nMsgID i18nmsgID3 = new I18nMsgID(code, locale3);
 			I18nMessage msg3 = new I18nMessage();	
 			msg3.setI18nMsgID(i18nmsgID3);
 			msg3.setMessage("Error Occurred. Unable To Process Your Request. Please report this issue to SupportFR");			
@@ -213,6 +204,23 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 			taskService.saveEntity(msg);
 			taskService.saveEntity(msg2);
 			taskService.saveEntity(msg3);
+			
+		}catch(PersistenceException | ApplicationException pe){
+			pe.printStackTrace();
+		}
+	}
+	
+	/*@Test
+	public void testSaveTypeCodeValue() throws ApplicationException{
+		
+		try{
+			TypeCode typeCode = (TypeCode) taskService.find(TypeCode.class, 1);
+			TypeValues typeVal1 = new TypeValues();		
+			typeVal1.setTypeCode(typeCode);
+			typeVal1.setTypeValue("fr");
+			typeVal1.setDescription("french");
+			
+			taskService.saveEntity(typeVal1);
 			
 		}catch(PersistenceException | ApplicationException pe){
 			pe.printStackTrace();

@@ -22,7 +22,7 @@ public class I18nMessage implements Persistable{
 	@EmbeddedId
 	private I18nMsgID i18nMsgID;	
 
-	@Column(name="message")
+	@Column(name="MESSAGE")
 	private String message;	
 	
 	public String getMessage() {

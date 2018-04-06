@@ -60,7 +60,7 @@ public class User implements Persistable  {
 	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.MERGE)	
 	@JoinTable(name="USERS_ROLE", 
 	joinColumns=@JoinColumn(name="USER_ID"),
-	inverseJoinColumns=@JoinColumn(name="ROLE_ID"))
+	inverseJoinColumns=@JoinColumn(name="TYPE_VALUE_ID"))
 	@GenericGenerator(name="userRole-sequence-hilo",strategy="org.hibernate.id.enhanced.SequenceStyleGenerator",
 	parameters = {
 		@Parameter(name = "sequence_name", value = "users_role_seq"),
@@ -68,7 +68,7 @@ public class User implements Persistable  {
 		@Parameter(name = "increment_size", value = "1")
 		})
 	@CollectionId(columns = { @Column(name="Id") }, generator = "userRole-sequence-hilo", type= @Type(type="long"))
-	private List<Role> roles = new ArrayList<>();
+	private List<TypeValues> roles = new ArrayList<>();
 	
 	@Column(name="STATUS")
 	private String status;	
@@ -104,7 +104,7 @@ public class User implements Persistable  {
 		return emailId;
 	}
 
-	public List<Role> getRoles() {
+	public List<TypeValues> getRoles() {
 		return roles;
 	}
 
@@ -136,7 +136,7 @@ public class User implements Persistable  {
 		this.emailId = emailId;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(List<TypeValues> roles) {
 		this.roles = roles;
 	}
 

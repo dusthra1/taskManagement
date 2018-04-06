@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mindtree.task.constants.QueryConstants;
 import com.mindtree.task.dao.TaskDAO;
-import com.mindtree.task.model.Role;
+import com.mindtree.task.model.TypeValues;
 import com.mindtree.task.model.User;
 
 @Service
@@ -47,9 +47,9 @@ public class UserService implements UserDetailsService {
 			
 			//populate User Roles
 			Collection<GrantedAuthority> authorities = new ArrayList<>();
-			List<Role> rolesList = user.getRoles();
-			for(Role role: rolesList){
-				authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+			List<TypeValues> rolesList = user.getRoles();
+			for(TypeValues role: rolesList){
+				authorities.add(new SimpleGrantedAuthority(role.getTypeValue()));
 			}
 			
 			//Create Spring security user

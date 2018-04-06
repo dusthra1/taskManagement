@@ -102,7 +102,7 @@ public class DatabaseMessageSource extends AbstractMessageSource implements Reso
 					m.put(i18nMsg.getI18nMsgID().getCode(), data);
 				}
 	
-				data.put(i18nMsg.getI18nMsgID().getLocale().getLocale(), i18nMsg.getMessage()); 
+				data.put(i18nMsg.getI18nMsgID().getLocale().getTypeValue(), i18nMsg.getMessage()); 
 
 			m.put(i18nMsg.getI18nMsgID().getCode(), data);
         }

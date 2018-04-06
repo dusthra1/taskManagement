@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.mindtree.task.constants.ApplicationConstants;
+import com.mindtree.task.constants.Role;
 import com.mindtree.task.dto.EmployeeDTO;
 import com.mindtree.task.dto.FileModelDTO;
 import com.mindtree.task.dto.ProjectDTO;
@@ -138,7 +139,7 @@ public class FrontController {
 		jsonUtil.handleJSONResponse(response, jsonResponse.toString());
 	}
 	
-	@PreAuthorize("hasAuthority('Admin')")
+	@PreAuthorize("hasAuthority('"+ApplicationConstants.ADMIN+"')")
 	@RequestMapping(method = RequestMethod.GET, value ="/viewTasks.do")
 	public ModelAndView viewTasks(HttpServletRequest request)
 	{

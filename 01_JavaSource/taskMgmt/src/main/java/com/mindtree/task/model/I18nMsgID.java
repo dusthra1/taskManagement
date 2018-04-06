@@ -12,17 +12,17 @@ public class I18nMsgID implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="code")
+	@Column(name="CODE")
 	private String code;
 	
 	@OneToOne
 	@JoinColumn(name="LOCALE_ID")
-	private Language locale;
+	private TypeValues locale;
 	
 	public I18nMsgID(){		
 	}
 	
-	public I18nMsgID(String code, Language locale){
+	public I18nMsgID(String code, TypeValues locale){
 		this.code = code;
 		this.locale = locale;
 	}
@@ -31,7 +31,7 @@ public class I18nMsgID implements Serializable {
 		return code;
 	}
 
-	public Language getLocale() {
+	public TypeValues getLocale() {
 		return locale;
 	}
 
@@ -39,7 +39,7 @@ public class I18nMsgID implements Serializable {
 		this.code = code;
 	}
 
-	public void setLocale(Language locale) {
+	public void setLocale(TypeValues locale) {
 		this.locale = locale;
 	}
 
@@ -73,4 +73,5 @@ public class I18nMsgID implements Serializable {
 			return false;
 		return true;
 	}
+	
 }
