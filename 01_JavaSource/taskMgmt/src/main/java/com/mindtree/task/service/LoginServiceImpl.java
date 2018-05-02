@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mindtree.task.authentication.CustomAuthenticationProvider;
+import com.mindtree.task.authentication.UserDetails;
 import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.constants.MessageCode;
 import com.mindtree.task.constants.NamedQueryConstants;
@@ -42,7 +43,8 @@ public class LoginServiceImpl implements LoginService  {
 		ReturnStatus returnStatus = new ReturnStatus();
 	
 		//Custom Authentication
-		Authentication authenticatedUser = authProvider.doLogin(userName, password);
+		UserDetails userDetails =  new UserDetails(userName,password);
+		Authentication authenticatedUser = authProvider.authenticate(userDetails);
 		
 		if(null != authenticatedUser && authenticatedUser.isAuthenticated()){
 			//Setting the user Object in Security context

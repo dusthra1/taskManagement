@@ -21,5 +21,7 @@ public final class QueryConstants {
 	public static final String UPDATE_USERS_LOGIN_STATUS = "update User set loginStatus= :status_n where loginStatus= :status_y";
 	
 	public static final String ALL_FILES = "from FileModel";
+	
+	public static final String ROLE_PERMISSIONS = "select tv.type_value_id,tv.type_value from ROLE_PERMISSIONS rp, TYPE_CODE tc,TYPE_VALUES tv where tc.type_code_id = tv.type_code_id and tc.type_code=:typeCode and tv.TYPE_VALUE_ID = rp.PERMISSION_ID and rp.ROLE_ID=:roleId";
 
 }

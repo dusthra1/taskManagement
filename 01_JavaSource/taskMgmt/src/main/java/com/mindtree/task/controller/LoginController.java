@@ -129,7 +129,7 @@ public class LoginController {
 						log.info("Roles:");
 						for(TypeValues role: rolesList){
 								log.info(" -"+role.getTypeValue());
-								if(Role.ADMIN.toString().equals(role.getTypeValue())){
+								if(Role.ADMIN.name().equals(role.getTypeValue())){
 									SessionManager.setAdminUserInSession(user, request, false);
 									modelAndView.setViewName(ApplicationConstants.ADMIN_HOME_PAGE);
 								}else{

@@ -138,5 +138,27 @@ public class TaskDAOImpl implements TaskDAO {
 			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object[]> findRecordsNSQL(String queryName, Map<String, Object> params) {
+
+		Session session = sessionFactory.getCurrentSession();
+		List<Object[]> records = null;
+		try{
+			Query query = session.createNativeQuery(queryName);
+			if(params !=null){
+				for (Map.Entry<String, Object> entry : params.entrySet()) {
+					query.setParameter(entry.getKey(), entry.getValue());
+				}
+			}
+			records = query.getResultList();
+		}catch (Exception ex) {	
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
+			throw new DAOException(ex.getMessage(), ex);
+		} 	
+		return records;
+	
 	}	
 }

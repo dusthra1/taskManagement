@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.mindtree.task.constants.NamedQueryConstants;
+import com.mindtree.task.constants.QueryConstants;
 import com.mindtree.task.dao.TaskDAO;
 import com.mindtree.task.model.TypeValues;
 import com.mindtree.task.model.User;
@@ -31,12 +32,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	 public CustomAuthenticationProvider() {
 	        super();
 	    }
-	 
-	 public Authentication doLogin(String username, String password){
-		 com.mindtree.task.authentication.UserDetails userDetails =  new com.mindtree.task.authentication.UserDetails(username,password);
-		 
-		 return authenticate(userDetails);
-	 }
 
 	@Override
 	public Authentication authenticate(final Authentication authentication) {
@@ -55,11 +50,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			 
 			 if(userObj !=null){
 				 
-				//populate User Roles
+				//populate permissions for User Roles
 				final List<GrantedAuthority> grantedAuths = new ArrayList<>();
 				List<TypeValues> rolesList = userObj.getRoles();
 				for(TypeValues role: rolesList){
-					grantedAuths.add(new SimpleGrantedAuthority(role.getTypeValue()));
+					grantedAuths.addAll(getGrantedAuthorities(role.getTypeValueId()));
 				}
 				
 				final UserDetails principal = new org.springframework.security.core.userdetails.User(username, password, grantedAuths);
@@ -76,5 +71,24 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public boolean supports(final Class authentication) {
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
+	}
+	
+	private List<GrantedAuthority> getGrantedAuthorities(Integer roleId){
+		List<GrantedAuthority> permissions = new ArrayList<>();
+		
+		List<Object[]> typeValues = null;
+		Map<String, Object> queryParams = null;
+		 
+		queryParams = new HashMap<>();
+		queryParams.put("typeCode","permission");
+		queryParams.put("roleId", roleId);
+		typeValues = taskDAO.findRecordsNSQL(QueryConstants.ROLE_PERMISSIONS, queryParams);
+		
+		if(!typeValues.isEmpty()){
+			for(Object[] obj: typeValues){
+				permissions.add(new SimpleGrantedAuthority(obj[1].toString()));
+			}
+		}
+		return permissions;
 	}
 }
