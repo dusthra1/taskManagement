@@ -19,9 +19,6 @@ public final class ApplicationConstants {
 	
 	public static final String DAO_EXCEPTION_MSG = "DAO exception occured: ";
 	
-	public static final String PERM_ACCESS_VIEW_TASKS = "PERM_ACCESS_VIEW_TASKS";
-	public static final String PERM_ACCESS_ADMIN_AREA = "PERM_ACCESS_ADMIN_AREA";
-	
 	//Tiles pages	
 	public static final String LOGIN_PAGE = "loginPage";
 	public static final String LOGIN_AS_PAGE = "adminLoginAsPage";

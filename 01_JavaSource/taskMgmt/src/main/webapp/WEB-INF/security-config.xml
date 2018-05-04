@@ -10,7 +10,7 @@
     http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
  
     <http use-expressions="true" create-session="never" authentication-manager-ref="authenticationManager">
-    <!--  <access-denied-handler error-page="/accessdenied.do" /> This is handled by Global ExceptionResolver-->
+     <access-denied-handler error-page="/403error.html" /> 
      <form-login 
      	login-page="/loginpage.do" 
      	default-target-url="/home.do" 
@@ -18,7 +18,7 @@
      	/>
      <logout logout-url="/logoff.do" logout-success-url="/loginpage.do"/>    	    	
      
-     <intercept-url pattern="/index.jsp" access="permitAll"/>  		<!-- Initial inxed page -->
+     <intercept-url pattern="/index.jsp" access="permitAll"/>  		<!-- Initial index page -->
      <intercept-url pattern="/loginpage.do" access="permitAll"/>
      <intercept-url pattern="/validateLogin.do" access="permitAll"/>
      <intercept-url pattern="/logoff.do" access="permitAll"/>
@@ -26,12 +26,16 @@
      <intercept-url pattern="/javascript/*" access="permitAll"/>
      <intercept-url pattern="/css/*" access="permitAll"/>
      
+     <intercept-url pattern="/viewTasks.do" access="hasAuthority('PERM_ACCESS_VIEW_TASKS')"/>
+     
      <intercept-url pattern="/**" access="isAuthenticated()"/>
+     
+     
        
     </http>
  
     <authentication-manager id="authenticationManager">
-        <authentication-provider ref="customAuthenticationProvider" />
+        <authentication-provider user-service-ref="userService" />
     </authentication-manager>
     
     <beans:bean  id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">

@@ -11,7 +11,7 @@
        <li><a href="welcome-flow.do">Start welcome flow</a></li>
         <li><a href="fileUpload.do">Upload File</a></li>
        
-       <sec:authorize access="hasAuthority('ADMIN')">
+       <sec:authorize access="hasAuthority('PERM_ACCESS_ADMIN_AREA')">
 	    <c:choose> 
 		  <c:when test = "${sessionScope.loginAs == true}">
 		  	 <li><a href="returnAdminHome.do">Return to Admin Home</a></li>

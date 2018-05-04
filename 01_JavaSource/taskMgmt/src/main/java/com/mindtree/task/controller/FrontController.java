@@ -13,7 +13,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -138,7 +137,6 @@ public class FrontController {
 		jsonUtil.handleJSONResponse(response, jsonResponse.toString());
 	}
 	
-	@PreAuthorize("hasAuthority('"+ApplicationConstants.PERM_ACCESS_VIEW_TASKS+"')")
 	@RequestMapping(method = RequestMethod.GET, value ="/viewTasks.do")
 	public ModelAndView viewTasks(HttpServletRequest request)
 	{
