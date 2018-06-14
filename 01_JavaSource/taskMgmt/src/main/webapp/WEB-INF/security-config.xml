@@ -16,16 +16,17 @@
      	default-target-url="/home.do" 
      	authentication-failure-url="/loginpage.do" 
      	/>
-     <logout logout-url="/logoff.do" logout-success-url="/loginpage.do"/>    	    	
+     <logout logout-url="/logoff.do" logout-success-url="/loginpage.do" invalidate-session="true"/>    	    	
      
      <intercept-url pattern="/index.jsp" access="permitAll"/>  		<!-- Initial index page -->
      <intercept-url pattern="/loginpage.do" access="permitAll"/>
      <intercept-url pattern="/validateLogin.do" access="permitAll"/>
-     <intercept-url pattern="/logoff.do" access="permitAll"/>
+     <intercept-url pattern="/logoff.do?st=?" access="permitAll"/>
      
      <intercept-url pattern="/javascript/*" access="permitAll"/>
      <intercept-url pattern="/css/*" access="permitAll"/>
      
+       <intercept-url pattern="/admin*" access="hasAuthority('PERM_ACCESS_ADMIN_AREA')"/>
      <intercept-url pattern="/viewTasks.do" access="hasAuthority('PERM_ACCESS_VIEW_TASKS')"/>
      
      <intercept-url pattern="/**" access="isAuthenticated()"/>

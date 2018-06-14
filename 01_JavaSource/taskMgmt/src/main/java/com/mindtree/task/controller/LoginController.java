@@ -49,12 +49,9 @@ public class LoginController {
 		if(SessionManager.isUserAuthenticated(request)){
 			mav = new ModelAndView(ApplicationConstants.HOME_PAGE);				
 		}
-		String sessionTimeOut = request.getParameter("st");
-		if (null!=sessionTimeOut && "1".equals(sessionTimeOut)) {
-			mav.addObject(ApplicationConstants.ERROR_MESSAGE, MessageCode.LOGIN_SESSION_TIMEOUT);
-		}else if (null!=sessionTimeOut && "2".equals(sessionTimeOut)) {
-			mav.addObject(ApplicationConstants.ERROR_MESSAGE, MessageCode.INVALID_LOGIN);
-		}
+		
+		String refreshUrl = taskUtil.timeOutUrl();
+		mav.addObject("refreshUrl", refreshUrl);
 		
 		return mav;
 	}
@@ -65,16 +62,21 @@ public class LoginController {
 		return new ModelAndView(ApplicationConstants.ADMIN_HOME_PAGE);
 	}
 	
-	@RequestMapping(value = "/loginAs.do", method = RequestMethod.GET)
+	@RequestMapping(value = "adminloginAs.do", method = RequestMethod.GET)
 	public ModelAndView loginAs(HttpServletRequest request,HttpServletResponse response){
 		return new ModelAndView("adminLoginAsPage");
 	}
 	
 	@RequestMapping(value = "/logoff.do", method = RequestMethod.GET)
 	public ModelAndView logOff(HttpServletRequest request,HttpServletResponse response) {		
-		String sessionTimeOut = request.getParameter("st");
-		ModelAndView mav = new ModelAndView("redirect:/loginPage.do?st="+sessionTimeOut+"");
 		
+		String sessionTimeOut = request.getParameter("st");
+		if(null!=sessionTimeOut && "1".equals(sessionTimeOut)) {
+			request.setAttribute("errorMessage", MessageCode.LOGIN_SESSION_TIMEOUT);
+		}else if(null!=sessionTimeOut && "0".equals(sessionTimeOut)) {
+			request.setAttribute("errorMessage", MessageCode.LOGOFF_SUCCESSFUL);
+		}
+				
 		//Update LoggedIn Status
 		User user = SessionManager.getUserInSession(request);
 		if(user !=null){
@@ -88,8 +90,8 @@ public class LoginController {
 		log.info("Session Data Cleared. User Logged Out Successfully:");
 		log.info("-----------------------------------------------------------");
 		
-		String refreshUrl = taskUtil.timeOutUrl();
-		mav.addObject("refreshUrl", refreshUrl);	
+		
+		ModelAndView mav = new ModelAndView(ApplicationConstants.LOGIN_PAGE);
 		return mav;
 	}
 	
@@ -154,12 +156,10 @@ public class LoginController {
 						 * if its null then forward request to welcome page else to the selected link 
 						 */
 						 
-						String accessedUrl = "";
-							if (null != session.getAttribute("accessedPath") && !"".equalsIgnoreCase(
-									(String) session.getAttribute("accessedPath"))) {
-								accessedUrl = (String) session.getAttribute("accessedPath");
-								session.removeAttribute("accessedPath");
-								response.sendRedirect(accessedUrl);
+						String accessedURL = (String)request.getSession().getAttribute("accessedURL");
+							if (accessedURL != null) {
+								session.removeAttribute("accessedURL");
+								response.sendRedirect(accessedURL);
 							}
 					} 
 
@@ -231,7 +231,7 @@ public class LoginController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/returnAdminHome.do", method = RequestMethod.GET)
+	@RequestMapping(value = "adminReturnHome.do", method = RequestMethod.GET)
 	public ModelAndView returnToAdminHome(HttpServletRequest request,HttpServletResponse response) {	
 		
 		SessionManager.setLoginAs(false, request, false);

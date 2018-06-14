@@ -9,7 +9,7 @@
 	
 	<c:choose> 
 	  <c:when test = "${sessionScope.loginAs == true}">
-	 	 <span id='returnAdminHome'><a href='returnAdminHome.do' title='ReturnToAdminHome'>Return to Admin Home</a></span>
+	 	 <span id='returnAdminHome'><a href='adminReturnHome.do' title='ReturnToAdminHome'>Return to Admin Home</a></span>
 	  </c:when>
 	  <c:otherwise>
 	    <span id='logout'><a href='logoff.do?st=0' title='Logout'>Logout</a></span>

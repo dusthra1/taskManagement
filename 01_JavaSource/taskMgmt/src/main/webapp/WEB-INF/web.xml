@@ -42,29 +42,7 @@
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
   
-	<filter>
-		<filter-name>MultipartFilter</filter-name>
-		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
-	</filter>
-  
-	<!-- Enables Spring security -->     
-	 <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-    
-    <filter-mapping>
-		<filter-name>MultipartFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
-    <filter-mapping>
-      <filter-name>springSecurityFilterChain</filter-name>
-      <url-pattern>/*</url-pattern>
-    </filter-mapping> 
-    <!-- End of Spring Security -->
-   
-    <filter>
+   <filter>
         <filter-name>requestFilter</filter-name>
         <filter-class>com.mindtree.task.authentication.RequestFilter</filter-class>
              <init-param>
@@ -76,10 +54,31 @@
                <param-value>loginpage.do</param-value>
              </init-param>
     </filter>
-
     <filter-mapping>
       <filter-name>requestFilter</filter-name>
       <url-pattern>*.do</url-pattern>
     </filter-mapping>
   
+	
+  
+	<!-- Enables Spring security -->     
+	 <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping> 
+    
+    <filter>
+		<filter-name>MultipartFilter</filter-name>
+		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+	</filter>
+    <filter-mapping>
+		<filter-name>MultipartFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+    
+    <!-- End of Spring Security -->
 </web-app>

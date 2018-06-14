@@ -12,6 +12,8 @@ public final class MessageCode {
 	
 	public static final String LOGIN_SESSION_TIMEOUT = "session.timeout";
 	
+	public static final String LOGOFF_SUCCESSFUL = "logoff.successful";
+	
 	public static final String SUCCESS = "success";
 	
 	public static final String ERROR = "error";

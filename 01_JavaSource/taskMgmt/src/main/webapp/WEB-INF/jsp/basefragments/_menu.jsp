@@ -14,7 +14,7 @@
        <sec:authorize access="hasAuthority('PERM_ACCESS_ADMIN_AREA')">
 	    <c:choose> 
 		  <c:when test = "${sessionScope.loginAs == true}">
-		  	 <li><a href="returnAdminHome.do">Return to Admin Home</a></li>
+		  	 <li><a href="adminReturnHome.do">Return to Admin Home</a></li>
 		  </c:when>
 		  <c:otherwise>
 		  		 <li><a href="adminHome.do">Admin Home</a></li>
