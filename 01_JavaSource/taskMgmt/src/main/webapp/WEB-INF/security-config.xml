@@ -10,29 +10,26 @@
     http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
  
     <http use-expressions="true" create-session="never" authentication-manager-ref="authenticationManager">
-     <access-denied-handler error-page="/403error.html" /> 
-     <form-login 
-     	login-page="/loginpage.do" 
-     	default-target-url="/home.do" 
-     	authentication-failure-url="/loginpage.do" 
-     	/>
-     <logout logout-url="/logoff.do" logout-success-url="/loginpage.do" invalidate-session="true"/>    	    	
-     
-     <intercept-url pattern="/index.jsp" access="permitAll"/>  		<!-- Initial index page -->
-     <intercept-url pattern="/loginpage.do" access="permitAll"/>
-     <intercept-url pattern="/validateLogin.do" access="permitAll"/>
-     <intercept-url pattern="/logoff.do?st=?" access="permitAll"/>
-     
-     <intercept-url pattern="/javascript/*" access="permitAll"/>
-     <intercept-url pattern="/css/*" access="permitAll"/>
-     
-       <intercept-url pattern="/admin*" access="hasAuthority('PERM_ACCESS_ADMIN_AREA')"/>
-     <intercept-url pattern="/viewTasks.do" access="hasAuthority('PERM_ACCESS_VIEW_TASKS')"/>
-     
-     <intercept-url pattern="/**" access="isAuthenticated()"/>
-     
-     
-       
+	     <access-denied-handler error-page="/403error.html" /> 
+	     <form-login 
+	     	login-page="/loginpage.do" 
+	     	default-target-url="/home.do" 
+	     	authentication-failure-url="/loginpage.do" 
+	     	/>
+	     <logout logout-url="/logoff.do" logout-success-url="/loginpage.do" invalidate-session="true"/>    	    	
+	     
+	     <intercept-url pattern="/index.jsp" access="permitAll"/>  		<!-- Initial index page -->
+	     <intercept-url pattern="/loginpage.do" access="permitAll"/>
+	     <intercept-url pattern="/validateLogin.do" access="permitAll"/>
+	     <intercept-url pattern="/logoff.do?st=?" access="permitAll"/>
+	     
+	     <intercept-url pattern="/javascript/*" access="permitAll"/>
+	     <intercept-url pattern="/css/*" access="permitAll"/>
+	     
+	       <intercept-url pattern="/admin*" access="hasAuthority('PERM_ACCESS_ADMIN_AREA')"/>
+	     <intercept-url pattern="/viewTasks.do" access="hasAuthority('PERM_ACCESS_VIEW_TASKS')"/>
+	     
+	     <intercept-url pattern="/**" access="isAuthenticated()"/>       
     </http>
  
     <authentication-manager id="authenticationManager">

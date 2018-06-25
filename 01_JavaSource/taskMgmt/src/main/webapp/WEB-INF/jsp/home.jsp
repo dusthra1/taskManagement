@@ -10,7 +10,22 @@
 <body>
 
 	<div align="center">
-	<c:out value="${message}"/> 
+	<c:if test="${message!=null && message!=''}">
+   				<table>
+   				<tr><td><img src="images/green-tickmark.jpg" alt="" width="30" height="30" /> </td>
+   				<td>${message}</td></tr>
+   				</table>
+	</c:if>
+	
+	<c:if test="${errorMessage!=null && errorMessage!=''}">
+	   				<table>
+	   				<tr><td></td></tr>
+	   				<tr>
+	   				<td><img src="images/error-icon1.png" alt="" width="30" height="30" /></td>
+	   				<td>${errorMessage}</td>
+	   				</tr>
+	   				</table>
+	</c:if> 
 		
 	</div>
 </body>

@@ -41,14 +41,18 @@
 		</property>
 	</bean>
 	
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
     	<property name="driverClassName" value="${driverClassName}" />
     	<property name="url" value="${driverURL}"/>
     	<property name="username" value="${db.username}" />
     	<property name="password" value="${db.password}" />
     	<property name="initialSize" value="2"></property>
     	<property name="maxActive" value="2"></property>
-  	</bean> 
+  	</bean>  -->
+  	
+  	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/${jndi.name}" />       
+    </bean>
   	
   	 <tx:annotation-driven transaction-manager="transactionManager"/>
   	

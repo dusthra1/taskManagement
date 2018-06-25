@@ -13,14 +13,26 @@
  		
  		<c:choose> 		
  		<c:when test="${not empty errorMessage}">
- 			<h3><fmt:message key="${errorMessage}"/></h3>
+ 			<table>
+   				<tr><td><img src="images/error-icon1.png" alt="" width="30" height="30" /> </td>
+   				<td><fmt:message key="${errorMessage}"/></td></tr>
+   			</table>
  		</c:when>
  		<c:when test="${not empty errorCode}">
- 			<h3><fmt:message key="${errorCode}"/></h3>
+ 			<table>
+   				<tr><td><img src="images/error-icon1.png" alt="" width="30" height="30" /> </td>
+   				<td><fmt:message key="${errorCode}"/></td></tr>
+   			</table>
  		</c:when>
  		<c:otherwise>
-	        <h3>Error Occurred. Unable To Process Your Request.</h3>
-	        <h3>Please report this issue to administrator</h3>
+ 		<table>
+   				<tr>
+	   				<td><img src="images/error-icon1.png" alt="" width="30" height="30" /> </td>
+		   			<td>
+		   				<p>Error Occurred. Unable To Process Your Request. Please report this issue to administrator </p>
+		   			</td>
+   				</tr>
+   		</table>
         </c:otherwise>
         </c:choose>
         
