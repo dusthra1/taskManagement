@@ -15,7 +15,7 @@ import com.mindtree.task.constants.QueryConstants;
 @Table(name = "FILES_UPLOAD")
 @NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.ALL_FILES, query = QueryConstants.ALL_FILES)
 })
-public class FileModel implements Persistable{
+public class FileModel extends AbstractTimestampEntity implements Persistable{
 	
 	
 	private static final long serialVersionUID = 1L;

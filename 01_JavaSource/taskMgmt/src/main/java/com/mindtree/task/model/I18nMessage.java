@@ -15,7 +15,7 @@ import com.mindtree.task.constants.QueryConstants;
 @NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.I18N_MESSAGES, query = QueryConstants.I18N_MESSAGES)
 			
 })
-public class I18nMessage implements Persistable{
+public class I18nMessage extends AbstractTimestampEntity implements Persistable{
 	
 	private static final long serialVersionUID = 1L;	
 	

@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="TYPE_VALUES")
-public class TypeValues implements Persistable{
+public class TypeValues extends AbstractTimestampEntity implements Persistable{
 	
 	
 	private static final long serialVersionUID = 1L;

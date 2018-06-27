@@ -33,7 +33,7 @@ import com.mindtree.task.constants.QueryConstants;
 			 				@NamedQuery(name = NamedQueryConstants.UPDATE_USERS_LOGIN_STATUS, query = QueryConstants.UPDATE_USERS_LOGIN_STATUS)
 			
 })
-public class User implements Persistable  {
+public class User extends AbstractTimestampEntity implements Persistable  {
 
 	private static final long serialVersionUID = 1L;
 	

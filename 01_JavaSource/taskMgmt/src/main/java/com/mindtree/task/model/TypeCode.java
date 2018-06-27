@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="TYPE_CODE")
-public class TypeCode implements Persistable{
+public class TypeCode extends AbstractTimestampEntity implements Persistable{
 	
 	private static final long serialVersionUID = 1L;
 	

@@ -25,7 +25,7 @@ import com.mindtree.task.constants.QueryConstants;
 @NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.PROJECT_EMPLOYEES, query = QueryConstants.PROJECT_EMPLOYEES),
 						@NamedQuery(name = NamedQueryConstants.ALL_EMPLOYEES, query = QueryConstants.ALL_EMPLOYEES)
 })
-public class Employee implements Persistable,Comparable<Employee> {
+public class Employee extends AbstractTimestampEntity implements Persistable,Comparable<Employee> {
 		
 	private static final long serialVersionUID = 1L;
 	
@@ -41,7 +41,7 @@ public class Employee implements Persistable,Comparable<Employee> {
 	private String emailId;
 	@OneToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="PROJ_ID")
-	private Project project;
+	private Project project;	
 	
 	public String getMid() {
 		return mid;

@@ -35,7 +35,7 @@ import com.mindtree.task.constants.QueryConstants;
 @Table(name="TASK")
 @NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.ALL_TASKS_FOR_PROJ, query = QueryConstants.ALL_TASKS_FOR_PROJ)
 })
-public class Task implements Persistable,Comparable<Task>{
+public class Task extends AbstractTimestampEntity implements Persistable,Comparable<Task>{
 	
 	/**
 	 * 

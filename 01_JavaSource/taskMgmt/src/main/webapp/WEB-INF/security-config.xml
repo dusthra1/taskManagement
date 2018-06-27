@@ -26,7 +26,7 @@
 	     <intercept-url pattern="/javascript/*" access="permitAll"/>
 	     <intercept-url pattern="/css/*" access="permitAll"/>
 	     
-	       <intercept-url pattern="/admin*" access="hasAuthority('PERM_ACCESS_ADMIN_AREA')"/>
+	     <intercept-url pattern="/admin*" access="hasAuthority('PERM_ACCESS_ADMIN_AREA')"/>
 	     <intercept-url pattern="/viewTasks.do" access="hasAuthority('PERM_ACCESS_VIEW_TASKS')"/>
 	     
 	     <intercept-url pattern="/**" access="isAuthenticated()"/>       

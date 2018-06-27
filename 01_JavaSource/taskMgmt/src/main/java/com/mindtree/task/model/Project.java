@@ -18,7 +18,7 @@ import com.mindtree.task.constants.QueryConstants;
 @NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.ALL_PROJECTS, query = QueryConstants.ALL_PROJECTS),
 		 				@NamedQuery(name = NamedQueryConstants.PROJECTS_BY_LIKE_NAME, query = QueryConstants.PROJECTS_BY_LIKE_NAME)
 	  })
-public class Project implements Persistable, Comparable<Project>{
+public class Project extends AbstractTimestampEntity implements Persistable, Comparable<Project>{
 	
 	
 	private static final long serialVersionUID = 1L;

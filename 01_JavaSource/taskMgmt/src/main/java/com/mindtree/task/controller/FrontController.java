@@ -332,11 +332,11 @@ public class FrontController {
 	    public ModelAndView handleFileUpload(HttpServletRequest request,
 	            @ModelAttribute("mFileModel") MultipartFileForm mFileModel, BindingResult result) {
 		 
-		 ModelAndView mv = new ModelAndView();
+		 ModelAndView mv = new ModelAndView("fileUploadPage");
 		 FileValidator fileValidator = new FileValidator();
 		 fileValidator.validate(mFileModel, result);
 		 if(result.hasErrors()){
-			 mv.setViewName("fileUploadPage");
+			 mv.addObject("message", "Error Occurred. Please try again");
 		 }else{
 			 MultipartFile fileUpload = mFileModel.getFile();
              log.debug("Saving file: " + fileUpload.getOriginalFilename());
