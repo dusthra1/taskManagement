@@ -23,4 +23,6 @@ public interface TaskDAO {
 	
 	public void updateRecords(String queryName, Map<String, Object> params);
 	
+	public void saveRecord(String insertQry, Map<String,Object> params);
+	
 }

@@ -428,4 +428,11 @@ public class FrontController {
 		
 			
 		}
+		
+
+		 @RequestMapping(method = RequestMethod.GET, value = "/viewPDF.do" )
+		    public ModelAndView viewPDF(HttpServletRequest request,  Model model) {
+		        
+			 return new ModelAndView("viewPDFPage");
+		    }
 }

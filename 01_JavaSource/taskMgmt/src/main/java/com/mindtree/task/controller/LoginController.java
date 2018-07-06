@@ -115,10 +115,11 @@ public class LoginController {
 					
 					User user = (User) returnStatus.getReturnObject();
 					if (null != user) {
-						
+						/*Default landing page on successful login*/
+						modelAndView.setViewName(ApplicationConstants.HOME_PAGE);						
 						SessionManager.setUserInSession(user, request, true);
 						
-						//Change default locale & Set Locale in Session
+						/*Change default locale & Set Locale in Session*/
 						LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
 					    localeResolver.setLocale(request, response, new Locale(locale));
 						SessionManager.setLocale(locale, request, false);
@@ -133,14 +134,13 @@ public class LoginController {
 								log.info(" -"+role.getTypeValue());
 								if(Role.ADMIN.name().equals(role.getTypeValue())){
 									SessionManager.setAdminUserInSession(user, request, false);
+									/*Admin home page for admin users*/
 									modelAndView.setViewName(ApplicationConstants.ADMIN_HOME_PAGE);
-								}else{
-									modelAndView.setViewName(ApplicationConstants.HOME_PAGE);
 								}
 						}
 						log.info("------------------------------------------");		
 						
-						//Save Logged In Status
+						/*Save Logged In Status*/
 						user.setLoginStatus("Y");
 						user.setLastLogin(new Date());
 						loginService.updateUser(user);

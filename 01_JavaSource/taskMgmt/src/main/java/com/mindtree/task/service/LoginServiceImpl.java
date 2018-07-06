@@ -46,18 +46,23 @@ public class LoginServiceImpl implements LoginService  {
 		UserDetails userDetails =  new UserDetails(userName,password);
 		Authentication authenticatedUser = authProvider.authenticate(userDetails);
 		
-		if(null != authenticatedUser && authenticatedUser.isAuthenticated()){
-			//Setting the user Object in Security context
-			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+		if(null != authenticatedUser && authenticatedUser.isAuthenticated()){			
 			
 			//Fetching user for status
 			queryParams = new HashMap<>();
 			queryParams.put("userName", userName);
 			queryParams.put("password",password);
-			userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME_KEY, queryParams);		
-			
-			returnStatus.setReturnObject(userObj);
-			returnStatus.setStatus(MessageCode.SUCCESS);
+			userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME_KEY, queryParams);	
+			/*Check if user is active in any other session*/
+			/*if(ApplicationConstants.YES.equals(userObj.getLoginStatus())){
+				returnStatus.setStatus(MessageCode.ERROR);
+				returnStatus.setErrorCode(MessageCode.RESTRICTED_LOGIN_ACTIVE_SESSION);
+			}else{*/
+				returnStatus.setReturnObject(userObj);
+				returnStatus.setStatus(MessageCode.SUCCESS);
+				//Setting the user Object in Security context
+				SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+			//}
 		}else{
 			returnStatus.setStatus(MessageCode.ERROR);
 			returnStatus.setErrorCode(MessageCode.INVALID_LOGIN);

@@ -281,4 +281,22 @@ public class TaskServiceImpl implements TaskService {
 		}	
 		return fileDTOList;
 	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void saveRecord(String insertQry, Map<String, Object> params) {
+
+		try{
+			if(!insertQry.isEmpty() && params != null){
+				taskDAO.saveRecord(insertQry, params);
+			}
+		}catch (DAOException daoEx) {
+			log.error("Exception occured while getting Files " + daoEx.getMessage());
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
+
+		} catch (Exception ex) {
+			log.error("Exception occured while getting Files " + ex.getMessage());
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
+		}	
+	}
 }

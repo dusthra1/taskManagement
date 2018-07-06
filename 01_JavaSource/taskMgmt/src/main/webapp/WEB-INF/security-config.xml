@@ -33,10 +33,11 @@
     </http>
  
     <authentication-manager id="authenticationManager">
-        <authentication-provider user-service-ref="userService" />
+        <authentication-provider ref="customAuthenticationProvider" />
     </authentication-manager>
-    
-    <beans:bean  id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+  
+  <!-- For medhod level security -->  
+  <!--   <beans:bean  id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
 	    <beans:constructor-arg>
 	        <beans:list>
 	        	 <beans:bean class="org.springframework.security.access.vote.RoleVoter"/>
@@ -44,8 +45,8 @@
 	             <beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
 	        </beans:list>
 	    </beans:constructor-arg>
-	</beans:bean>
+	</beans:bean> 
     
-    <global-method-security pre-post-annotations="enabled" authentication-manager-ref="authenticationManager" />
+    <global-method-security pre-post-annotations="enabled" authentication-manager-ref="authenticationManager" /> -->
     
 </beans:beans>

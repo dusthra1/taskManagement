@@ -1,6 +1,7 @@
 package com.mindtree.task.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.mindtree.task.dto.EmployeeDTO;
 import com.mindtree.task.dto.ProjectDTO;
@@ -12,6 +13,8 @@ import com.mindtree.task.model.Task;
 public interface TaskService {
 	
 	public void saveEntity(Persistable obj);
+	
+	public void saveRecord(String insertQry, Map<String,Object> params);
 	
 	public void deleteEntity(Persistable obj);
 	

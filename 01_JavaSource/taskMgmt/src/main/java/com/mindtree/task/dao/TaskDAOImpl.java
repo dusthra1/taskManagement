@@ -160,5 +160,23 @@ public class TaskDAOImpl implements TaskDAO {
 		} 	
 		return records;
 	
+	}
+
+	@Override
+	public void saveRecord(String insertQry, Map<String, Object> params) {
+		Session session = sessionFactory.getCurrentSession();
+		try{
+			Query query = session.createNativeQuery(insertQry);
+			if(params !=null){
+				for (Map.Entry<String, Object> entry : params.entrySet()) {
+					query.setParameter(entry.getKey(), entry.getValue());
+				}
+			}
+			query.executeUpdate();
+		}catch (Exception ex) {	
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
+			throw new DAOException(ex.getMessage(), ex);
+		} 	
+		
 	}	
 }

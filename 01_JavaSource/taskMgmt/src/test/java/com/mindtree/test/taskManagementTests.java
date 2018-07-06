@@ -1,7 +1,11 @@
 package com.mindtree.test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.PersistenceException;
 
+import org.apache.commons.collections4.map.HashedMap;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -11,11 +15,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.mindtree.task.constants.Locale;
+import com.mindtree.task.constants.QueryConstants;
+import com.mindtree.task.constants.Role;
+import com.mindtree.task.constants.RolePermission;
 import com.mindtree.task.exception.ApplicationException;
-import com.mindtree.task.model.I18nMessage;
-import com.mindtree.task.model.I18nMsgID;
 import com.mindtree.task.model.TypeValues;
+import com.mindtree.task.model.User;
 import com.mindtree.task.service.TaskService;
 
 @RunWith( SpringJUnit4ClassRunner.class )
@@ -155,13 +160,13 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	public void testSaveUser() throws ApplicationException{
 		
 		try{
-			Role role = (Role) taskService.find(Role.class, 3);
+			TypeValues role = (TypeValues) taskService.find(TypeValues.class, 5);
 			
 			User user = new User();
-			user.setFirstName("Sneha");
-			user.setLastName("Dingari");
-			user.setEmailId("sneha.dingari@gmial.com");
-			user.setUserName("sdingari");
+			user.setFirstName("Ramanand");
+			user.setLastName("Dusthakar");
+			user.setEmailId("dusthra1@gmial.com");
+			user.setUserName("dusthra1");
 			user.setPassword("YWJjZDEyMzQ=");
 			user.setStatus("A");
 			user.getRoles().add(role);
@@ -173,7 +178,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}
 	}*/
 	
-	@Test
+	/*@Test
 	public void createi18nMessage() throws ApplicationException{
 		
 		try{
@@ -208,17 +213,17 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}catch(PersistenceException | ApplicationException pe){
 			pe.printStackTrace();
 		}
-	}
+	}*/
 	
-	/*@Test
+/*	@Test
 	public void testSaveTypeCodeValue() throws ApplicationException{
 		
 		try{
-			TypeCode typeCode = (TypeCode) taskService.find(TypeCode.class, 1);
+			TypeCode typeCode = (TypeCode) taskService.find(TypeCode.class, 3);
 			TypeValues typeVal1 = new TypeValues();		
 			typeVal1.setTypeCode(typeCode);
-			typeVal1.setTypeValue("fr");
-			typeVal1.setDescription("french");
+			typeVal1.setTypeValue("PERM_ACCESS_VIEW_TASKS");
+			typeVal1.setDescription("manager access");
 			
 			taskService.saveEntity(typeVal1);
 			
@@ -226,5 +231,19 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 			pe.printStackTrace();
 		}
 	}*/
+	
+	@Test
+	public void testSaveRolePermission() throws ApplicationException{
+		
+		try{
+			Map<String,Object> params = new HashMap<>();
+			params.put("roleId", Role.MANAGER.value);
+			params.put("permissionId", RolePermission.PERM_ACCESS_VIEW_TASKS.value);
+			taskService.saveRecord(QueryConstants.INSERT_ROLE_PERMISSIONS, params);
+			
+		}catch(PersistenceException | ApplicationException pe){
+			pe.printStackTrace();
+		}
+	}
 	
 }

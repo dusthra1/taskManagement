@@ -10,6 +10,8 @@ public final class MessageCode {
 	
 	public static final String EMPTY_LOGIN_CREDENTIALS = "error.emptyLoginCredentials";
 	
+	public static final String RESTRICTED_LOGIN_ACTIVE_SESSION = "error.restrictedLogin.activeSession";
+	
 	public static final String LOGIN_SESSION_TIMEOUT = "session.timeout";
 	
 	public static final String LOGOFF_SUCCESSFUL = "logoff.successful";

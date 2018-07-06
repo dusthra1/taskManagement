@@ -75,7 +75,7 @@
   	
   	<bean id="taskService" class="com.mindtree.task.service.TaskServiceImpl" />
   	
-  	<bean id="userService" class="com.mindtree.task.service.UserService" />
+  	<bean id="userService" class="com.mindtree.task.service.UserServiceImpl" />
   	
   	<bean id="taskUtil" class="com.mindtree.task.util.TaskUtil"/>
   		

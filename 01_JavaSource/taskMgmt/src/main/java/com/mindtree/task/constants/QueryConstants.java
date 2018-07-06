@@ -12,9 +12,9 @@ public final class QueryConstants {
 	
 	public static final String ALL_TASKS_FOR_PROJ = "from Task where project.id=:projId";	
 	
-	public static final String FIND_USER_BY_USERNAME_KEY = "from User where userName= :userName and password= :password";
+	public static final String FIND_USER_BY_USERNAME_KEY = "from User where userName= :userName and password= :password and status='A'";
 	
-	public static final String FIND_USER_BY_USERNAME = "from User where userName= :userName";
+	public static final String FIND_USER_BY_USERNAME = "from User where userName= :userName and status='A'";
 	
 	public static final String I18N_MESSAGES = "from I18nMessage";
 	
@@ -28,5 +28,7 @@ public final class QueryConstants {
 													  + "tc.type_code=:typeCode and "
 													  + "tv.TYPE_VALUE_ID = rp.PERMISSION_ID and "
 													  + "rp.ROLE_ID=:roleId";
+	
+	public static final String INSERT_ROLE_PERMISSIONS = "insert into ROLE_PERMISSIONS (ROLE_ID,PERMISSION_ID) values(:roleId, :permissionId)";
 
 }

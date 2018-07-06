@@ -9,7 +9,8 @@
        <li><a href="viewProjects.do">Manage Projects</a></li>
        <li><a href="empreport.do">Employees Report</a></li>
        <li><a href="welcome-flow.do">Start welcome flow</a></li>
-        <li><a href="fileUpload.do">Upload File</a></li>
+       <li><a href="fileUpload.do">Upload File</a></li>
+        <li><a href="viewPDF.do">View PDF</a></li>
        
        <sec:authorize access="hasAuthority('PERM_ACCESS_ADMIN_AREA')">
 	    <c:choose> 
