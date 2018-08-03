@@ -68,7 +68,7 @@ public class User extends AbstractTimestampEntity implements Persistable  {
 		@Parameter(name = "increment_size", value = "1")
 		})
 	@CollectionId(columns = { @Column(name="ID") }, generator = "userRole-sequence-hilo", type= @Type(type="long"))
-	private List<TypeValues> roles = new ArrayList<>();
+	private List<Role> roles = new ArrayList<>();
 	
 	@Column(name="STATUS")
 	private String status;	
@@ -104,7 +104,7 @@ public class User extends AbstractTimestampEntity implements Persistable  {
 		return emailId;
 	}
 
-	public List<TypeValues> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
@@ -136,7 +136,7 @@ public class User extends AbstractTimestampEntity implements Persistable  {
 		this.emailId = emailId;
 	}
 
-	public void setRoles(List<TypeValues> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 

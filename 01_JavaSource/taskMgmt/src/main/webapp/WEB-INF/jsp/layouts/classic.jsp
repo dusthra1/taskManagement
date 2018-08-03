@@ -7,17 +7,8 @@
 
 <html>
 <head>
-	<c:set var="url" value=""/>
-	<c:choose>
-	<c:when test="${not empty refreshUrl && ''!=refreshUrl}">
-		<c:set var="url" value="${refreshUrl}" />
-	</c:when>
-	<c:otherwise>
-		<c:set var="url" value="${sessionScope.refreshUrl}" />
-	</c:otherwise>
-	</c:choose>
-<meta http-equiv="refresh" content="<%= session.getMaxInactiveInterval()%>;url=<c:out value="${url}" />">
 <meta http-equiv="Content-Type" content="text/html; UTF-8">
+<meta http-equiv="cache-control" content="no-cache" />
 
 <title><tiles:getAsString name="title" /></title>
 

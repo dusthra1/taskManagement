@@ -28,14 +28,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		
 		final String username = authentication.getName().trim();
 	    final String password = authentication.getCredentials().toString();
-	    UserDetails userDetails = null;
+	    //Spring security userDetails obj
+	    UserDetailsImpl userDetails = null;
 	    Authentication auth = null;
 	     
 		 try{
 			 
-			userDetails = userService.loadUserByUsernameandPasskey(username, password);
+			userDetails = (UserDetailsImpl) userService.loadUserByUsernameandPasskey(username, password);
 			if(userDetails !=null){
-				auth = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+				auth = new UsernamePasswordAuthenticationToken(userDetails.getPrincipalUser(), password, userDetails.getAuthorities());
 			}else{
 				 log.error("--ALERT-- ERROR Occurred: User "+username+" not found");
 			}

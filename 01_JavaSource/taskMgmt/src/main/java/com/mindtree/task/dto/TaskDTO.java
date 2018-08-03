@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.mindtree.task.model.Employee;
 import com.mindtree.task.model.Project;
 
 public class TaskDTO {
@@ -16,7 +15,7 @@ public class TaskDTO {
 	private Date dueDate;
 	private Project project;
 	
-	private List<Employee> employeesList = new ArrayList<>();
+	private List<EmployeeDTO> EmployeeDTOList = new ArrayList<>();
 
 	public int getTaskId() {
 		return taskId;
@@ -42,8 +41,8 @@ public class TaskDTO {
 		return project;
 	}
 
-	public List<Employee> getEmployeesList() {
-		return employeesList;
+	public List<EmployeeDTO> getEmployeeDTOList() {
+		return EmployeeDTOList;
 	}
 
 	public void setTaskId(int taskId) {
@@ -70,10 +69,10 @@ public class TaskDTO {
 		this.project = project;
 	}
 
-	public void setEmployeesList(List<Employee> employeesList) {
-		this.employeesList = employeesList;
+	public void setEmployeeDTOList(List<EmployeeDTO> EmployeeDTOsList) {
+		this.EmployeeDTOList = EmployeeDTOsList;
 		/*Code Smell: for loop here is to avoid LazyInitializationException */
-		for(Employee emp: employeesList){
+		for(EmployeeDTO emp: EmployeeDTOsList){
 			emp.getMid();break;
 		}
 		

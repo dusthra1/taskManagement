@@ -23,10 +23,9 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import com.mindtree.task.authentication.SessionManager;
 import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.constants.MessageCode;
-import com.mindtree.task.constants.Role;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.form.LoginForm;
-import com.mindtree.task.model.TypeValues;
+import com.mindtree.task.model.Role;
 import com.mindtree.task.model.User;
 import com.mindtree.task.service.LoginService;
 import com.mindtree.task.util.ReturnStatus;
@@ -73,7 +72,7 @@ public class LoginController {
 		String sessionTimeOut = request.getParameter("st");
 		if(null!=sessionTimeOut && "1".equals(sessionTimeOut)) {
 			request.setAttribute("errorMessage", MessageCode.LOGIN_SESSION_TIMEOUT);
-		}else if(null!=sessionTimeOut && "0".equals(sessionTimeOut)) {
+		}else {
 			request.setAttribute("errorMessage", MessageCode.LOGOFF_SUCCESSFUL);
 		}
 				
@@ -85,9 +84,9 @@ public class LoginController {
 			
 			SessionManager.clearUserInSession(request);		
 			SecurityContextHolder.clearContext();
+			
+			log.info("Session Data Cleared. User Logged Out Successfully:");
 		}		
-		
-		log.info("Session Data Cleared. User Logged Out Successfully:");
 		log.info("-----------------------------------------------------------");
 		
 		
@@ -128,11 +127,11 @@ public class LoginController {
 						log.info("Logged in User Details");
 						log.info("UserName: "+user.getUserName());
 						log.info("Locale: "+LocaleContextHolder.getLocale());
-						List<TypeValues> rolesList = user.getRoles();
+						List<Role> rolesList = user.getRoles();
 						log.info("Roles:");
-						for(TypeValues role: rolesList){
-								log.info(" -"+role.getTypeValue());
-								if(Role.ADMIN.name().equals(role.getTypeValue())){
+						for(Role role: rolesList){
+								log.info(" -"+role.getRoleName());
+								if(ApplicationConstants.ROLE_ADMIN.equals(role.getRoleName())){
 									SessionManager.setAdminUserInSession(user, request, false);
 									/*Admin home page for admin users*/
 									modelAndView.setViewName(ApplicationConstants.ADMIN_HOME_PAGE);

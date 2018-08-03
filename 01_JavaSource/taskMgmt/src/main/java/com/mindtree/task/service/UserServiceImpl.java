@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mindtree.task.authentication.CustomUserDetails;
+import com.mindtree.task.authentication.UserDetailsImpl;
 import com.mindtree.task.constants.NamedQueryConstants;
-import com.mindtree.task.constants.QueryConstants;
 import com.mindtree.task.dao.TaskDAO;
+import com.mindtree.task.model.Role;
 import com.mindtree.task.model.TypeValues;
 import com.mindtree.task.model.User;
 
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public UserDetails loadUserByUsernameandPasskey(String username, String password) {
 		User user = null;
-		CustomUserDetails userDetails = null;
+		UserDetailsImpl userDetails = null;
 		final List<GrantedAuthority> authorities = new ArrayList<>();
 
 		if (null != username && null !=password) {
@@ -42,34 +42,20 @@ public class UserServiceImpl implements UserService {
 			
 			if(user != null){
 				//populate permissions for User Roles
-				List<TypeValues> rolesList = user.getRoles();
-				for(TypeValues role: rolesList){
-					authorities.addAll(getGrantedAuthorities(role.getTypeValueId()));
+				List<Role> rolesList = user.getRoles();
+				for(Role role: rolesList){
+					List<TypeValues> permissionList = role.getPermissions();
+					if(!permissionList.isEmpty()){
+						for(TypeValues permission: permissionList){
+							authorities.add(new SimpleGrantedAuthority(permission.getTypeValue()));
+						}
+					}
 				}
 				//return Spring security user
-				userDetails =  new CustomUserDetails(username, password, authorities);
+				userDetails =  new UserDetailsImpl(username, password, authorities);
+				userDetails.setPrincipalUser(user);
 			}
 		}
 		return userDetails;
 	}
-	
-	private List<GrantedAuthority> getGrantedAuthorities(Integer roleId){
-		List<GrantedAuthority> permissions = new ArrayList<>();
-		
-		List<Object[]> typeValues = null;
-		Map<String, Object> queryParams = null;
-		 
-		queryParams = new HashMap<>();
-		queryParams.put("typeCode","permission");
-		queryParams.put("roleId", roleId);
-		typeValues = taskDAO.findRecordsNSQL(QueryConstants.ROLE_PERMISSIONS, queryParams);
-		
-		if(!typeValues.isEmpty()){
-			for(Object[] obj: typeValues){
-				permissions.add(new SimpleGrantedAuthority(obj[1].toString()));
-			}
-		}
-		return permissions;
-	}
-
 }

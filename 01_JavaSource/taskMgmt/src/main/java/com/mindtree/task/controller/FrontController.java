@@ -32,7 +32,6 @@ import com.mindtree.task.dto.TaskDTO;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.form.AddTaskForm;
 import com.mindtree.task.form.MultipartFileForm;
-import com.mindtree.task.model.Employee;
 import com.mindtree.task.model.FileModel;
 import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.Project;
@@ -96,12 +95,8 @@ public class FrontController {
 			taskdto.setStartDate(TaskUtil.parseDate(addTaskForm.getStartDate()));
 			taskdto.setDueDate(TaskUtil.parseDate(addTaskForm.getDueDate()));
 			List<String> empArr = addTaskForm.getEmpId();
-			for(String empId: empArr){
-				Employee emp = (Employee)taskService.find(Employee.class, empId);
-				if(emp!=null){
-					taskdto.getEmployeesList().add(emp);
-				}
-			}
+			List<EmployeeDTO> empDTOList = taskService.getAllEmployees(empArr);
+			taskdto.getEmployeeDTOList().addAll(empDTOList);
 			
 			Task savedTask = taskService.saveTaskDetails(taskdto);
 			String message="Task Saved Successfully: Id: "+savedTask.getTaskId();
@@ -178,7 +173,7 @@ public class FrontController {
 						   .append("<tr><td>Employees </td></tr>")
 						   .append("<tr><td><table border=\"1\">")
 						   .append("<tr><td>MID</td><td>Employee Name</td></tr>");
-						   for(Employee emp: tsk.getEmployeesList()){
+						   for(EmployeeDTO emp: tsk.getEmployeeDTOList()){
 							   htmlStr.append("<tr><td>"+emp.getMid()+"</td><td>"+emp.getName()+"</td></tr>");							   
 						   }
 						   htmlStr.append("</table></td></tr>")

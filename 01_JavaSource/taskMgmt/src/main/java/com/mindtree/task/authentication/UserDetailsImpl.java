@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class CustomUserDetails implements UserDetails {
+import com.mindtree.task.model.User;
+
+public class UserDetailsImpl implements UserDetails {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -19,12 +21,15 @@ public class CustomUserDetails implements UserDetails {
     private final boolean credentialsNonExpired;
     private final boolean enabled;
     
-    public CustomUserDetails (String username, String password,
+    //Extended
+    private User principalUser;
+    
+    public UserDetailsImpl (String username, String password,
             Collection<? extends GrantedAuthority> authorities) {
         this(username, password, true, true, true, true, authorities);
     }
     
-    public CustomUserDetails (String username, String password,
+    public UserDetailsImpl (String username, String password,
             boolean enabled, boolean accountNonExpired,
             boolean credentialsNonExpired, boolean accountNonLocked,
             Collection<? extends GrantedAuthority> authorities) {
@@ -77,5 +82,15 @@ public class CustomUserDetails implements UserDetails {
 	public boolean isEnabled() {
 		return enabled;
 	}
+
+	public User getPrincipalUser() {
+		return principalUser;
+	}
+
+	public void setPrincipalUser(User principalUser) {
+		this.principalUser = principalUser;
+	}
+
+	
 
 }

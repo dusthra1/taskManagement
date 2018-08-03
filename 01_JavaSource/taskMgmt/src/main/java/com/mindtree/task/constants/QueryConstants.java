@@ -22,13 +22,8 @@ public final class QueryConstants {
 	
 	public static final String ALL_FILES = "from FileModel";
 	
-	public static final String ROLE_PERMISSIONS = "select tv.type_value_id,tv.type_value "
-												+ "from ROLE_PERMISSIONS rp, TYPE_CODE tc,TYPE_VALUES tv "
-												+ "where tc.type_code_id = tv.type_code_id and "
-													  + "tc.type_code=:typeCode and "
-													  + "tv.TYPE_VALUE_ID = rp.PERMISSION_ID and "
-													  + "rp.ROLE_ID=:roleId";
-	
 	public static final String INSERT_ROLE_PERMISSIONS = "insert into ROLE_PERMISSIONS (ROLE_ID,PERMISSION_ID) values(:roleId, :permissionId)";
+	
+	public static final String EMPLOYEES_FOR_IDS = "from Employee emp where mid in (:mIds)";
 
 }

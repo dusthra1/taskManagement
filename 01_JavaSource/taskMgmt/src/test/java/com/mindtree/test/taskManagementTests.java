@@ -1,11 +1,7 @@
 package com.mindtree.test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.persistence.PersistenceException;
 
-import org.apache.commons.collections4.map.HashedMap;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,10 +11,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.mindtree.task.constants.QueryConstants;
-import com.mindtree.task.constants.Role;
-import com.mindtree.task.constants.RolePermission;
+import com.mindtree.task.constants.Locale;
 import com.mindtree.task.exception.ApplicationException;
+import com.mindtree.task.model.I18nMessage;
+import com.mindtree.task.model.I18nMsgID;
+import com.mindtree.task.model.Role;
 import com.mindtree.task.model.TypeValues;
 import com.mindtree.task.model.User;
 import com.mindtree.task.service.TaskService;
@@ -160,13 +157,14 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 	public void testSaveUser() throws ApplicationException{
 		
 		try{
-			TypeValues role = (TypeValues) taskService.find(TypeValues.class, 5);
+			
+			Role role = (Role) taskService.find(Role.class, 120);
 			
 			User user = new User();
-			user.setFirstName("Ramanand");
-			user.setLastName("Dusthakar");
-			user.setEmailId("dusthra1@gmial.com");
-			user.setUserName("dusthra1");
+			user.setFirstName("Sneha");
+			user.setLastName("Dingari");
+			user.setEmailId("sdingari@gmial.com");
+			user.setUserName("sdingari");
 			user.setPassword("YWJjZDEyMzQ=");
 			user.setStatus("A");
 			user.getRoles().add(role);
@@ -178,34 +176,34 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}
 	}*/
 	
-	/*@Test
+	@Test
 	public void createi18nMessage() throws ApplicationException{
 		
 		try{
 			
-			String code= "error.generic";
+			String code= "session.timeout";
 			
 			TypeValues locale = (TypeValues) taskService.find(TypeValues.class, Locale.ENGLISH.getValue());
 								
 			I18nMsgID i18nmsgID = new I18nMsgID(code, locale);
 			I18nMessage msg = new I18nMessage();	
 			msg.setI18nMsgID(i18nmsgID);
-			msg.setMessage("Error Occurred. Unable To Process Your Request. Please report this issue to Support");
+			msg.setMessage("Your session timed out. Please login again");
 			
 			TypeValues locale2 = (TypeValues) taskService.find(TypeValues.class, Locale.SPANISH.getValue());
 			
 			I18nMsgID i18nmsgID2 = new I18nMsgID(code, locale2);
 			I18nMessage msg2 = new I18nMessage();	
 			msg2.setI18nMsgID(i18nmsgID2);
-			msg2.setMessage("Error Occurred. Unable To Process Your Request. Please report this issue to SupportSP");
+			msg2.setMessage("Your session timed out. Please login againSP");
 			
 			TypeValues locale3 = (TypeValues) taskService.find(TypeValues.class, Locale.FRENCH.getValue());
 			
 			I18nMsgID i18nmsgID3 = new I18nMsgID(code, locale3);
 			I18nMessage msg3 = new I18nMessage();	
 			msg3.setI18nMsgID(i18nmsgID3);
-			msg3.setMessage("Error Occurred. Unable To Process Your Request. Please report this issue to SupportFR");			
-			
+			msg3.setMessage("Your session timed out. Please login againFR");			
+		
 			taskService.saveEntity(msg);
 			taskService.saveEntity(msg2);
 			taskService.saveEntity(msg3);
@@ -213,7 +211,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}catch(PersistenceException | ApplicationException pe){
 			pe.printStackTrace();
 		}
-	}*/
+	}
 	
 /*	@Test
 	public void testSaveTypeCodeValue() throws ApplicationException{
@@ -232,18 +230,18 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}
 	}*/
 	
-	@Test
+	/*@Test
 	public void testSaveRolePermission() throws ApplicationException{
 		
 		try{
 			Map<String,Object> params = new HashMap<>();
-			params.put("roleId", Role.MANAGER.value);
-			params.put("permissionId", RolePermission.PERM_ACCESS_VIEW_TASKS.value);
+			params.put("roleId", Role.MANAGER.getValue());
+			params.put("permissionId", RolePermission.PERM_ACCESS_VIEW_TASKS.getValue());
 			taskService.saveRecord(QueryConstants.INSERT_ROLE_PERMISSIONS, params);
 			
 		}catch(PersistenceException | ApplicationException pe){
 			pe.printStackTrace();
 		}
-	}
+	}*/
 	
 }

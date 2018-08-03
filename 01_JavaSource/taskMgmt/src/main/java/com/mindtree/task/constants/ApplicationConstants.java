@@ -17,6 +17,8 @@ public final class ApplicationConstants {
 	public static final String YES = "Y";
 	public static final String NO = "N";
 	
+	public static final String ROLE_ADMIN = "ADMIN";
+	
 	public static final String DAO_EXCEPTION_MSG = "DAO exception occured: ";
 	
 	//Tiles pages	

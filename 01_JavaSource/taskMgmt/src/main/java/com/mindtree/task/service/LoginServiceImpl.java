@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mindtree.task.authentication.CustomAuthenticationProvider;
-import com.mindtree.task.authentication.UserDetails;
+import com.mindtree.task.authentication.CustomAuthentication;
 import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.constants.MessageCode;
 import com.mindtree.task.constants.NamedQueryConstants;
@@ -43,8 +43,8 @@ public class LoginServiceImpl implements LoginService  {
 		ReturnStatus returnStatus = new ReturnStatus();
 	
 		//Custom Authentication
-		UserDetails userDetails =  new UserDetails(userName,password);
-		Authentication authenticatedUser = authProvider.authenticate(userDetails);
+		CustomAuthentication userToAuthenticate =  new CustomAuthentication(userName,password);
+		Authentication authenticatedUser = authProvider.authenticate(userToAuthenticate);
 		
 		if(null != authenticatedUser && authenticatedUser.isAuthenticated()){			
 			
@@ -52,7 +52,8 @@ public class LoginServiceImpl implements LoginService  {
 			queryParams = new HashMap<>();
 			queryParams.put("userName", userName);
 			queryParams.put("password",password);
-			userObj = (User)taskDAO.findRecord(NamedQueryConstants.FIND_USER_BY_USERNAME_KEY, queryParams);	
+			userObj = (User) authenticatedUser.getPrincipal();
+					
 			/*Check if user is active in any other session*/
 			/*if(ApplicationConstants.YES.equals(userObj.getLoginStatus())){
 				returnStatus.setStatus(MessageCode.ERROR);

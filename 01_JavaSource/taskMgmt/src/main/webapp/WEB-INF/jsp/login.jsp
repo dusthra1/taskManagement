@@ -44,7 +44,7 @@
 		<tr>
 			<td colspan="2">
 				<div class="btnLayer">
-					<input type="submit" name="Login" value="Login" onclick="">
+					<input type="submit" name="Login" value="Login">
 				</div></td>
 		</tr>
 	</table>

@@ -10,14 +10,14 @@ import org.springframework.security.core.GrantedAuthority;
  * UserDetails is a custom user object used by CustomAuthenticationProvider
  *
  */
-public class UserDetails implements Authentication {
+public class CustomAuthentication implements Authentication {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private String userName;
 	private String password;
 	
-	public UserDetails(String userName, String password){
+	public CustomAuthentication(String userName, String password){
 		this.userName = userName;
 		this.password = password;
 	}

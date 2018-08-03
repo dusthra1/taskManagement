@@ -21,5 +21,7 @@ public final class NamedQueryConstants {
 	public static final String UPDATE_USERS_LOGIN_STATUS = "User.updateLoginStatusToN";
 	
 	public static final String ALL_FILES = "FileModel.allFiles";
+	
+	public static final String EMPLOYEES_FOR_IDS = "Employee.employeesForIds";
 
 }

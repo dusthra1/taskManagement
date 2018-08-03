@@ -18,7 +18,7 @@
 		
 		<table align="center">
 			<tr>
-			<td><spring:message code="label.project" />: </td>
+			<td><label><spring:message code="label.project" /></label>: </td>
 			<td>
 				<form:errors path="projId" class="error" /><br/>
 				<form:select path="projId"  name="projId" id="projId" onchange="loadProjEmp(this.value)">
@@ -28,7 +28,7 @@
 				</td>
 			</tr>
 			<tr>
-			<td><spring:message code="label.taskName" />:</td>			
+			<td><label><spring:message code="label.taskName" /></label>:</td>			
 			<td>
 				<form:errors path="taskName" class="error" /><br/>
 				<form:input path="taskName"/>
@@ -36,7 +36,7 @@
 			</tr>
 			
 			<tr>
-			<td><spring:message code="label.desc" />:</td>			
+			<td><label><spring:message code="label.desc" /></label>:</td>			
 			<td>
 				<form:errors path="taskDesc" class="error" /><br/>
 				<form:input path="taskDesc"/>
@@ -44,7 +44,9 @@
 			</tr>
 			
 				<tr>
-			<td><spring:message code="label.startDate" />:</td>			
+			<td>
+				<label><spring:message code="label.startDate" /></label>:
+			</td>			
 			<td>
 				<form:errors path="startDate" class="error" /><br/>
 				<form:input path="startDate" readonly="readonly"/>
@@ -52,7 +54,9 @@
 			</tr>
 			
 			<tr>
-			<td><spring:message code="label.dueDate" />:</td>			
+			<td>
+				<label><spring:message code="label.dueDate" /></label>
+			</td>			
 			<td>
 			<form:errors path="dueDate" class="error" /><br/>
 				<form:input path="dueDate" readonly="readonly"/>
@@ -60,7 +64,7 @@
 			</tr>
 			
 			<tr>
-			<td><spring:message code="label.employees" />: </td>
+			<td><label><spring:message code="label.employees" /></label>: </td>
 			<td>
 			<form:errors path="empId" class="error" /><br/>
 				<form:select path="empId" name="empId" id="empId" multiple="multiple">
@@ -89,7 +93,8 @@
 	
 	$( function() {
 	    $("#startDate").datepicker({
-	    		dateFormat: 'dd-mm-yy',
+	    	showOn: 'button',
+	    	dateFormat: 'dd-mm-yy',
 	    		minDate: 0,
 	           onSelect: function(date) {
 	             $("#dueDate").datepicker('option', 'minDate', date);
@@ -97,8 +102,11 @@
 	         });
 
 	         $("#dueDate").datepicker({
+	        	 showOn: 'button',	
 	        	 dateFormat: 'dd-mm-yy'
 	         });
+	         
+	        
 	} );
 	
 	</script>

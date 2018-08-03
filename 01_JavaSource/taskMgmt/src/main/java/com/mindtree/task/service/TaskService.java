@@ -24,6 +24,8 @@ public interface TaskService {
 	
 	public List<EmployeeDTO> getAllEmployees(Integer projId);
 	
+	public List<EmployeeDTO> getAllEmployees(List<String> mIds);
+	
 	public List<Persistable> getAllEmployees();
 	
 	public Task saveTaskDetails(TaskDTO taskdto);

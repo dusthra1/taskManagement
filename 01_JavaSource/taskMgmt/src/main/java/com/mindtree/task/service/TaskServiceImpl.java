@@ -16,17 +16,17 @@ import com.mindtree.task.constants.NamedQueryConstants;
 import com.mindtree.task.dao.TaskDAO;
 import com.mindtree.task.dto.EmployeeDTO;
 import com.mindtree.task.dto.EmployeeMapper;
+import com.mindtree.task.dto.FileModelDTO;
+import com.mindtree.task.dto.FileModelMapper;
 import com.mindtree.task.dto.ProjectDTO;
 import com.mindtree.task.dto.ProjectMapper;
 import com.mindtree.task.dto.TaskDTO;
 import com.mindtree.task.dto.TaskMapper;
-import com.mindtree.task.dto.FileModelDTO;
-import com.mindtree.task.dto.FileModelMapper;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.exception.DAOException;
+import com.mindtree.task.model.FileModel;
 import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.Task;
-import com.mindtree.task.model.FileModel;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -118,7 +118,7 @@ public class TaskServiceImpl implements TaskService {
 	public Task saveTaskDetails(TaskDTO taskdto) {
 		Task savedTask = null;
 		try {
-			Task task = TaskMapper.toEntity(taskdto);
+			Task task = (Task) TaskMapper.toEntity(taskdto);
 			savedTask = (Task) taskDAO.saveEntity(task);
 				
 		} catch (DAOException daoEx) {
@@ -298,5 +298,29 @@ public class TaskServiceImpl implements TaskService {
 			log.error("Exception occured while getting Files " + ex.getMessage());
 			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}	
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public List<EmployeeDTO> getAllEmployees(List<String> mIds) {
+		List<Persistable> empList = null;
+		List<EmployeeDTO> empDTOList = null;
+		try {
+			if(mIds != null && !mIds.isEmpty()){
+				Map<String,Object> params = new HashMap<>();
+				params.put("mIds", mIds);
+				
+				empList = taskDAO.findRecords(NamedQueryConstants.EMPLOYEES_FOR_IDS, params);	
+				empDTOList = EmployeeMapper.toDTOList(empList);
+			}
+		} catch (DAOException daoEx) {
+			log.error("Exception occured while getting employees " + daoEx.getMessage());
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
+
+		} catch (Exception ex) {
+			log.error("Exception occured while getting employees " + ex.getMessage());
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
+		}		
+		return empDTOList;
 	}
 }
