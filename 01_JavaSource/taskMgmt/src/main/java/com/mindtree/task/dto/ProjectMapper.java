@@ -27,5 +27,21 @@ public class ProjectMapper {
 		
 		return prjDTOList;
 	}
+	
+	public static ProjectDTO toDTO(Project proj){
+		ProjectDTO projDTO = new ProjectDTO();
+		projDTO.setId(proj.getId());
+		projDTO.setName(proj.getName());
+		projDTO.setDescription(proj.getDescription());
+		return projDTO;
+	}
+	
+	public static Project toEntity(ProjectDTO projDTO){
+		Project proj = new Project();
+		proj.setId(projDTO.getId());
+		proj.setName(projDTO.getName());
+		proj.setDescription(projDTO.getDescription());
+		return proj;
+	}
 
 }

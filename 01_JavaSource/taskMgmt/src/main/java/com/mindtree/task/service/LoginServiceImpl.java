@@ -5,13 +5,13 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mindtree.task.authentication.CustomAuthenticationProvider;
 import com.mindtree.task.authentication.CustomAuthentication;
 import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.constants.MessageCode;
@@ -32,7 +32,7 @@ public class LoginServiceImpl implements LoginService  {
 	private TaskDAO  taskDAO;
 	
 	@Autowired
-	private CustomAuthenticationProvider authProvider;
+	private AuthenticationProvider authenticationProvider;
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -44,7 +44,7 @@ public class LoginServiceImpl implements LoginService  {
 	
 		//Custom Authentication
 		CustomAuthentication userToAuthenticate =  new CustomAuthentication(userName,password);
-		Authentication authenticatedUser = authProvider.authenticate(userToAuthenticate);
+		Authentication authenticatedUser = authenticationProvider.authenticate(userToAuthenticate);
 		
 		if(null != authenticatedUser && authenticatedUser.isAuthenticated()){			
 			

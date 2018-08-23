@@ -45,7 +45,7 @@ public class EmployeeMapper {
 		empDTO.setName(emp.getName());
 		empDTO.setJoinDate(emp.getJoinDate());
 		empDTO.setEmailId(emp.getEmailId());
-		empDTO.setProject(emp.getProject());
+		empDTO.setProject(ProjectMapper.toDTO(emp.getProject()));
 		
 		return empDTO;
 	}
@@ -56,7 +56,7 @@ public class EmployeeMapper {
 		emp.setMid(empDTO.getMid());
 		emp.setName(empDTO.getName());
 		emp.setJoinDate(empDTO.getJoinDate());
-		emp.setProject(empDTO.getProject());
+		emp.setProject(ProjectMapper.toEntity(empDTO.getProject()));
 		emp.setEmailId(empDTO.getEmailId());
 		
 		return emp;

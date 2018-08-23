@@ -24,8 +24,10 @@ import com.mindtree.task.dto.TaskDTO;
 import com.mindtree.task.dto.TaskMapper;
 import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.exception.DAOException;
+import com.mindtree.task.model.Employee;
 import com.mindtree.task.model.FileModel;
 import com.mindtree.task.model.Persistable;
+import com.mindtree.task.model.Project;
 import com.mindtree.task.model.Task;
 
 @Service
@@ -97,11 +99,12 @@ public class TaskServiceImpl implements TaskService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public List<Persistable> getAllEmployees()  {
+	public List<EmployeeDTO> getAllEmployees()  {
 		List<Persistable> empList = null;
+		List<EmployeeDTO> empDTOList = null;
 		try {
-			
-			empList = taskDAO.findRecords(NamedQueryConstants.ALL_EMPLOYEES, null);	
+			empList = taskDAO.findRecords(NamedQueryConstants.ALL_EMPLOYEES, null);
+			empDTOList = EmployeeMapper.toDTOList(empList);
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while getting employees " + daoEx.getMessage());
 			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
@@ -110,7 +113,7 @@ public class TaskServiceImpl implements TaskService {
 			log.error("Exception occured while getting employees " + ex.getMessage());
 			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}		
-		return empList;
+		return empDTOList;
 	}
 
 	@Override
@@ -322,5 +325,41 @@ public class TaskServiceImpl implements TaskService {
 			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
 		}		
 		return empDTOList;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public ProjectDTO getProject(Integer projId) {
+		ProjectDTO projDTO = null;
+		Project proj = (Project)taskDAO.getEntity(Project.class, projId);
+		projDTO = ProjectMapper.toDTO(proj);
+		return projDTO;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void saveEmployee(EmployeeDTO empDTO) {
+
+		try {
+			Employee emp = (Employee) EmployeeMapper.toEntity(empDTO);
+			taskDAO.saveEntity(emp);
+				
+		} catch (DAOException daoEx) {
+			log.error("Exception occured while saving employee " + daoEx.getMessage());
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
+
+		} catch (Exception ex) {
+			log.error("Exception occured while saving employee " + ex.getMessage());
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
+		}
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public EmployeeDTO getEmployee(String id) {
+		EmployeeDTO empDTO = null;
+		Employee emp = (Employee) taskDAO.getEntity(Employee.class,id);
+		empDTO = EmployeeMapper.toDTO(emp);
+		return empDTO;
 	}
 }

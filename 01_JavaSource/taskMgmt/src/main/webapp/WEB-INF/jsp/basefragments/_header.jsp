@@ -12,7 +12,7 @@
 	<meta http-equiv="refresh" content="<%= session.getMaxInactiveInterval()%>;url=<c:out value="${url}" />">
 </head>
 
-<div style="background: #E0E0E0; height: 55px; padding: 5px;">
+<div style="background: #E0E0E0; height: 55px; padding: 15px;">
   <div style="float: left">
      <h1>Task Management</h1>
   </div>

@@ -7,6 +7,7 @@
        <li><a href="assignTask.do">Assign Task</a></li>
        <li><a href="viewTasks.do">View Tasks</a></li>
        <li><a href="viewProjects.do">Manage Projects</a></li>
+       <li><a href="viewEmployees.do">Manage Employees</a></li>
        <li><a href="empreport.do">Employees Report</a></li>
        <li><a href="welcome-flow.do">Start welcome flow</a></li>
        <li><a href="fileUpload.do">Upload File</a></li>

@@ -2,15 +2,13 @@ package com.mindtree.task.dto;
 
 import java.util.Date;
 
-import com.mindtree.task.model.Project;
-
 public class EmployeeDTO {
 	
 	private String mid;
 	private String name;
 	private Date joinDate;
 	private String emailId;
-	private Project project;
+	private ProjectDTO project;
 	
 	public String getMid() {
 		return mid;
@@ -24,7 +22,7 @@ public class EmployeeDTO {
 	public String getEmailId() {
 		return emailId;
 	}
-	public Project getProject() {
+	public ProjectDTO getProject() {
 		return project;
 	}
 	public void setMid(String mid) {
@@ -39,7 +37,7 @@ public class EmployeeDTO {
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
-	public void setProject(Project project) {
+	public void setProject(ProjectDTO project) {
 		this.project = project;
 	}
 	

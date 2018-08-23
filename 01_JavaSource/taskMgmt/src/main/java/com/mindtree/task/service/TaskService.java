@@ -14,32 +14,48 @@ public interface TaskService {
 	
 	public void saveEntity(Persistable obj);
 	
+	public Task saveTaskDetails(TaskDTO taskdto);
+	
+	public void saveEmployee(EmployeeDTO empDTO);
+	
+
 	public void saveRecord(String insertQry, Map<String,Object> params);
 	
 	public void deleteEntity(Persistable obj);
+	
+	
+	public ProjectDTO getProject(Integer projId);
 	
 	public List<ProjectDTO> getAllProjects();
 	
 	public List<ProjectDTO> getAllProjects(String projName);
 	
+	
+	public EmployeeDTO getEmployee(String id);
+	
 	public List<EmployeeDTO> getAllEmployees(Integer projId);
 	
 	public List<EmployeeDTO> getAllEmployees(List<String> mIds);
 	
-	public List<Persistable> getAllEmployees();
+	public List<EmployeeDTO> getAllEmployees();
 	
-	public Task saveTaskDetails(TaskDTO taskdto);
 	
-	public Persistable find(Class entityobj, int key);
 	
-	public Persistable find(Class entityobj, String key);
+	
+	
 	
 	public List<TaskDTO> getAllTasks(Integer projId);
 	
 	public void updateUsersLoginStatus();
 	
+	
 	public FileModelDTO getFile(Integer fileId);
 	
 	public List<FileModelDTO> getAllFiles();
+	
+	
+	public Persistable find(Class entityobj, int key);
+	
+	public Persistable find(Class entityobj, String key);
 
 }

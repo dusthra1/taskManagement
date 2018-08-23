@@ -29,6 +29,7 @@ public final class ApplicationConstants {
 	public static final String ADD_TASK_PAGE = "addTaskPage";
 	public static final String VIEW_TASK_PAGE = "viewTaskPage";
 	public static final String VIEW_PROJECTS_PAGE = "viewProjectsPage";
+	public static final String VIEW_EMPLOYEES_PAGE = "viewEmployeesPage";
 	
 
 }

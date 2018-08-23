@@ -78,6 +78,8 @@
   	<bean id="userService" class="com.mindtree.task.service.UserServiceImpl" />
   	
   	<bean id="taskUtil" class="com.mindtree.task.util.TaskUtil"/>
+  	
+  	<bean id="authenticationProvider" class="com.mindtree.task.authentication.CustomAuthenticationProvider"/>
   		
   	
   	<!-- i18n Internationalization -->  	

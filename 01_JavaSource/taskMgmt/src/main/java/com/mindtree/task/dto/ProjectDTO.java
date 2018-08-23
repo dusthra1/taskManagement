@@ -6,6 +6,15 @@ public class ProjectDTO {
 	private String name;
 	private String description;
 	
+	public ProjectDTO(){
+		
+	}
+	
+	public ProjectDTO(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 	public int getId() {
 		return id;
 	}

@@ -45,10 +45,11 @@ $(function () {
             	   return d.promise();
             	},
             	insertItem: function (item) {
-            	    var jsonReq = '{"type":"add","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'","dummy=":"'+(new Date()).getTime()+'"}';
+            	    var jsonReq = '{"type":"add","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'"}';
             	    $.ajax({
                         type: "POST",
-                        url: encodeURI("addProject.do?jsonstr="+jsonReq),
+                        url: encodeURI("addProject.do"),
+                        data: "jsonstr="+jsonReq,
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },
@@ -60,10 +61,11 @@ $(function () {
                     });
                 },
                 updateItem: function (item) {
-                	var jsonReq = '{"type":"update","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'","dummy=":"'+(new Date()).getTime()+'"}';
+                	var jsonReq = '{"type":"update","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'"}';
                     $.ajax({
                         type: "POST",
-                        url: encodeURI("addProject.do?jsonstr="+jsonReq),
+                        url: encodeURI("addProject.do"),
+                        data: "jsonstr="+jsonReq,
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },
