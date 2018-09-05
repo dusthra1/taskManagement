@@ -24,6 +24,15 @@ public class FileModelMapper {
 		return fileDTO;
 	}
 	
+	public static FileModel toEntity(FileModelDTO fileDTO){
+		FileModel fileModel = new FileModel();
+		fileModel.setId(fileDTO.getId());
+		fileModel.setFileName(fileDTO.getFileName());
+		fileModel.setContentType(fileDTO.getContentType());
+		fileModel.setData(fileDTO.getData());
+		return fileModel;
+	}
+	
 	public static List<FileModelDTO> toDTOList(List<Persistable> filesList){
 		
 		List<FileModelDTO> filesDTOList = new ArrayList<>();

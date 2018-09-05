@@ -79,6 +79,8 @@
   	
   	<bean id="taskUtil" class="com.mindtree.task.util.TaskUtil"/>
   	
+  	<bean id="jsonUtil" class="com.mindtree.task.util.JSONUtil" />
+  	
   	<bean id="authenticationProvider" class="com.mindtree.task.authentication.CustomAuthenticationProvider"/>
   		
   	

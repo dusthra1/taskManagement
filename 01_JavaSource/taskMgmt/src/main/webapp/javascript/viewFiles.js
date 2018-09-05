@@ -1,6 +1,8 @@
 var header = $("meta[name='_csrf_header']").attr("content");
 var token = $("meta[name='_csrf']").attr("content");
-                	
+
+alert(header);
+alert(token);
 
 $(function () {
 	
@@ -44,19 +46,27 @@ $(function () {
             	    });
             	   return d.promise();
             	},
-
-                deleteItem: function (item) {
-                	var jsonReq = '{"type":"delete","id":"'+item.id+'","dummy=":"'+(new Date()).getTime()+'"}';
-                    $.ajax({
-                        type: "GET",
-                        url: encodeURI("viewFiles.do?jsonstr="+jsonReq),
-                        error: function() {
-                            //alert("FAILURE !");
-                          }
-                    }).done(function(){
-                    	$("#jsGrid").jsGrid("loadData");
-                    });
-                }
+            	
+            	 deleteItem: function (item) {
+                 	var jsonReq = '{"type":"delete","id":"'+item.id+'"}';
+                     $.ajax({
+                         type: "POST",
+                         url: encodeURI("deleteFile.do"),
+                         data: "jsonstr="+jsonReq,
+                         beforeSend: function(xhr){
+                        	 xhr.setRequestHeader(header, token);
+                         },
+                         error: function () {
+                         	 //alert("FAILURE !");
+                         }
+                     }).done(function(response){
+                     	if(response.results=='success'){
+                     		$("#jsGrid").jsGrid("loadData");
+                     	}else{
+                     		alert("Error Occured- Cannot delete file.");
+                     	}
+                     });
+                 }
             },
             
             fields: [

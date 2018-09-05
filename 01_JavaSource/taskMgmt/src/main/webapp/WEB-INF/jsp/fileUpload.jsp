@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<html>
+<head>
+<sec:csrfMetaTags/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>Spring MVC - Hibernate File Upload to Database</title>
 
@@ -16,12 +16,13 @@
             color: red;
         }
     </style>
+    
 </head>
 <body>
     <div align="left">
         <h1>File Upload to Database</h1>
         <c:out value="${message}"/> <br/>
-        <form:form action="doUpload.do" name ="uploadFile" modelAttribute="mFileModel" method="post" enctype="multipart/form-data">
+        <form:form action="fileUpload.do" name ="uploadFile" modelAttribute="mFileModel" method="post" enctype="multipart/form-data">
             <table border="0">
                 <tr>
                     <td>Select your file:</td>
@@ -37,7 +38,7 @@
     </div>
     
     <div id="jsGrid"></div>
-  
+
  	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" src="javascript/jsgrid/jsgrid.min.js"></script>
   	<script type="text/javascript" src="javascript/viewFiles.js"></script>

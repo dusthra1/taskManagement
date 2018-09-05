@@ -176,7 +176,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}
 	}*/
 	
-	@Test
+	/*@Test
 	public void createi18nMessage() throws ApplicationException{
 		
 		try{
@@ -211,7 +211,7 @@ public class taskManagementTests extends AbstractJUnit4SpringContextTests{
 		}catch(PersistenceException | ApplicationException pe){
 			pe.printStackTrace();
 		}
-	}
+	}*/
 	
 /*	@Test
 	public void testSaveTypeCodeValue() throws ApplicationException{

@@ -28,7 +28,7 @@ public class TaskMapper {
 	public static Persistable toEntity(TaskDTO taskdto){
 		
 		Task task = new Task();
-		task.setProject(taskdto.getProject());
+		task.setProject(ProjectMapper.toEntity(taskdto.getProject()));
 		task.setTaskName(taskdto.getTaskName());
 		task.setDescription(taskdto.getDescription());
 		task.setStartDate(taskdto.getStartDate());
@@ -45,7 +45,7 @@ public class TaskMapper {
 	public static TaskDTO toDTO(Task task){
 		
 		TaskDTO taskDTO = new TaskDTO();
-		taskDTO.setProject(task.getProject());
+		taskDTO.setProject(ProjectMapper.toDTO(task.getProject()));
 		taskDTO.setTaskId(task.getTaskId());
 		taskDTO.setTaskName(task.getTaskName());
 		taskDTO.setDescription(task.getDescription());

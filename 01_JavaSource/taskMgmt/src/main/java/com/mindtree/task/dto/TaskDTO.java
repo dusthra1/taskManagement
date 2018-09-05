@@ -13,7 +13,7 @@ public class TaskDTO {
 	private String description;
 	private Date startDate;
 	private Date dueDate;
-	private Project project;
+	private ProjectDTO project;
 	
 	private List<EmployeeDTO> EmployeeDTOList = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class TaskDTO {
 		return dueDate;
 	}
 
-	public Project getProject() {
+	public ProjectDTO getProject() {
 		return project;
 	}
 
@@ -65,7 +65,7 @@ public class TaskDTO {
 		this.dueDate = dueDate;
 	}
 
-	public void setProject(Project project) {
+	public void setProject(ProjectDTO project) {
 		this.project = project;
 	}
 

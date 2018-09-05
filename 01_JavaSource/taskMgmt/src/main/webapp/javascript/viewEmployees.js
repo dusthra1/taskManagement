@@ -4,9 +4,11 @@ var token = $("meta[name='_csrf']").attr("content");
 
 $(function () {
 	
+	var jsonReq = '{"type":"projects","dummy=":"'+(new Date()).getTime()+'"}';
+	
     $.ajax({
         type: "GET",
-        url: encodeURI("getProjects.do")
+        url: encodeURI("manageEmployees.do?jsonstr="+jsonReq)
     }).done(function(projList) {
 
 	

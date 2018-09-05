@@ -77,15 +77,23 @@ $(function () {
                     });
                 },
                 deleteItem: function (item) {
-                	var jsonReq = '{"type":"delete","id":"'+item.id+'","dummy=":"'+(new Date()).getTime()+'"}';
+                	var jsonReq = '{"type":"delete","id":"'+item.id+'"}';
                     $.ajax({
-                        type: "GET",
-                        url: encodeURI("manageProject.do?jsonstr="+jsonReq),
+                        type: "POST",
+                        url: encodeURI("addProject.do"),
+                        data: "jsonstr="+jsonReq,
+                        beforeSend: function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
                         error: function() {
                             //alert("FAILURE !");
                           }
-                    }).done(function(){
-                    	$("#jsGrid").jsGrid("loadData");
+                    }).done(function(response){
+                    	if(response.results=='success'){
+                    		$("#jsGrid").jsGrid("loadData");
+                    	}else{
+                    		alert("Error Occured- Cannot delete Project.");
+                    	}
                     });
                 }
             },
