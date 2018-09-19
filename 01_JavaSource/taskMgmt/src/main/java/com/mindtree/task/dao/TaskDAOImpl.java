@@ -140,7 +140,7 @@ public class TaskDAOImpl implements TaskDAO {
 		} 	
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> findRecordsNSQL(String queryName, Map<String, Object> params) {
 
@@ -178,5 +178,5 @@ public class TaskDAOImpl implements TaskDAO {
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
 		
-	}	
+	}*/	
 }

@@ -3,8 +3,6 @@ package com.mindtree.task.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,18 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
 import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.dto.EmployeeDTO;
 import com.mindtree.task.dto.FileModelDTO;
 import com.mindtree.task.dto.ProjectDTO;
 import com.mindtree.task.dto.TaskDTO;
-import com.mindtree.task.exception.ApplicationException;
 import com.mindtree.task.form.AddTaskForm;
 import com.mindtree.task.form.MultipartFileForm;
 import com.mindtree.task.reports.ExcelReportView;
 import com.mindtree.task.service.TaskService;
-import com.mindtree.task.util.JSONUtil;
 import com.mindtree.task.util.TaskUtil;
 import com.mindtree.task.validators.FileValidator;
 import com.mindtree.task.validators.TaskValidator;
@@ -97,55 +91,55 @@ public class FrontController {
 	
 	//http://learnfromexamples.com/generate-excel-in-spring-mvc-application-using-apache-poi/
 	
-		@RequestMapping(method = RequestMethod.GET, value ="/empreport.do")
-		public ModelAndView empReport(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(method = RequestMethod.GET, value ="/empreport.do")
+	public ModelAndView empReport(HttpServletRequest request, HttpServletResponse response) {
 
-			List<EmployeeDTO> empList = taskService.getAllEmployees();		
-			return new ModelAndView(new ExcelReportView(), "empList", empList);
-				
-			}
-		
-		 @RequestMapping(method = RequestMethod.GET, value = "/fileUpload.do" )
-		    public ModelAndView showUploadForm(HttpServletRequest request,  Model model) {
-		        
-			 model.addAttribute("mFileModel", new MultipartFileForm());
-			 return new ModelAndView("fileUploadPage");
-		    }
+		List<EmployeeDTO> empList = taskService.getAllEmployees();		
+		return new ModelAndView(new ExcelReportView(), "empList", empList);
+			
+		}
+	
+	 @RequestMapping(method = RequestMethod.GET, value = "/fileUpload.do" )
+	    public ModelAndView showUploadForm(HttpServletRequest request,  Model model) {
+	        
+		 model.addAttribute("mFileModel", new MultipartFileForm());
+		 return new ModelAndView("fileUploadPage");
+	    }
 		 
-		 @RequestMapping(method = RequestMethod.GET, value ="/downloadFile.do")
-		    public void download(HttpServletRequest request,
-		            @RequestParam String fileId, HttpServletResponse response) {
-		 		
-		        try {
-		        	
-		        	FileModelDTO doc = taskService.getFile(Integer.valueOf(fileId));
-		        	if(doc !=null){
-		        		response.setHeader("Content-Disposition", "inline;filename=\"" +doc.getFileName()+ "\"");
-		  	            OutputStream out = response.getOutputStream();
-		  	            response.setContentType(doc.getContentType());
-		  	            IOUtils.copy(new ByteArrayInputStream(doc.getData()), out);
-		  	            out.flush();
-		  	            out.close();
-		        	}
-		        } catch (IOException e) {
-		        	log.error("Exception occurred while downloading file", e);
-		        }
-		    }
+	 @RequestMapping(method = RequestMethod.GET, value ="/downloadFile.do")
+	    public void download(HttpServletRequest request,
+	            @RequestParam String fileId, HttpServletResponse response) {
+	 		
+	        try {
+	        	
+	        	FileModelDTO doc = taskService.getFile(Integer.valueOf(fileId));
+	        	if(doc !=null){
+	        		response.setHeader("Content-Disposition", "inline;filename=\"" +doc.getFileName()+ "\"");
+	  	            OutputStream out = response.getOutputStream();
+	  	            response.setContentType(doc.getContentType());
+	  	            IOUtils.copy(new ByteArrayInputStream(doc.getData()), out);
+	  	            out.flush();
+	  	            out.close();
+	        	}
+	        } catch (IOException e) {
+	        	log.error("Exception occurred while downloading file", e);
+	        }
+	    }
 		 	
 			
 			
 
-			@RequestMapping(method = RequestMethod.GET, value = "/viewPDF.do" )
-			public ModelAndView viewPDF(HttpServletRequest request,  Model model) {
-				 return new ModelAndView("viewPDFPage");
-			}
-			
-			@RequestMapping(method = RequestMethod.GET, value ="/viewEmployees.do")
-			public ModelAndView viewEmployees(HttpServletRequest request)
-			{
-				return new ModelAndView(ApplicationConstants.VIEW_EMPLOYEES_PAGE);
-			}
-			
+		@RequestMapping(method = RequestMethod.GET, value = "/viewPDF.do" )
+		public ModelAndView viewPDF(HttpServletRequest request,  Model model) {
+			 return new ModelAndView("viewPDFPage");
+		}
+		
+		@RequestMapping(method = RequestMethod.GET, value ="/viewEmployees.do")
+		public ModelAndView viewEmployees(HttpServletRequest request)
+		{
+			return new ModelAndView(ApplicationConstants.VIEW_EMPLOYEES_PAGE);
+		}
+		
 	
 	/*
 	 * All Post Methods

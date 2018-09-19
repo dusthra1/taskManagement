@@ -19,10 +19,10 @@ public interface TaskDAO {
 	
 	public List<Persistable> findRecords(String queryName, Map<String, Object> params);
 	
-	public List<Object[]> findRecordsNSQL(String queryName, Map<String, Object> params);
+	//public List<Object[]> findRecordsNSQL(String queryName, Map<String, Object> params);
 	
 	public void updateRecords(String queryName, Map<String, Object> params);
 	
-	public void saveRecord(String insertQry, Map<String,Object> params);
+	//public void saveRecord(String insertQry, Map<String,Object> params);
 	
 }
