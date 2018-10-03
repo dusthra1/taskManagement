@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import com.mindtree.task.constants.ApplicationConstants;
 import com.mindtree.task.exception.DAOException;
 import com.mindtree.task.model.Persistable;
+import com.mindtree.task.util.CriteriaExpression;
 
 @Repository
 public class TaskDAOImpl implements TaskDAO {
@@ -138,6 +143,39 @@ public class TaskDAOImpl implements TaskDAO {
 			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
 			throw new DAOException(ex.getMessage(), ex);
 		} 	
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Persistable> findByCriteria(Class classObj, List<CriteriaExpression> criteriaExpressions) {
+		List<Persistable> records = null;
+		Session session = sessionFactory.getCurrentSession();
+		try{
+			CriteriaBuilder creteriaBuilder = session.getCriteriaBuilder();
+			
+			
+			CriteriaQuery<Persistable> crQuery = creteriaBuilder.createQuery(classObj);
+			 Root<Persistable> objRoot = crQuery.from(classObj);
+			 
+			 Predicate[] predicates = new Predicate[criteriaExpressions.size()];
+			 if(criteriaExpressions != null){
+				 int i=0;
+				 for(CriteriaExpression critExp: criteriaExpressions){
+					 predicates[i] = critExp.toPredicate(objRoot, crQuery, creteriaBuilder);
+					 i++;
+				 }
+			}
+			
+			 crQuery.select(objRoot).where(predicates);
+			
+	         Query query=session.createQuery(crQuery);
+	         records = query.getResultList();
+			
+		}catch (Exception ex) {	
+			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());
+			throw new DAOException(ex.getMessage(), ex);
+		} 	
+		return records;
 	}
 
 	/*@SuppressWarnings("unchecked")

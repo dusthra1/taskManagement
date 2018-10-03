@@ -4,11 +4,12 @@ var token = $("meta[name='_csrf']").attr("content");
 
 $(function () {
 	
-	var jsonReq = '{"type":"projects","dummy=":"'+(new Date()).getTime()+'"}';
+	var jsonReqObj = new Object();
+	jsonReqObj.type = "projects";
 	
     $.ajax({
         type: "GET",
-        url: encodeURI("manageEmployees.do?jsonstr="+jsonReq)
+        url: encodeURI("manageEmployees.do?jsonstr="+JSON.stringify(jsonReqObj))
     }).done(function(projList) {
 
 	
@@ -33,11 +34,16 @@ $(function () {
             	loadData: function(filter) {      		
             		
             		var d = $.Deferred();
-            		var jsonReq = '{"type":"view","filter":"'+filter.name+'","sortOrder":"'+filter.sortOrder+'","sortField":"'+filter.sortField+'","dummy=":"'+(new Date()).getTime()+'"}';
-            	   
+            		jsonReqObj = new Object();
+            		jsonReqObj.type="view";
+            		jsonReqObj.mid=filter.mid;
+            		jsonReqObj.name=filter.name;
+            		jsonReqObj.emailId=filter.emailId;
+            		jsonReqObj.projId=filter.project != undefined ? filter.project.id: 0;	
+            		
             	    $.ajax({
                         type: "GET",
-                        url: encodeURI("manageEmployees.do?jsonstr="+jsonReq),
+                        url: encodeURI("manageEmployees.do?jsonstr="+JSON.stringify(jsonReqObj)),
                         error: function() {
                             //alert("FAILURE !");
                           }
@@ -49,12 +55,20 @@ $(function () {
             	    });
             	   return d.promise();
             	},
+            	
             	insertItem: function (item) {
-            		var jsonReq = '{"type":"add","mid":"'+item.mid+'","name":"'+item.name+'","joinDate":"'+item.joinDate+'","emailId":"'+item.emailId+'","projId":"'+item.project.id+'"}';
-            	    $.ajax({
+            		jsonReqObj = new Object();
+            		jsonReqObj.type="add";
+            		jsonReqObj.mid=item.mid;
+            		jsonReqObj.name=item.name;
+            		jsonReqObj.joinDate=item.joinDate;
+            		jsonReqObj.emailId=item.emailId;
+            		jsonReqObj.projId=item.project != undefined ? item.project.id: 0;
+            		
+            		$.ajax({
                         type: "POST",
                         url: encodeURI("addEmployeeAjx.do"),
-                        data: "jsonstr="+jsonReq,
+                        data: "jsonstr="+JSON.stringify(jsonReqObj),
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },
@@ -71,19 +85,26 @@ $(function () {
                     	
                     });
                 },
+                
                 updateItem: function (item) {
-                	var jsonReq = '{"type":"update","mid":"'+item.mid+'","name":"'+item.name+'","joinDate":"'+item.joinDate+'","emailId":"'+item.emailId+'","projId":"'+item.project.id+'"}';
+                	jsonReqObj = new Object();
+            		jsonReqObj.type="update";
+            		jsonReqObj.mid=item.mid;
+            		jsonReqObj.name=item.name;
+            		jsonReqObj.joinDate=item.joinDate;
+            		jsonReqObj.emailId=item.emailId;
+            		jsonReqObj.projId=item.project != undefined ? item.project.id: 0;
                     $.ajax({
                         type: "POST",
                         url: encodeURI("addEmployeeAjx.do"),
-                        data: "jsonstr="+jsonReq,
+                        data: "jsonstr="+JSON.stringify(jsonReqObj),
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },
                         error: function() {
                             //alert("FAILURE !");
                           }
-                    }).done(function(){
+                    }).done(function(response){
                     	if(response.results=='success'){
                     		$("#jsGrid").jsGrid("loadData");
                     	}else{
@@ -93,11 +114,13 @@ $(function () {
                 },
                 
                 deleteItem: function (item) {
-                	var jsonReq = '{"type":"delete","mid":"'+item.mid+'"}';
+                	jsonReqObj = new Object();
+            		jsonReqObj.type="delete";
+            		jsonReqObj.mid=item.mid;
                     $.ajax({
                         type: "POST",
                         url: encodeURI("addEmployeeAjx.do"),
-                        data: "jsonstr="+jsonReq,
+                        data: "jsonstr="+JSON.stringify(jsonReqObj),
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },
@@ -115,7 +138,7 @@ $(function () {
             },
             
             fields: [
-                {name: "mid", title: "Id", type: "text", width: 40},
+                {name: "mid", title: "Id", type: "text", width: 40, editing: false},
                 {name: "name", title: "Employee Name", type: "text", width: 60, order:"asc"},
                 {name: "joinDate", title: "Join Date", type: "text",  width: 50, align: "center", sorting:false},
                 {name: "emailId", title: "Email", type: "text",  width: 60,sorting:false},                

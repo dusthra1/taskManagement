@@ -29,6 +29,7 @@ import com.mindtree.task.model.FileModel;
 import com.mindtree.task.model.Persistable;
 import com.mindtree.task.model.Project;
 import com.mindtree.task.model.Task;
+import com.mindtree.task.util.CriteriaExpression;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -226,6 +227,25 @@ public class TaskServiceImpl implements TaskService {
 		List<EmployeeDTO> empDTOList = null;
 		try {
 			empList = taskDAO.findRecords(NamedQueryConstants.ALL_EMPLOYEES, null);
+			empDTOList = EmployeeMapper.toDTOList(empList);
+		} catch (DAOException daoEx) {
+			log.error("Exception occured while getting employees " + daoEx.getMessage());
+			throw new ApplicationException(ApplicationConstants.ERROR_MESSAGE, daoEx);
+
+		} catch (Exception ex) {
+			log.error("Exception occured while getting employees " + ex.getMessage());
+			throw new ApplicationException(MessageCode.GENERIC_ERROR, ex);
+		}		
+		return empDTOList;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public List<EmployeeDTO> searchEmployee(List<CriteriaExpression> criteriaExpressions){
+		List<Persistable> empList = null;
+		List<EmployeeDTO> empDTOList = null;
+		try {
+			empList = taskDAO.findByCriteria(Employee.class, criteriaExpressions);
 			empDTOList = EmployeeMapper.toDTOList(empList);
 		} catch (DAOException daoEx) {
 			log.error("Exception occured while getting employees " + daoEx.getMessage());

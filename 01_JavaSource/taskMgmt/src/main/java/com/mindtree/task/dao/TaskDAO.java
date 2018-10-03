@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mindtree.task.model.Persistable;
+import com.mindtree.task.util.CriteriaExpression;
 
 public interface TaskDAO {
 	
@@ -24,5 +25,7 @@ public interface TaskDAO {
 	public void updateRecords(String queryName, Map<String, Object> params);
 	
 	//public void saveRecord(String insertQry, Map<String,Object> params);
+	
+	public List<Persistable> findByCriteria(Class classObj, List<CriteriaExpression> criteriaExpressions);
 	
 }

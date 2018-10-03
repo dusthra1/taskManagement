@@ -6,6 +6,7 @@ import com.mindtree.task.dto.EmployeeDTO;
 import com.mindtree.task.dto.FileModelDTO;
 import com.mindtree.task.dto.ProjectDTO;
 import com.mindtree.task.dto.TaskDTO;
+import com.mindtree.task.util.CriteriaExpression;
 
 public interface TaskService {
 	
@@ -32,6 +33,8 @@ public interface TaskService {
 	public List<EmployeeDTO> getEmployeesForMids(List<String> mIds);
 	
 	public List<EmployeeDTO> getAllEmployees();
+	
+	public List<EmployeeDTO> searchEmployee(List<CriteriaExpression> criteriaExpressions);
 	
 	public void deleteEmployee(EmployeeDTO empDTO);
 	
