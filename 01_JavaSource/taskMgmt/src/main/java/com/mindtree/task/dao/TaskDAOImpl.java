@@ -151,25 +151,29 @@ public class TaskDAOImpl implements TaskDAO {
 		List<Persistable> records = null;
 		Session session = sessionFactory.getCurrentSession();
 		try{
-			CriteriaBuilder creteriaBuilder = session.getCriteriaBuilder();
-			
+			CriteriaBuilder creteriaBuilder = session.getCriteriaBuilder();			
 			
 			CriteriaQuery<Persistable> crQuery = creteriaBuilder.createQuery(classObj);
 			 Root<Persistable> objRoot = crQuery.from(classObj);
 			 
-			 Predicate[] predicates = new Predicate[criteriaExpressions.size()];
-			 if(criteriaExpressions != null){
+			 Predicate[] predicates = null;
+			
+			 if(criteriaExpressions != null && !criteriaExpressions.isEmpty()){
+				 predicates = new Predicate[criteriaExpressions.size()];
 				 int i=0;
 				 for(CriteriaExpression critExp: criteriaExpressions){
 					 predicates[i] = critExp.toPredicate(objRoot, crQuery, creteriaBuilder);
 					 i++;
 				 }
 			}
+			if(null != predicates){
+				crQuery.select(objRoot).where(predicates);
+			}else{
+				crQuery.select(objRoot);
+			}
 			
-			 crQuery.select(objRoot).where(predicates);
-			
-	         Query query=session.createQuery(crQuery);
-	         records = query.getResultList();
+	        Query query=session.createQuery(crQuery);
+	        records = query.getResultList();
 			
 		}catch (Exception ex) {	
 			log.error(ApplicationConstants.DAO_EXCEPTION_MSG+ex.getMessage());

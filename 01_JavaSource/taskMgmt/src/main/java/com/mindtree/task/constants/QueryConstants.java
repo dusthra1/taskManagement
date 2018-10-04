@@ -2,13 +2,13 @@ package com.mindtree.task.constants;
 
 public final class QueryConstants {	
 	
-	public static final String ALL_PROJECTS = "from Project";
+	//public static final String ALL_PROJECTS = "from Project";
 	
-	public static final String PROJECTS_BY_LIKE_NAME = "from Project where name like :projName order by name asc"; 
+	//public static final String PROJECTS_BY_LIKE_NAME = "from Project where name like :projName order by name asc"; 
 	
-	public static final String PROJECT_EMPLOYEES = "from Employee emp where emp.project.id= :projId";
+	//public static final String PROJECT_EMPLOYEES = "from Employee emp where emp.project.id= :projId";
 	
-	public static final String ALL_EMPLOYEES = "from Employee";
+	//public static final String ALL_EMPLOYEES = "from Employee";
 	
 	public static final String ALL_TASKS_FOR_PROJ = "from Task where project.id=:projId";	
 	

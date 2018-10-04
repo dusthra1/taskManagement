@@ -17,22 +17,14 @@ public interface TaskService {
 	
 	public ProjectDTO getProject(Integer projId);
 	
-	public List<ProjectDTO> getAllProjects();
-	
-	public List<ProjectDTO> getAllProjects(String projName);
+	public List<ProjectDTO> searchProject(List<CriteriaExpression> criteriaExpressions);
 	
 	public void deleteProject(ProjectDTO projDTO);
 	
 	
 	public void saveEmployee(EmployeeDTO empDTO);
 	
-	public EmployeeDTO getEmployee(String id);
-	
-	public List<EmployeeDTO> getProjEmployees(Integer projId);
-	
 	public List<EmployeeDTO> getEmployeesForMids(List<String> mIds);
-	
-	public List<EmployeeDTO> getAllEmployees();
 	
 	public List<EmployeeDTO> searchEmployee(List<CriteriaExpression> criteriaExpressions);
 	

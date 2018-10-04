@@ -57,7 +57,7 @@ public class FrontController {
 		AddTaskForm addTaskForm = new AddTaskForm();
 		request.setAttribute("addTaskFormDetails", addTaskForm);
 		
-		List<ProjectDTO> allProjList= taskService.getAllProjects();		
+		List<ProjectDTO> allProjList= taskService.searchProject(null);	
 		request.setAttribute("allProjList", allProjList);
 		ModelAndView modelview=new ModelAndView();
 		modelview.addObject(model);
@@ -68,7 +68,7 @@ public class FrontController {
 	@RequestMapping(method = RequestMethod.GET, value ="/viewTasks.do")
 	public ModelAndView viewTasks(HttpServletRequest request)
 	{
-		List<ProjectDTO> allProjList= taskService.getAllProjects();		
+		List<ProjectDTO> allProjList= taskService.searchProject(null);	
 		StringBuilder sb = new StringBuilder("[");
 		int index = 0;
 		for(ProjectDTO prj:allProjList){
@@ -94,7 +94,7 @@ public class FrontController {
 	@RequestMapping(method = RequestMethod.GET, value ="/empreport.do")
 	public ModelAndView empReport(HttpServletRequest request, HttpServletResponse response) {
 
-		List<EmployeeDTO> empList = taskService.getAllEmployees();		
+		List<EmployeeDTO> empList = taskService.searchEmployee(null);	
 		return new ModelAndView(new ExcelReportView(), "empList", empList);
 			
 		}
@@ -154,7 +154,7 @@ public class FrontController {
 		taskValidator.validate(addTaskForm, result);
 		
 		if(result.hasErrors()){
-			List<ProjectDTO> allProjList= taskService.getAllProjects();		
+			List<ProjectDTO> allProjList= taskService.searchProject(null);	
 			request.setAttribute("allProjList", allProjList);	
 			modelview.setViewName(ApplicationConstants.ADD_TASK_PAGE);
 		}else{

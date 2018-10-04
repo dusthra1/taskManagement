@@ -48,7 +48,7 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 			@RequestParam("jsonstr") String jsonstr){
 		
 		JSONObject jsonRequest = new JSONObject(jsonstr);
-		String type = jsonRequest.has("type") ? jsonRequest.getString("type"):null;	
+		String type = jsonRequest.has("type") ? jsonRequest.getString("type"):"";	
 		
 		JSONObject jsonResponse = new JSONObject();
 		log.debug("type=: "+type);
@@ -57,9 +57,9 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 		
 		case "view":
 			
-			String filterEmpName =  jsonRequest.has("name") ? jsonRequest.getString("name") :null;
-			String filterMid =  jsonRequest.has("mid") ? jsonRequest.getString("mid") : null;
-			String filterEmail = jsonRequest.has("emailId") ? jsonRequest.getString("emailId") : null;
+			String filterEmpName =  jsonRequest.has("name") ? jsonRequest.getString("name") :"";
+			String filterMid =  jsonRequest.has("mid") ? jsonRequest.getString("mid") :"";
+			String filterEmail = jsonRequest.has("emailId") ? jsonRequest.getString("emailId") :"";
 			int filterProject = jsonRequest.has("projId") ? jsonRequest.getInt("projId"):0;
 			
 			List<EmployeeDTO> empList = null;
@@ -83,10 +83,7 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 				criteriaExpList.add(criteriaExp);
 			}
 			
-			if(!criteriaExpList.isEmpty()){
-				empList = taskService.searchEmployee(criteriaExpList); }
-			else{
-				empList = taskService.getAllEmployees(); }
+			empList = taskService.searchEmployee(criteriaExpList);
 			
 			if (!empList.isEmpty()) {
 				Gson gson = new Gson();
@@ -102,7 +99,7 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 		case "projects":
 			List<ProjectDTO> projList = new ArrayList<>();
 			
-			projList = taskService.getAllProjects();
+			projList = taskService.searchProject(null);
 			projList.add(0,new ProjectDTO(0,"--SELECT--"));
 			
 			if (!projList.isEmpty()) {
@@ -129,7 +126,7 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 		JSONObject jsonRequest = new JSONObject(jsonstr);
 		JSONObject jsonResponse = new JSONObject();
 		
-		String type = jsonRequest.has("type") ? jsonRequest.getString("type"):null;
+		String type = jsonRequest.has("type") ? jsonRequest.getString("type"):"";
 		
 		switch(type){
 		case "view":
@@ -158,7 +155,7 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 	public void manageProject(@RequestParam("jsonstr") String jsonstr, HttpServletRequest request, HttpServletResponse response){
 		
 		JSONObject jsonRequest = new JSONObject(jsonstr);
-		String type = jsonRequest.has("type") ? jsonRequest.getString("type"):null;	
+		String type = jsonRequest.has("type") ? jsonRequest.getString("type"):"";	
 		
 		JSONObject jsonResponse = new JSONObject();
 		log.debug("type=: "+type);
@@ -168,25 +165,33 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 		
 		switch(type){
 		
-			case "view":
-				
-					String filterName = jsonRequest.has("filter") ? jsonRequest.getString("filter"):null;
-					String sortOrder = jsonRequest.has("sortOrder") ? jsonRequest.getString("sortOrder"):null;
-					String sortField = jsonRequest.has("sortField") ? jsonRequest.getString("sortField"):null;
+			case "view":				
+					String filterProjName = jsonRequest.has("projName") ? jsonRequest.getString("projName"):"";
+					String filterProjDesc = jsonRequest.has("projDesc") ? jsonRequest.getString("projDesc"):"";
+					String sortOrder = jsonRequest.has("sortOrder") ? jsonRequest.getString("sortOrder"):"";
+					//String sortField = jsonRequest.has("sortField") ? jsonRequest.getString("sortField"):"";
 					
-					if(!filterName.isEmpty() && !"undefined".equalsIgnoreCase(filterName) ){
-						log.debug("Executing filter: "+filterName);
-						allProjList= taskService.getAllProjects(filterName);
-					}else{
-							allProjList= taskService.getAllProjects();
-							//Implementing Lambda expressions for sorting collections
-							if("desc".equals(sortOrder)){
-								Collections.sort(allProjList,(p1,p2)-> p1.getName().compareTo(p2.getName())); 
-							}else{
-								Collections.sort(allProjList,(p2,p1)-> p1.getName().compareTo(p2.getName())); 
-							}
-							 
+					CriteriaExpression criteriaExp = null;
+					List<CriteriaExpression> criteriaExpList = new ArrayList<>();
+					
+					if(!filterProjName.isEmpty() && !"undefined".equalsIgnoreCase(filterProjName) ){
+						criteriaExp = new CriteriaExpression("name",filterProjName,"LIKE");
+						criteriaExpList.add(criteriaExp);
 					}
+					if(!filterProjDesc.isEmpty() && !"undefined".equalsIgnoreCase(filterProjDesc) ){
+						criteriaExp = new CriteriaExpression("description",filterProjDesc,"LIKE");
+						criteriaExpList.add(criteriaExp);
+					}
+					
+					allProjList= taskService.searchProject(criteriaExpList);
+					
+					//Implementing Lambda expressions for sorting collections
+					if("desc".equals(sortOrder)){
+						Collections.sort(allProjList,(p1,p2)-> p1.getName().compareTo(p2.getName())); 
+					}else{
+						Collections.sort(allProjList,(p2,p1)-> p1.getName().compareTo(p2.getName())); 
+					}
+					
 					
 					if (!allProjList.isEmpty()) {
 						Gson gson = new Gson();
@@ -254,13 +259,24 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 	public void getProjectEmployees(@RequestParam("jsonstr") String jsonstr, 
 						HttpServletRequest request, HttpServletResponse response){			
 
+		List<EmployeeDTO> empDTOList = null;
 		JSONObject jsonResponse = new JSONObject();
 		
 		JSONObject jsonRequest = new JSONObject(jsonstr);
-		String projId = jsonRequest.getString("projId");
-		List<EmployeeDTO> empDTOList = taskService.getProjEmployees(Integer.valueOf(projId));
+		int projId = jsonRequest.has("projId") ? jsonRequest.getInt("projId"): 0;
 		
-		if (!empDTOList.isEmpty()) {
+		CriteriaExpression criteriaExp = null;
+		List<CriteriaExpression> criteriaExpList = new ArrayList<>();
+		
+		if(projId > 0){
+			ProjectDTO proj = taskService.getProject(projId);
+			criteriaExp = new CriteriaExpression("project",ProjectMapper.toEntity(proj),"EQ");
+			criteriaExpList.add(criteriaExp);
+			
+			empDTOList = taskService.searchEmployee(criteriaExpList);
+		}
+		
+		if (null != empDTOList && !empDTOList.isEmpty()) {
 			Gson gson = new Gson();
 			String jsonStr=gson.toJson(empDTOList);
 			
@@ -290,10 +306,11 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 		switch(type){
 		
 		case "add":
-			String name = jsonRequest.has("name") ? jsonRequest.getString("name") :null;
-			String joinDate = jsonRequest.has("joinDate") ? jsonRequest.getString("joinDate"):null;
-			String email = jsonRequest.has("emailId") ? jsonRequest.getString("emailId") : null;
+			String name = jsonRequest.has("name") ? jsonRequest.getString("name") :"";
+			String joinDate = jsonRequest.has("joinDate") ? jsonRequest.getString("joinDate"):"";
+			String email = jsonRequest.has("emailId") ? jsonRequest.getString("emailId") :"";
 			int projId = jsonRequest.has("projId") ? jsonRequest.getInt("projId"):0;
+			
 			EmployeeDTO emp=  new EmployeeDTO();
 			emp.setMid(mid);
 			emp.setName(name);
@@ -306,12 +323,24 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 			break;
 		
 		case "update":
-			String upname = jsonRequest.has("name") ? jsonRequest.getString("name") :null;
-			String upjoinDate = jsonRequest.has("joinDate") ? jsonRequest.getString("joinDate"):null;
-			String upemail = jsonRequest.has("emailId") ? jsonRequest.getString("emailId") : null;
+			String upname = jsonRequest.has("name") ? jsonRequest.getString("name") :"";
+			String upjoinDate = jsonRequest.has("joinDate") ? jsonRequest.getString("joinDate"):"";
+			String upemail = jsonRequest.has("emailId") ? jsonRequest.getString("emailId") :"";
 			int upprojId = jsonRequest.has("projId") ? jsonRequest.getInt("projId"):0;
 			
-			EmployeeDTO updateEmp = taskService.getEmployee(mid);
+			CriteriaExpression criteriaExp = null;
+			List<CriteriaExpression> criteriaExpList = new ArrayList<>();
+			EmployeeDTO updateEmp = null;
+			
+			if(null != mid && !mid.isEmpty()){
+				criteriaExp = new CriteriaExpression("mid",mid,"EQ");
+				criteriaExpList.add(criteriaExp);
+				List<EmployeeDTO> empList = taskService.searchEmployee(criteriaExpList);
+				if(!empList.isEmpty()){
+					updateEmp = empList.get(0);
+				}
+			}
+			
 			if(updateEmp !=null)	{
 				updateEmp.setMid(mid);
 				updateEmp.setName(upname);
@@ -324,9 +353,19 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 			}
 			break;
 		case "delete":
-			EmployeeDTO empToDel;
+			EmployeeDTO empToDel=null;
+			criteriaExpList = new ArrayList<>();
 			try {
-				empToDel = taskService.getEmployee(mid);
+				
+				if(null != mid && !mid.isEmpty()){
+					criteriaExp = new CriteriaExpression("mid",mid,"EQ");
+					criteriaExpList.add(criteriaExp);
+					List<EmployeeDTO> empList = taskService.searchEmployee(criteriaExpList);
+					if(!empList.isEmpty()){
+						empToDel = empList.get(0);
+					}
+				}
+				
 				if(empToDel !=null){
 					taskService.deleteEmployee(empToDel);
 					jsonResponse.put("results", "success");
@@ -350,7 +389,7 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 		JSONObject jsonRequest = new JSONObject(jsonstr);
 		JSONObject jsonResponse = new JSONObject();
 		
-		String type = jsonRequest.has("type") ? jsonRequest.getString("type"):null;
+		String type = jsonRequest.has("type") ? jsonRequest.getString("type"):"";
 		
 		String id = null;
 		String name = null;
@@ -359,8 +398,8 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 		switch(type){
 		
 		case "add":
-			name = jsonRequest.has("name") ? jsonRequest.getString("name") :null;
-			desc = jsonRequest.has("desc") ? jsonRequest.getString("desc") :null;
+			name = jsonRequest.has("name") ? jsonRequest.getString("name") :"";
+			desc = jsonRequest.has("desc") ? jsonRequest.getString("desc") :"";
 			ProjectDTO projDTO=  new ProjectDTO();
 			projDTO.setName(name);
 			projDTO.setDescription(desc);
@@ -369,9 +408,9 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 			break;
 		
 		case "update":
-			id = jsonRequest.has("id") ? jsonRequest.getString("id"): null;
-			name = jsonRequest.has("name") ? jsonRequest.getString("name") :null;
-			desc = jsonRequest.has("desc") ? jsonRequest.getString("desc") :null;
+			id = jsonRequest.has("id") ? jsonRequest.getString("id"):"";
+			name = jsonRequest.has("name") ? jsonRequest.getString("name") :"";
+			desc = jsonRequest.has("desc") ? jsonRequest.getString("desc") :"";
 			ProjectDTO updateproj =  taskService.getProject(Integer.valueOf(id));
 			if(updateproj !=null)	{
 				updateproj.setId(Integer.valueOf(id));
@@ -383,7 +422,7 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 			break;
 			
 		case "delete":
-			id = jsonRequest.has("id") ? jsonRequest.getString("id"): null;
+			id = jsonRequest.has("id") ? jsonRequest.getString("id"):"";
 			ProjectDTO prj;
 			try {
 				prj = taskService.getProject(Integer.valueOf(id));
@@ -409,7 +448,7 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 		JSONObject jsonRequest = new JSONObject(jsonstr);
 		JSONObject jsonResponse = new JSONObject();
 		
-		String id = jsonRequest.has("id") ? jsonRequest.getString("id"): null;
+		String id = jsonRequest.has("id") ? jsonRequest.getString("id"):"";
 		FileModelDTO fileDTO;
 		try {
 			fileDTO = taskService.getFile(Integer.valueOf(id));

@@ -4,6 +4,8 @@ var token = $("meta[name='_csrf']").attr("content");
 
 $(function () {
 	
+	var jsonReqObj = new Object();
+	
         $("#jsGrid").jsGrid({
         	height: 500,
             width: "60%",
@@ -28,11 +30,15 @@ $(function () {
             		//alert(filter.name);      		
             		
             		var d = $.Deferred();
-            		var jsonReq = '{"type":"view","filter":"'+filter.name+'","sortOrder":"'+filter.sortOrder+'","sortField":"'+filter.sortField+'","dummy=":"'+(new Date()).getTime()+'"}';
-            	   
+            		jsonReqObj.type="view";
+            		jsonReqObj.projName=filter.name;
+            		jsonReqObj.sortOrder=filter.sortOrder;
+            		jsonReqObj.sortField=filter.sortField;
+            		jsonReqObj.projDesc=filter.description;
+            		
             	    $.ajax({
                         type: "GET",
-                        url: encodeURI("manageProject.do?jsonstr="+jsonReq),
+                        url: encodeURI("manageProject.do?jsonstr="+JSON.stringify(jsonReqObj)),
                         error: function() {
                             //alert("FAILURE !");
                           }
@@ -45,11 +51,16 @@ $(function () {
             	   return d.promise();
             	},
             	insertItem: function (item) {
-            	    var jsonReq = '{"type":"add","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'"}';
+            	    jsonReqObj = new Object();
+            	    jsonReqObj.type="add";
+            	    jsonReqObj.id=item.id;
+            	    jsonReqObj.name=item.name;
+            	    jsonReqObj.desc=item.description;
+            	    
             	    $.ajax({
                         type: "POST",
                         url: encodeURI("addProject.do"),
-                        data: "jsonstr="+jsonReq,
+                        data: "jsonstr="+JSON.stringify(jsonReqObj),
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },
@@ -61,11 +72,15 @@ $(function () {
                     });
                 },
                 updateItem: function (item) {
-                	var jsonReq = '{"type":"update","id":"'+item.id+'","name":"'+item.name+'","desc":"'+item.description+'"}';
+                	jsonReqObj = new Object();
+             	    jsonReqObj.type="update";
+             	    jsonReqObj.id=item.id;
+             	    jsonReqObj.name=item.name;
+             	    jsonReqObj.desc=item.description;
                     $.ajax({
                         type: "POST",
                         url: encodeURI("addProject.do"),
-                        data: "jsonstr="+jsonReq,
+                        data: "jsonstr="+JSON.stringify(jsonReqObj),
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },
@@ -77,11 +92,13 @@ $(function () {
                     });
                 },
                 deleteItem: function (item) {
-                	var jsonReq = '{"type":"delete","id":"'+item.id+'"}';
+                	jsonReqObj = new Object();
+             	    jsonReqObj.type="delete";
+             	    jsonReqObj.id=item.id;
                     $.ajax({
                         type: "POST",
                         url: encodeURI("addProject.do"),
-                        data: "jsonstr="+jsonReq,
+                        data: "jsonstr="+JSON.stringify(jsonReqObj),
                         beforeSend: function(xhr){
                             xhr.setRequestHeader(header, token);
                         },

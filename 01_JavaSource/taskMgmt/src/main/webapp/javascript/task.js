@@ -1,10 +1,11 @@
 function loadProjEmp(projId) {	
 	
-var jsonReq = '{"projId":"'+projId+'","dummy=":"'+(new Date()).getTime()+'"}';
+var jsonReqObj = new Object();
+jsonReqObj.projId=projId;
 	
-	$.ajax({
+$.ajax({
         type: 'GET',
-		url: encodeURI("getProjEmployees.do?jsonstr="+jsonReq),
+		url: encodeURI("getProjEmployees.do?jsonstr="+JSON.stringify(jsonReqObj)),
 		dataType: "json",
 		
 		success: function(event) {			

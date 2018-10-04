@@ -4,11 +4,11 @@ public final class NamedQueryConstants {
 	
 	public static final String ALL_PROJECTS = "Project.allProjects";
 	
-	public static final String PROJECTS_BY_LIKE_NAME = "Project.likeNameProjects";
+	//public static final String PROJECTS_BY_LIKE_NAME = "Project.likeNameProjects";
 	
-	public static final String PROJECT_EMPLOYEES = "Project.projectEmployees";
+	//public static final String PROJECT_EMPLOYEES = "Project.projectEmployees";
 	
-	public static final String ALL_EMPLOYEES = "Employee.allEmployees";
+	//public static final String ALL_EMPLOYEES = "Employee.allEmployees";
 	
 	public static final String ALL_TASKS_FOR_PROJ = "Task.allTasksForProj";
 	

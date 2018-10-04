@@ -13,8 +13,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
-import com.mindtree.task.model.Employee;
-import com.mindtree.task.model.Persistable; 
+import com.mindtree.task.dto.EmployeeDTO; 
  
  
 public class ExcelReportView extends AbstractXlsxView{
@@ -26,7 +25,7 @@ public class ExcelReportView extends AbstractXlsxView{
  HttpServletResponse response) throws Exception {
 	  
 	 response.setHeader("Content-Disposition", "attachment;filename=\"Employees.xlsx\"");
-	 List<Persistable> empList = (List<Persistable>) model.get("empList");	 
+	 List<EmployeeDTO> empList = (List<EmployeeDTO>) model.get("empList");	 
 	  
 	  // Create an instance of sheet
 	 Sheet sheet = workbook.createSheet("Employee Data");
@@ -39,8 +38,7 @@ public class ExcelReportView extends AbstractXlsxView{
 	 
 	  
 	 int rowNum = 1;
-	 for(Persistable obj:empList){
-	 Employee emp = (Employee) obj;
+	 for(EmployeeDTO emp:empList){
 		 Row row = sheet.createRow(rowNum++);
 		 row.createCell(0).setCellValue(emp.getMid());
 		 row.createCell(1).setCellValue(emp.getName());

@@ -22,9 +22,7 @@ import com.mindtree.task.constants.QueryConstants;
 
 @Entity
 @Table (name="EMPLOYEE")
-@NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.PROJECT_EMPLOYEES, query = QueryConstants.PROJECT_EMPLOYEES),
-						@NamedQuery(name = NamedQueryConstants.ALL_EMPLOYEES, query = QueryConstants.ALL_EMPLOYEES),
-						@NamedQuery(name = NamedQueryConstants.EMPLOYEES_FOR_IDS, query = QueryConstants.EMPLOYEES_FOR_IDS)
+@NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.EMPLOYEES_FOR_IDS, query = QueryConstants.EMPLOYEES_FOR_IDS)
 })
 public class Employee extends AbstractTimestampEntity implements Persistable,Comparable<Employee> {
 		

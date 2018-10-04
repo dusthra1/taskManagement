@@ -5,19 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-
-import com.mindtree.task.constants.NamedQueryConstants;
-import com.mindtree.task.constants.QueryConstants;
 
 
 @Entity
 @Table(name="PROJECT")
-@NamedQueries(value = { @NamedQuery(name = NamedQueryConstants.ALL_PROJECTS, query = QueryConstants.ALL_PROJECTS),
-		 				@NamedQuery(name = NamedQueryConstants.PROJECTS_BY_LIKE_NAME, query = QueryConstants.PROJECTS_BY_LIKE_NAME)
-	  })
 public class Project extends AbstractTimestampEntity implements Persistable, Comparable<Project>{
 	
 	
