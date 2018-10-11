@@ -35,7 +35,7 @@ public class DatabaseMessageSource extends AbstractMessageSource implements Reso
 
     public DatabaseMessageSource(I18nService messageResourceService) {
         this.i18nService = messageResourceService;
-        if(!messages.isEmpty()) {reload();}
+       reload();
     }
 
     @Override
