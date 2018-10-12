@@ -1,9 +1,6 @@
 var header = $("meta[name='_csrf_header']").attr("content");
 var token = $("meta[name='_csrf']").attr("content");
 
-alert(header);
-alert(token);
-
 $(function () {
 	
         $("#jsGrid").jsGrid({
@@ -39,10 +36,14 @@ $(function () {
                             //alert("FAILURE !");
                           }
                     }).done(function(response) {
-                    	d.resolve({
-            	            data: JSON.parse(response.fileList),
-            	            itemsCount: response.itemCount
-            	       });
+                    	if(response.results=='success'){
+                    		d.resolve({
+                	            data: JSON.parse(response.fileList),
+                	            itemsCount: response.itemCount
+                	       });
+                    	}else{
+                    		alert("Data not found.");
+                    	}
             	    });
             	   return d.promise();
             	},

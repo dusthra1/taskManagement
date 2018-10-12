@@ -3,9 +3,11 @@ package com.mindtree.task.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.mindtree.task.constants.NamedQueryConstants;
@@ -21,7 +23,7 @@ public class FileModel extends AbstractTimestampEntity implements Persistable{
 	private static final long serialVersionUID = 1L;
 
 	 @Id
-	 @GeneratedValue
+	 @GeneratedValue(strategy=GenerationType.AUTO)
 	 @Column(name = "FILE_ID")
 	 private int id;
 	 

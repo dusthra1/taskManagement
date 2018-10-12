@@ -3,13 +3,13 @@ CREATE DATABASE `taskmgmt` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `taskmgmt`;
 
 CREATE TABLE `project` (
-  `PROJ_ID` int(11) NOT NULL,
+  `PROJ_ID` int(11) NOT NULL AUTO_INCREMENT,
   `PROJ_NAME` varchar(50) DEFAULT NULL,
   `PROJ_DESC` varchar(200) DEFAULT NULL,
   `CREATE_TS` datetime DEFAULT NULL,
   `UPDATE_TS` datetime DEFAULT NULL,
   PRIMARY KEY (`PROJ_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `employee` (
   `MID` varchar(25) NOT NULL,
@@ -33,11 +33,13 @@ CREATE TABLE `files_upload` (
   `CREATE_TS` datetime DEFAULT NULL,
   `UPDATE_TS` datetime DEFAULT NULL,
   PRIMARY KEY (`file_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `hibernate_sequence` (
   `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into hibernate_sequence value(1);
 
 CREATE TABLE `type_code` (
   `TYPE_CODE_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -46,7 +48,8 @@ CREATE TABLE `type_code` (
   `CREATE_TS` datetime DEFAULT NULL,
   `UPDATE_TS` datetime DEFAULT NULL,
   PRIMARY KEY (`TYPE_CODE_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `type_values` (
   `TYPE_VALUE_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -58,7 +61,8 @@ CREATE TABLE `type_values` (
   PRIMARY KEY (`TYPE_VALUE_ID`),
   KEY `FKpw65w1rkgb26pr7f6xfj7fj6d` (`TYPE_CODE_ID`),
   CONSTRAINT `FKpw65w1rkgb26pr7f6xfj7fj6d` FOREIGN KEY (`TYPE_CODE_ID`) REFERENCES `type_code` (`TYPE_CODE_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `i18n_messages` (
   `CODE` varchar(255) NOT NULL,
@@ -225,31 +229,33 @@ CREATE TABLE `qrtz_simprop_triggers` (
 
 
 CREATE TABLE `role` (
-  `ROLE_ID` int(11) NOT NULL,
+  `ROLE_ID` int(11) NOT NULL AUTO_INCREMENT,
   `CREATE_TS` datetime DEFAULT NULL,
   `UPDATE_TS` datetime DEFAULT NULL,
   `DESCRIPTION` varchar(255) DEFAULT NULL,
   `ROLE_NAME` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ROLE_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `role_permissions` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `ROLE_ID` int(11) NOT NULL,
   `PERMISSION_ID` int(11) NOT NULL,
-  `ID` bigint(20) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FKbr1ettrcfmc1k855meqhnmp0` (`PERMISSION_ID`),
   KEY `FK3sah2xlcnfnxs8r70pux3sp0f` (`ROLE_ID`),
   CONSTRAINT `FK3sah2xlcnfnxs8r70pux3sp0f` FOREIGN KEY (`ROLE_ID`) REFERENCES `role` (`ROLE_ID`),
   CONSTRAINT `FKbr1ettrcfmc1k855meqhnmp0` FOREIGN KEY (`PERMISSION_ID`) REFERENCES `type_values` (`TYPE_VALUE_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `role_permissions_seq` (
   `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into role_permissions_seq value(1);
 
 CREATE TABLE `task` (
-  `TASK_ID` int(11) NOT NULL,
+  `TASK_ID` int(11) NOT NULL AUTO_INCREMENT,
   `TASK_DESC` varchar(255) DEFAULT NULL,
   `START_DATE` date DEFAULT NULL,
   `DUE_DATE` date DEFAULT NULL,
@@ -261,7 +267,8 @@ CREATE TABLE `task` (
   KEY `task_ibfk_1` (`PROJ_ID`),
   CONSTRAINT `FKejtx7xw6e030gaavef7qmkdpc` FOREIGN KEY (`PROJ_ID`) REFERENCES `project` (`PROJ_ID`),
   CONSTRAINT `task_ibfk_1` FOREIGN KEY (`PROJ_ID`) REFERENCES `project` (`PROJ_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `task_employee` (
   `ID` bigint(20) NOT NULL,
@@ -279,9 +286,10 @@ CREATE TABLE `task_employee` (
 CREATE TABLE `task_employee_seq` (
   `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into task_employee_seq value(1);
 
 CREATE TABLE `users` (
-  `USER_ID` int(11) NOT NULL,
+  `USER_ID` int(11) NOT NULL AUTO_INCREMENT,
   `FNAME` varchar(45) NOT NULL,
   `LNAME` varchar(45) DEFAULT NULL,
   `PASSWORD` varchar(45) DEFAULT NULL,
@@ -294,49 +302,51 @@ CREATE TABLE `users` (
   `UPDATE_TS` datetime DEFAULT NULL,
   PRIMARY KEY (`USER_ID`),
   UNIQUE KEY `USERNAME_UNIQUE` (`USERNAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `users_role` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `USER_ID` int(11) NOT NULL,
   `ROLE_ID` int(11) NOT NULL,
-  `ID` bigint(20) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FKro07f1ftodw09y67rp9adyfd8` (`ROLE_ID`),
   KEY `FK2tlfrcab3bnbq4s42062qcdew` (`USER_ID`),
   CONSTRAINT `FK2tlfrcab3bnbq4s42062qcdew` FOREIGN KEY (`USER_ID`) REFERENCES `users` (`USER_ID`),
   CONSTRAINT `FKro07f1ftodw09y67rp9adyfd8` FOREIGN KEY (`ROLE_ID`) REFERENCES `role` (`ROLE_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_role_seq` (
   `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into users_role_seq value(1);
 
-insert into type_code (TYPE_CODE_ID,TYPE_CODE,DESCRIPTION) values (1,'locale','locale master codes');
-insert into type_code (TYPE_CODE_ID,TYPE_CODE,DESCRIPTION) values (2,'role_permissions','default permissions for role');
+insert into type_code (TYPE_CODE,DESCRIPTION) values ('locale','locale master codes');
+insert into type_code (TYPE_CODE,DESCRIPTION) values ('role_permissions','default permissions for role');
 
-insert into type_values (TYPE_VALUE_ID,TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values (1,'en',1,'english');
-insert into type_values (TYPE_VALUE_ID,TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values (2,'es',1,'spanish');
-insert into type_values (TYPE_VALUE_ID,TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values (3,'fr',1,'french');
-insert into type_values (TYPE_VALUE_ID,TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values (4,'PERM_ACCESS_ADMIN_AREA',2,'admin role permission');
-insert into type_values (TYPE_VALUE_ID,TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values (5,'PERM_ACCESS_VIEW_TASKS',2,'manager role permission');
+insert into type_values (TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values ('en',(select type_code_id from type_code where type_code='locale'),'english');
+insert into type_values (TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values ('es',(select type_code_id from type_code where type_code='locale'),'spanish');
+insert into type_values (TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values ('fr',(select type_code_id from type_code where type_code='locale'),'french');
+insert into type_values (TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values ('PERM_ACCESS_ADMIN_AREA',(select type_code_id from type_code where type_code='role_permissions'),'admin role permission');
+insert into type_values (TYPE_VALUE,TYPE_CODE_ID,DESCRIPTION) values ('PERM_ACCESS_VIEW_TASKS',(select type_code_id from type_code where type_code='role_permissions'),'manager role permission');
 
-insert into role (ROLE_ID,ROLE_NAME,DESCRIPTION) values (1,'SYSADMIN','super user');
-insert into role (ROLE_ID,ROLE_NAME,DESCRIPTION) values (2,'ADMIN','super user');
-insert into role (ROLE_ID,ROLE_NAME,DESCRIPTION) values (3,'MANAGER','super user');
+insert into role (ROLE_NAME,DESCRIPTION) values ('SYSADMIN','super user');
+insert into role (ROLE_NAME,DESCRIPTION) values ('ADMIN','admin user');
+insert into role (ROLE_NAME,DESCRIPTION) values ('MANAGER','manager user');
 
-insert into role_permissions (ID,PERMISSION_ID,ROLE_ID) values(1,4,2);
-insert into role_permissions (ID,PERMISSION_ID,ROLE_ID) values(2,5,3);
+insert into role_permissions (PERMISSION_ID,ROLE_ID) values((select TYPE_VALUE_ID from type_values where TYPE_VALUE='PERM_ACCESS_ADMIN_AREA'),(select ROLE_ID from ROLE where ROLE_NAME='ADMIN'));
+insert into role_permissions (PERMISSION_ID,ROLE_ID) values((select TYPE_VALUE_ID from type_values where TYPE_VALUE='PERM_ACCESS_VIEW_TASKS'),(select ROLE_ID from ROLE where ROLE_NAME='MANAGER'));
 
-insert into users (USER_ID,FNAME,LNAME,PASSWORD,EMAIL_ID,STATUS,USERNAME) values (1,'Ramanand','Dusthakar','YWJjZDEyMzQ=','ramanand@mindtree.com','A','dusthra1');
-insert into users (USER_ID,FNAME,LNAME,PASSWORD,EMAIL_ID,STATUS,USERNAME) values (2,'Sneha','Dingari','YWJjZDEyMzQ=','sneha@mindtree.com','A','sdingari');
+insert into users (FNAME,LNAME,PASSWORD,EMAIL_ID,STATUS,USERNAME) values ('Ramanand','Dusthakar','YWJjZDEyMzQ=','ramanand@mindtree.com','A','dusthra1');
+insert into users (FNAME,LNAME,PASSWORD,EMAIL_ID,STATUS,USERNAME) values ('Sneha','Dingari','YWJjZDEyMzQ=','sneha@mindtree.com','A','sdingari');
 
-insert into users_role (ID,USER_ID,ROLE_ID) values (1,1,2);
-insert into users_role (ID,USER_ID,ROLE_ID) values (2,2,3);
+insert into users_role (USER_ID,ROLE_ID) values ((select USER_ID from users where USERNAME='dusthra1'),(select ROLE_ID from role where ROLE_NAME='ADMIN'));
+insert into users_role (USER_ID,ROLE_ID) values ((select USER_ID from users where USERNAME='sdingari'),(select ROLE_ID from role where ROLE_NAME='MANAGER'));
 
-insert into project (PROJ_ID,PROJ_NAME,PROJ_DESC) values (1,'Iphone UI', 'Iphone UI Project');
-insert into project (PROJ_ID,PROJ_NAME,PROJ_DESC) values (2,'iPad Bugs', 'Ipad Project');
-insert into project (PROJ_ID,PROJ_NAME,PROJ_DESC) values (3,'Android UI', 'Android UI Project');
-insert into project (PROJ_ID,PROJ_NAME,PROJ_DESC) values (4,'Note 5 Bugs', 'Note5 bugs list');
+insert into project (PROJ_NAME,PROJ_DESC) values ('Iphone UI', 'Iphone UI Project');
+insert into project (PROJ_NAME,PROJ_DESC) values ('iPad Bugs', 'Ipad Project');
+insert into project (PROJ_NAME,PROJ_DESC) values ('Android UI', 'Android UI Project');
+insert into project (PROJ_NAME,PROJ_DESC) values ('Note 5 Bugs', 'Note5 bugs list');
 
 Insert into EMPLOYEE (MID,NAME,JOIN_DATE,EMAIL_ID,PROJ_ID) values('M1001000','Ramanand','2010-04-05', 'ramanand.dusthakar@mindtree.com',1);
 Insert into EMPLOYEE (MID,NAME,JOIN_DATE,EMAIL_ID,PROJ_ID) values('M1001001','Jhon','2010-04-06', 'employee2@mindtree.com',1);
@@ -351,54 +361,53 @@ Insert into EMPLOYEE (MID,NAME,JOIN_DATE,EMAIL_ID,PROJ_ID) values('M1001009','Ki
 Insert into EMPLOYEE (MID,NAME,JOIN_DATE,EMAIL_ID,PROJ_ID) values('M1001010','Chetana','2010-04-15', 'employee11@mindtree.com',4);
 Insert into EMPLOYEE (MID,NAME,JOIN_DATE,EMAIL_ID,PROJ_ID) values('M1001011','Arun','2010-04-16', 'employee12@mindtree.com',4);
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.project',1,'Project');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.project',2,'ProjectSP');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.project',3,'ProjectFR');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.project',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'Project');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.project',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'ProjectSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.project',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'ProjectFR');
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.taskName',1,'Taskname');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.taskName',2,'TasknameSP');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.taskName',3,'TasknameFR');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.taskName',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'Taskname');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.taskName',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'TasknameSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.taskName',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'TasknameFR');
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.desc',1,'Description');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.desc',2,'DescriptionSP');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.desc',3,'DescriptionFR');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.desc',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'Description');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.desc',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'DescriptionSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.desc',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'DescriptionFR');
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.startDate',1,'Start Date');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.startDate',2,'Start DateSP');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.startDate',3,'Start DateFR');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.startDate',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'Start Date');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.startDate',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'Start DateSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.startDate',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'Start DateFR');
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.dueDate',1,'Due Date');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.dueDate',2,'Due DateSP');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.dueDate',3,'Due DateFR');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.dueDate',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'Due Date');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.dueDate',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'Due DateSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.dueDate',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'Due DateFR');
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.employees',1,'Employees');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.employees',2,'EmployeesSP');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.employees',3,'EmployeesFR');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.employees',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'Employees');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.employees',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'EmployeesSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('label.employees',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'EmployeesFR');
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.generic',1,'ERROR Occurred. Please contact your Administrator');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.generic',2,'ERROR OccurredSP. Please contact your Administrator');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.generic',3,'ERROR OccurredFR. Please contact your Administrator');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.generic',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'ERROR Occurred. Please contact your Administrator');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.generic',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'ERROR OccurredSP. Please contact your Administrator');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.generic',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'ERROR OccurredFR. Please contact your Administrator');
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('logoff.successful',1,'You have successfully logged out');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('logoff.successful',2,'You have successfully logged out');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('logoff.successful',3,'You have successfully logged out');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('logoff.successful',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'You have successfully logged out');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('logoff.successful',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'You have successfully logged out');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('logoff.successful',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'You have successfully logged out');
 
---insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('',1,'');
---insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('',2,'');
---insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('',3,'');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('session.timeout',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'Session timeout.Please login aagain');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('session.timeout',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'Session timeout.Please login aagainSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('session.timeout',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'Session timeout.Please login aagainFR');
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.invalidLogin',1,'Invalid credentials.Please try again');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.invalidLogin',2,'Invalid credentials.Please try againSP');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.invalidLogin',3,'Invalid credentials.Please try againFR');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.invalidLogin',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'Invalid credentials.Please try again');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.invalidLogin',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'Invalid credentials.Please try againSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.invalidLogin',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'Invalid credentials.Please try againFR');
 
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.emptyLoginCredentials',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'Empty Credentials. Please try again');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.emptyLoginCredentials',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'Empty Credentials. Please try againSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.emptyLoginCredentials',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'Empty Credentials. Please try againFR');
 
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.emptyLoginCredentials',1,'Empty Credentials. Please try again');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.emptyLoginCredentials',2,'Empty Credentials. Please try againSP');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.emptyLoginCredentials',3,'Empty Credentials. Please try againFR');
-
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.userNotFound',1,'User not found');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.userNotFound',2,'User not foundSP');
-insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.userNotFound',3,'User not foundFR');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.userNotFound',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='en'),'User not found');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.userNotFound',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='es'),'User not foundSP');
+insert i18n_messages (CODE,LOCALE_ID,MESSAGE) values ('error.userNotFound',(select TYPE_VALUE_ID from type_values where TYPE_VALUE='fr'),'User not foundFR');
 
 
 COMMIT;
