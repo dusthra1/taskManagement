@@ -118,7 +118,7 @@ $(function () {
             fields: [
                 {name: "id", title: "Id", type: "text",visible: false, width: 0},
                 {name: "name", title: "Project Name", type: "text", width: 60, order:"asc"},
-                {name: "description", title: "Description", type: "text",  width: 50,sorting:false},
+                {name: "description", title: "Description", type: "text",  width: 50},
                 {type: "control"}
             ]
             

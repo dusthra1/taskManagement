@@ -19,7 +19,7 @@
 		
 		<app.name>taskManagement</app.name>
 		<basedir>taskMgmt</basedir>
-		<dist.folder>C:\Projects\L201\myGitHub\taskManagement\03_Dist</dist.folder>
+		<dist.folder>D:\myGit_repo\taskManagement\03_Dist</dist.folder>
 	</properties>
   
   <dependencies>

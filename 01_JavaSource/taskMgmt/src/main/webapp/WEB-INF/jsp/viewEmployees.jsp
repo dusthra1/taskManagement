@@ -16,6 +16,7 @@
   <div id="jsGrid"></div>
   
  	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+ 	<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
 	<script type="text/javascript" src="javascript/jsgrid/jsgrid.min.js"></script>
   	<script type="text/javascript" src="javascript/viewEmployees.js"></script>
  </body>

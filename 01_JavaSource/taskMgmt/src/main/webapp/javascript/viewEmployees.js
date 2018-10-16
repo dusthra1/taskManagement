@@ -12,7 +12,42 @@ $(function () {
         url: encodeURI("manageEmployees.do?jsonstr="+JSON.stringify(jsonReqObj))
     }).done(function(projList) {
 
-	
+	//Date field script
+        var MyDateField = function(config) {
+            jsGrid.Field.call(this, config);
+        };
+     
+        MyDateField.prototype = new jsGrid.Field({
+            sorter: function(date1, date2) {
+                return new Date(date1) - new Date(date2);
+            },
+     
+            itemTemplate: function(value) {
+            	var date = new Date(value);
+            	//console.log($.datepicker.formatDate("dd-mm-yy", date));
+            	return ($.datepicker.formatDate("dd-MM-yy", date));
+            	
+            },
+     
+            insertTemplate: function(value) {
+                return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date()});
+            },
+     
+            editTemplate: function(value) {
+                return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
+            },
+     
+            insertValue: function() {
+                return this._insertPicker.datepicker("getDate");
+            },
+     
+            editValue: function() {
+                return this._editPicker.datepicker("getDate");
+            }
+        });
+     
+        jsGrid.fields.myDateField = MyDateField;	
+    //
         $("#jsGrid").jsGrid({
         	height: 500,
             width: "100%",
@@ -61,7 +96,7 @@ $(function () {
             		jsonReqObj.type="add";
             		jsonReqObj.mid=item.mid;
             		jsonReqObj.name=item.name;
-            		jsonReqObj.joinDate=item.joinDate;
+            		jsonReqObj.joinDate=($.datepicker.formatDate("dd-mm-yy", item.joinDate));
             		jsonReqObj.emailId=item.emailId;
             		jsonReqObj.projId=item.project != undefined ? item.project.id: 0;
             		
@@ -91,7 +126,7 @@ $(function () {
             		jsonReqObj.type="update";
             		jsonReqObj.mid=item.mid;
             		jsonReqObj.name=item.name;
-            		jsonReqObj.joinDate=item.joinDate;
+            		jsonReqObj.joinDate=($.datepicker.formatDate("dd-mm-yy", item.joinDate));
             		jsonReqObj.emailId=item.emailId;
             		jsonReqObj.projId=item.project != undefined ? item.project.id: 0;
                     $.ajax({
@@ -140,7 +175,7 @@ $(function () {
             fields: [
                 {name: "mid", title: "Id", type: "text", width: 40, editing: false},
                 {name: "name", title: "Employee Name", type: "text", width: 60, order:"asc"},
-                {name: "joinDate", title: "Join Date", type: "text",  width: 50, align: "center", sorting:false},
+                {name: "joinDate", title: "Join Date", type: "myDateField",  width: 50, align: "center"},
                 {name: "emailId", title: "Email", type: "text",  width: 60,sorting:false},                
                 { name: "project.id", title: "Project", width: 60 ,type: "select", items: JSON.parse(projList.projects), valueField: "id", textField: "name" },
                 {type: "control"}

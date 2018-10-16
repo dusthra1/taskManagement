@@ -169,7 +169,7 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 					String filterProjName = jsonRequest.has("projName") ? jsonRequest.getString("projName"):"";
 					String filterProjDesc = jsonRequest.has("projDesc") ? jsonRequest.getString("projDesc"):"";
 					String sortOrder = jsonRequest.has("sortOrder") ? jsonRequest.getString("sortOrder"):"";
-					//String sortField = jsonRequest.has("sortField") ? jsonRequest.getString("sortField"):"";
+					String sortField = jsonRequest.has("sortField") ? jsonRequest.getString("sortField"):"";
 					
 					CriteriaExpression criteriaExp = null;
 					List<CriteriaExpression> criteriaExpList = new ArrayList<>();
@@ -187,9 +187,17 @@ private static final Logger log = Logger.getLogger(AjaxController.class);
 					
 					//Implementing Lambda expressions for sorting collections
 					if("desc".equals(sortOrder)){
-						Collections.sort(allProjList,(p1,p2)-> p1.getName().compareTo(p2.getName())); 
+						if("name".equals(sortField)) {
+							Collections.sort(allProjList,(p1,p2)-> p1.getName().compareTo(p2.getName())); 
+						}else {
+							Collections.sort(allProjList,(p1,p2)-> p1.getDescription().compareTo(p2.getName())); 
+						}
 					}else{
-						Collections.sort(allProjList,(p2,p1)-> p1.getName().compareTo(p2.getName())); 
+						if("description".equals(sortField)) {
+							Collections.sort(allProjList,(p2,p1)-> p1.getName().compareTo(p2.getName())); 
+						}else {
+							Collections.sort(allProjList,(p2,p1)-> p1.getDescription().compareTo(p2.getName())); 
+						}
 					}
 					
 					
